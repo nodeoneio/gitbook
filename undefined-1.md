@@ -1,0 +1,15 @@
+# 개발 환경 설정
+
+Mandel 에서 로컬 개발 환경이란, Mandel 소프트웨어와 함께 종속성을 가진 소프트웨어를 설치하여, 시스템 요구 사항을 충족시킨 로컬 시스템을 의미합니다. 그 다음  nodeos 를 실행하여 로컬 블록체인 인스턴스를 실행하면 스마트 컨트랙트를 배포할 수 있게 됩니다.
+
+Mandel 은 Ubuntu 18.04 LTS \~ 22.04 LTS 에서만 정식으로 지원됩니다. 기타 유닉스 기반 OS 에서도 동작은 하겠지만 정상적인 동작을 보장하지는 않습니다.
+
+그래서 ENF 는 개발자들의 편의를 위하여 로컬에서 컨테이너 기반으로 간단히 스마트 컨트랙트 개발 환경을 구축할 있는 유틸리티 소프트웨어인 D.U.N.E 을 만들어 공개하였습니다. 가능하면 이 도구를 이용하여 개발 환경을 구축하는 것이 좋습니다. 간단한 사용법을 [다음 장](mandel-d.u.n.e.md)에서 다루고 있으니 이를 참조하여 개발 환경을 구축할 수 있습니다.
+
+직접 개발 환경을 구축하려면 다음 문서를 참조합니다.
+
+{% embed url="https://developers.eos.io/welcome/v2.1/getting-started-guide/local-development-environment/index" %}
+
+EOSIO 바이너리 대신 ENF 가 개발/운영하는 EOSIO 의 차세대 버전인 Mandel 을 공식 Github 에서 다운로드 받을 수도 있습니다.
+
+{% embed url="https://github.com/eosnetworkfoundation/mandel" %}
