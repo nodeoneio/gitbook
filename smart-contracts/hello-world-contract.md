@@ -25,7 +25,7 @@
 
 ## 컨트랙트 개발 툴킷(CDT)
 
-Mandel 스마트 컨트랙트는 C++ 프로그래밍 언어를 사용하여 만듭니다. 스마트 컨트랙트를 구축하는 데 필요한 라이브러리와 도구는 컨트랙트 개발 툴킷(Contract Development Toolkit) 줄여서 CDT 라 부르는 툴킷에서 제공하고 있습니다. 자세한 내용은 [CDT 설명서](cdt/cdt-contract-development-toolkit.md)를 참조하시기 바랍니다.
+Mandel 스마트 컨트랙트는 C++ 프로그래밍 언어를 사용하여 만듭니다. 스마트 컨트랙트를 구축하는 데 필요한 라이브러리와 도구는 컨트랙트 개발 툴킷(Contract Development Toolkit) 줄여서 CDT 라 부르는 툴킷에서 제공하고 있습니다. 자세한 내용은 [CDT 설명서](../cdt/cdt-contract-development-toolkit.md)를 참조하시기 바랍니다.
 
 스마트 컨트랙트를 블록체인에 배포하려면 먼저 [eosio-cpp](https://developers.eos.io/manuals/eosio.cdt/latest/command-reference/eosio-cpp) 를 사용하여 스마트 컨트랙트를 컴파일 해야 합니다. 스마트 컨트랙트 소스 파일을 컴파일하면 웹 어셈블리 파일과 응용 프로그램 바이너리 인터페이스(ABI, Application Binary Interface) 파일을 빌드합니다.
 

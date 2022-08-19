@@ -5,7 +5,7 @@
 `producer_plugin` 을 설정하면 nodeos 가 블록을 생성하는데 필요한 기능을 사용할 수 있습니다.
 
 {% hint style="info" %}
-블록 생성을 하려면 추가적인 설정이 필요합니다. [블록 생산자(BP) 노드 설정](../../producer.md) 단원을 참조합니다.
+블록 생성을 하려면 추가적인 설정이 필요합니다. [블록 생산자(BP) 노드 설정](../../setup-producer-node.md) 단원을 참조합니다.
 {% endhint %}
 
 ## 사용법
@@ -124,4 +124,4 @@ plugin = eosio::chain_plugin [operations] [options]`
 nodeos ... --plugin eosio::chain_plugin [operations] [options]`
 ```
 
-[블록 생성에 대한 상세](../../undefined-1.md) 참조
+[블록 생성에 대한 상세](../../block-producing-explained.md) 참조

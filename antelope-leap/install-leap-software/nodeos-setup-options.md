@@ -37,7 +37,7 @@ Application Command Line Options:
 
 플러그인 전용 옵션은 nodeos 플러그인의 동작을 제어합니다. 플러그인 전용 옵션마다 고유한 이름이 있으므로 명령줄이나 `config.ini` 파일 내에서 원하는 방식과 순서대로 기입할 수 있습니다. 일반적으로 어떤 플러그인과 그 플러그인의 옵션들을 한 데 묶어 기입하는 것이 관리하기 편리합니다. 플러그인 전용 옵션을 설정할 때는 반드시 `--plugin` 옵션을 사용하여 해당 옵션이 적용될 플러그인도 함께 사용하도록 설정해야 합니다. 그렇지 않으면 해당 옵션은 무시됩니다.
 
-각 플러그인별 전용 옵션에 대한 자세한 내용은 [Nodeos Plugin 상세](nodeos-plugin/) 단원에서 찾아볼 수 있습니다.
+각 플러그인별 전용 옵션에 대한 자세한 내용은 [Nodeos Plugin 상세](nodeos-plugin-details/) 단원에서 찾아볼 수 있습니다.
 
 대부분의 `config.ini` 옵션에는 그에 대응하는 CLI 옵션이 존재합니다. 예를 들어 CLI 옵션 `--plugin eosio::chain_api_plugin` 은 `config.ini` 의 `plugin = eosio::chain_api_plugin` 에 대응됩니다.
 

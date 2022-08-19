@@ -1,4 +1,4 @@
-# 🔎 Mandel 의 모든 것
+# 🔎 Antelope Leap 의 모든 것
 
 
 
@@ -56,8 +56,8 @@ Learn the fundamentals of MyProduct to get a deeper understanding of our main fe
 [cdt-contract-development-toolkit.md](cdt/cdt-contract-development-toolkit.md)
 {% endcontent-ref %}
 
-{% content-ref url="cdt/undefined-1.md" %}
-[undefined-1.md](cdt/undefined-1.md)
+{% content-ref url="cdt/best-practices.md" %}
+[best-practices.md](cdt/best-practices.md)
 {% endcontent-ref %}
 
 {% content-ref url="broken-reference" %}
