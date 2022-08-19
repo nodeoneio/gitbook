@@ -1,136 +1,327 @@
----
-description: Under the hood of a smart contract
----
+# 인라인 액션을 추가하는 법
 
-# 스마트 컨트랙트의 뒤에서 일어나는 일
+## 개요
 
-효율적인 스마트 컨트랙트를 작성할 수 있으려면 뒤에서 무슨 일이 일어나고 있는지 이해해야 합니다. 경험이 풍부한 개발자는 마이크로컨트롤러 또는 임베디드 장치 프로그래밍과 많은 유사점을 발견할 것입니다. 여기에는 특정한 제약 조건이 있고, 여러분이 설계한 응용 프로그램이 그것들에 적합해야 합니다. 프로그램은 라이브러리와 리소스를 효율적으로 활용해야 합니다. 또한 확장성이 뛰어나, 배포 전에 수십 개가 아닌 수만 개의 데이터 항목을 가지고 테스트 했을 때 막히지 않아야 합니다.&#x20;
+이 단원에서는 스마트 계약에서 인라인 액션을 호출하는 방법을 학습할 것입니다.
 
-스마트 계약 운영에는 데이터 핸들링과와 실행 환경이라는 두 가지 중요한 측면이 있습니다
+이전 단원에서 addressbook 컨트랙트를 작성하고 다중 인덱스 테이블을 사용하는 기본적인 방법을 알아보았습니다. 본편에서는 액션을 구성하는 방법과 컨트랙트 안에서 이러한 액션을 보내는 방법을 배울 것입니다.
 
-## 데이터 직렬화(Data Serialisation)
+## 단계1: 권한에 eosio.code 를 추가
 
-일반적으로 직렬화라는 용어는, 나중에 발생할 역직렬화를 위해 데이터 구조를 바이트 시퀀스로 변환될 때 사용됩니다. JSON 및 Google Protocol Buffers가 직렬화의 일반적인 예입니다.&#x20;
+addressbook 에서 인라인 액션을 보내려면 이 컨트랙트를 가지고 있는 계정의 active 권한에 eosio.code 권한을 추가해야 합니다. 터미널을 열고 다음 코드를 실행합니다.
 
-JSON 과 Protocol Buffers 는 모두 매우 유연하며 많은 응용 프로그램에서 사용됩니다. 그러나 일부 복잡한 파싱 및 상태 추적(예: JSON의 중괄호 및 구문 요소)과 오류 처리가 필요합니다. EOSIO는 빠른 트랜잭션 실행을 위해 설계되었기 때문에 유연성 제한적인 직렬화 표준을 가지게 되지만 대신 스마트 컨트랙트 내에서 훨씬 더 빠른 처리가 가능합니다.&#x20;
+```cpp
+cleos set account permission addressbook active --add-code
+```
 
-직렬화 형식에는 필드 구분자가 없으며 기본 형식에는 길이 필드가 없습니다. 따라서 작성한 측과 읽는 측 모두 직렬화 또는 역직렬화에 앞서 데이터 구조에 대한 공통적인 이해가 필요합니다.&#x20;
+eosio.code 권한은 보안을 강화하고 인라인 액션을 실행하는 컨트랙트를 활성화하기 위해 구현된 의사(Pseudo) 권한입다.
 
-C++ 스마트 컨트랙트가 직렬화된 데이터 구조를 읽거나 써야 하는 경우, C++ 스마트 컨트랙트에 대한 구조체 타입 정의가 있어야 합니다. CDT(EOSIO Contract Development Toolkit)는 이 프로세스를 자동화하여 개발자가 알아차리지 못하게 하는 다양한 방법을 제공합니다. 때로는 개발자가 전체 프로세스를 이해하지 못하여 혼란으로 이어지기도 합니다.&#x20;
+## 단계2: 액션 알림
 
-소스 코드에 \[\[eosio::table]] 속성 지정자를 사용하여 CDT에 구조체를 직렬화 및 역직렬화하기 위한 C++ 메서드를 준비하도록 지정할 수 있습니다.
-
-예를들면,
+이전 단원에서 작성한 addressbook.cpp 파일을 엽니다. 그리고 addressbook 컨트랙트에서 트랜잭션이 발생할 때마다 "트랜잭션 영수증"을 발송하는 helper 함수인 notify 액션을 작성하겠습니다.
 
 ```
-struct [[eosio::table("stock")]] stockrow {
-  uint64_t       skuid;
-  uint64_t       items_onsale = 0; // number of items available on sale
-  time_point     last_sale;
-  auto primary_key()const { return skuid; }
+[[eosio::action]]
+void notify(name user, std::string msg) {}
+```
+
+이 함수는 user 계정을 name 타입으로, 메시지를 string 타입으로 받는 단순한 함수입니다. user 는 메시지를 받을 사용자를 나타냅니다.
+
+## 단계3: require\_recipient 를 사용하여 발신자에게 액션을 복사
+
+이 트랜잭션은 영수증으로 활용 될 수 있도록 require\_recipient 메서드를 사용하여 발신한 사용자에게도 복사되어야 합니다. require\_recipient 를 호출하면 require\_recipient set 에 계정이 추가되고, 추가된 계정이 실행 중인 액션의 알림을 수신하도록 합니다. 이 알림은 require\_recipient set 에 들어 있는 계정으로 액션의 "carbon copy"를 보내는 것과 같습니다.
+
+```
+[[eosio::action]]
+  void notify(name user, std::string msg) {
+   require_recipient(user);
+  }
+```
+
+이 액션은 매우 간단하지만 모든 사용자가 이 기능을 호출할 수 있으며, 이 컨트랙트에서 받은 영수증을 위조 할 수도 있는 문제점이 있습니다. 이는 악의적인 수단으로 사용될 수 있으며 취약성으로 간주되어야 합니다. 이 문제를 해결하려면 get\_self 를 사용하여, 이 액션을 호출할 수 있는 권한을 컨트랙트 자체적으로 제공하도록 합니다.
+
+```
+[[eosio::action]]
+  void notify(name user, std::string msg) {
+    require_auth(get_self());
+    require_recipient(user);
+  }
+```
+
+이제 만약 사용자 bob 이 함수를 직접적으로 호출할 때 매개변수로 alice 를 전달하면 예외가 발생하게 됩니다.
+
+## 단계4: 인라인 트랜잭션 전송을 위하여 helper 에게 알림
+
+이 인라인 액션은 여러 번 호출될 것이므로 코드를 최대한 재사용 할 수 있도록 helper 메소드를 작성하겠습니다. 컨트랙트의 private 영역에 다음과 같이 새 메소드를 정의합니다.
+
+```
+...
+  private:
+    void send_summary(name user, std::string message){}
+```
+
+이제 이 helper 의 내부에 액션을 만들고 이 액션을 보낼 것입니이다.
+
+## 단계5: 액션 생성자
+
+사용자가 컨트랙트의 액션을 수행 할 때마다 영수증을 사용자에게 보내도록 주소록 컨트랙트를 수정합니다.
+
+시작하려면, "create record" 사례를 확인한다. 테이블에 레코드가 없을 때, 즉 iterator == address.ends() 가 true 일 때 발생하는 경우이다.
+
+이 오브젝트를 notification 이라는 액션 변수에 저장합니다.
+
+```
+...
+  private:
+    void send_summary(name user, std::string message){
+      action(
+        //permission_level,
+        //code,
+        //action,
+        //data
+      );
+    }
+```
+
+액션 생성자에 다음과 같은 매개 변수가 필요합니다.
+
+* permission\_level 구조체
+* 호출할 컨트랙트 코드 (eosio::name type을 사용하여 초기화)
+* 액션 (eosio:name type을 사용하여 초기화됨)
+* 액션에 전달할 데이터, 호출되는 액션과 관련된 위치들의 튜플.
+
+### 권한 구조체
+
+이 컨트렉트에서는 get\_self()를 사용하여 계약 자체의 active 권한에 의해 승인되어야 합니다. 위에서 설명한대로 계약에서 eosio.code 의사 권한(pseudo-authority)에 active 권한을 부여하려면 active 권한을 인라인으로 사용해야 합니다.
+
+```
+...
+  private:
+    void send_summary(name user, std::string message){
+      action(
+        permission_level{get_self(),"active"_n},
+        //code,
+        //action,
+        //data
+      );
+    }
+```
+
+### Code - 계약이 배포되어 있는 계정
+
+호출된 액션이 이 컨트랙트 안에 있으므로 get\_self()를 사용합니다. "addressbook"\_n도 가능은 하지만 이 컨트랙트가 다른 계정 이름으로 배포되면 작동하지 않기 때문에 get\_self() 를 사용하는 것이 더 낫습니다.
+
+```
+...
+  private:
+    void send_summary(name user, std::string message){
+      action(
+        permission_level{get_self(),"active"_n},
+        get_self(),
+        //action
+        //data
+      );
+    }
+```
+
+## 액션
+
+notify 액션은 이전에 이 인라인 액션에서 호출되도록 정의되었습니다. 여기서는 \_n 연산자를 사용합니다.
+
+```
+...
+  private:
+    void send_summary(name user, std::string message){
+      action(
+        permission_level{get_self(),"active"_n},
+        get_self(),
+        "notify"_n,
+        //data
+      );
+    }
+```
+
+## 데이터
+
+마지막으로 이 액션에 전달할 데이터를 정의합니다. 알림 함수는 name과 문자열의 두 매개 변수를 받습니다. 액션 생성자는 데이터를 bytes 타입으로 받기 때문에 std C++ 라이브러리를 통해 사용할 수 있는 함수인 make\_tuple을 사용할 것입니다. 이 튜플로부터 전달된 데이터는 positional 하며 호출되는 액션에서 받는 매개 변수의 순서에 따라 결정됩니다.
+
+* upsert() 액션의 매개 변수로 제공되는 user 변수를 전달합니다.
+* user 의 name 이 포함된 문자열에 notify 액션에 전달할 message 문자열을 더합니다.
+
+```
+...
+  private:
+    void send_summary(name user, std::string message){
+      action(
+        permission_level{get_self(),"active"_n},
+        get_self(),
+        "notify"_n,
+        std::make_tuple(user, name{user}.to_string() + message)
+      );
+    }
+```
+
+## 액션 보내기
+
+마지막으로 액션 구조체의 send 메소드를 사용하여 액션을 전송합니다.
+
+```
+...
+  private:
+    void send_summary(name user, std::string message) {
+      action(
+        permission_level{get_self(),"active"_n},
+        get_self(),
+        "notify"_n,
+        std::make_tuple(user, name{user}.to_string() + message)
+      ).send();
+    }
+```
+
+## 단계6: helper 호출 및 메시지 삽입
+
+이제 helper 메소드가 정의되었습니다. 이 컨트랙트 코드의 다음과 같은 위치에서 새롭게 만든 helper 메소드를 호출할 것입니다.
+
+* emplaces 가 새 레코드를 만든 다음:\
+  `send_summary(user, "successfully emplaced record to addressbook");`
+* modify 가 기존 레코드를 수정한 다음: \
+  `send_summary(user, "successfully modified record in addressbook.");`
+* erase 가 기존 레코드를 삭제한 다음: \
+  `send_summary(user, "successfully erased record from addressbook");`
+
+## 단계 7: 재 컴파일 및 ABI 파일 재생성
+
+이제 준비가 다 되었습니다. 완성된 addressbook 컨트랙트는 다음과 같습니다.
+
+```cpp
+#include <eosio/eosio.hpp>#include <eosio/print.hpp>using namespace eosio;
+
+class [[eosio::contract("addressbook")]] addressbook : public eosio::contract {
+
+public:
+
+  addressbook(name receiver, name code,  datastream<const char*> ds): contract(receiver, code, ds) {}
+
+  [[eosio::action]]
+  void upsert(name user, std::string first_name, std::string last_name, uint64_t age, std::string street, std::string city, std::string state) {
+    require_auth(user);
+    address_index addresses(get_first_receiver(), get_first_receiver().value);
+    auto iterator = addresses.find(user.value);
+    if( iterator == addresses.end() )
+    {
+      addresses.emplace(user, [&]( auto& row ) {
+       row.key = user;
+       row.first_name = first_name;
+       row.last_name = last_name;
+       row.age = age;
+       row.street = street;
+       row.city = city;
+       row.state = state;
+      });
+      send_summary(user, " successfully emplaced record to addressbook");
+    }
+    else {
+      addresses.modify(iterator, user, [&]( auto& row ) {
+        row.key = user;
+        row.first_name = first_name;
+        row.last_name = last_name;
+        row.street = street;
+        row.city = city;
+        row.state = state;
+      });
+      send_summary(user, " successfully modified record to addressbook");
+    }
+  }
+
+  [[eosio::action]]
+  void erase(name user) {
+    require_auth(user);
+
+    address_index addresses(get_first_receiver(), get_first_receiver().value);
+
+    auto iterator = addresses.find(user.value);
+    check(iterator != addresses.end(), "Record does not exist");
+    addresses.erase(iterator);
+    send_summary(user, " successfully erased record from addressbook");
+  }
+
+  [[eosio::action]]
+  void notify(name user, std::string msg) {
+    require_auth(get_self());
+    require_recipient(user);
+  }
+
+private:
+  struct [[eosio::table]] person {
+    name key;
+    std::string first_name;
+    std::string last_name;
+    uint64_t age;
+    std::string street;
+    std::string city;
+    std::string state;
+
+    uint64_t primary_key() const { return key.value; }
+    uint64_t get_secondary_1() const { return age;}
+  };
+
+  void send_summary(name user, std::string message) {
+    action(
+      permission_level{get_self(),"active"_n},
+      get_self(),
+      "notify"_n,
+      std::make_tuple(user, name{user}.to_string() + message)
+    ).send();
+  };
+
+  typedef eosio::multi_index<"people"_n, person,
+    indexed_by<"byage"_n, const_mem_fun<person, uint64_t, &person::get_secondary_1>>
+  > address_index;
 };
-
-typedef eosio::multi_index<name("stock"), stockrow> stockrows;
 ```
 
-이 구조체 정의는 세 개의 직렬화된 64비트 정수와 메모리의 구조 사이를 변환하는 reader 및 writer 메소드를 만듭니다. 이 바이트 배열이 다른 구조 정의에 대해 작성된 경우 reader 메서드가 의미 없는 정보를 읽거나 배열의 바이트 수가 예상한 것과 다르기 때문에 오류가 발생합니다. 따라서 reader 에 필드 순서가 다르거나, 다른 유형(예: 64비트 대신 32비트 정수)이 있거나 또는 필드 수가 다른 구조체 정의가 있는 경우, reader 가 해당 바이트 배열에 저장한 내용을 읽을 수 없습니다.&#x20;
+이제 터미널을 열고 CONTRACTS\_DIR/addressbook 으로 이동합니다.
 
-액션 정의는 완전히 다르게 보이지만 작업 자체는 유사합니다.
-
-```
-[[eosio::action]] challenge(name challenger, uint64_t id, 
-                             name account, checksum256 hash, 
-                             uint32_t expire_seconds)
- {
+```cpp
+cd CONTRACTS_DIR/addressbook
 ```
 
-액션 인수도 동일한 직렬화 프로토콜을 사용하여 직렬화 및 역직렬화되므로 C++ 컴파일러는 바이트 배열에서 인수를 패키징하거나 언패키징하는 방법을 알아야 합니다. \[\[eosio::action]] 속성(단순하게 표현하기 위한 ACTION 매크로도 있음)은 컴파일러에 함수 인수가 직렬화되거나 역직렬화됨을 알려줍니다. 위의 예제에서 액션 인수는 바이트 배열로 구성됩니다. 여기서 세 개의 64비트 정수는 32바이트 배열 뒤에 이어집니다. 이 모든 값은 고정 길이를 가지므로 두 값 사이에 구분 기호가 없고 길이에 대한 정보도 없습니다. 따라서 본질적으로 구조체나 함수 인수를 처리하는 데 차이가 없습니다.&#x20;
+본문에서 변경한 코드가 ABI 에 영향을 주기 때문에 --abigen 플래그를 넣어서 컨트랙트를 다시 컴파일 합니다.
 
-구조에 std::string 또는 std::vector와 같은 가변 길이 필드가 있는 경우 직렬화 프로토콜은 데이터 시작 부분에 데이터의 길이를 추가합니다. 길이는 변수 길이의 특수한 유형인 varuint로 저장되므로 문자열이 짧을수록 길이 필드도 짧아집니다.&#x20;
-
-경우에 따라 CDT는 eosio::public\_key 타입의 필드를 포함하는 것과 같은 복잡한 데이터 구조를 직렬화하는 메서드를 만들 수 없습니다. 이러한 경우 컨트랙트 코드에는 EOSLIB\_SERIALIZE 매크로를 사용하여 직렬화 방법을 명시적으로 정의해야 합니다.
-
-```
-struct [[eosio::table("messages")]] message {
-  uint64_t         id;             /* autoincrement */
-  name             sender;
-  vector<char>     iv;
-  public_key       ephem_key;
-  vector<char>     ciphertext;
-  checksum256      mac;
-  auto primary_key()const { return id; }
-};
-EOSLIB_SERIALIZE(message, (id)(sender)(iv)(ephem_key)(ciphertext)(mac));
-typedef eosio::multi_index<name("messages"), message> messages;  
+```cpp
+$ eosio-cpp -o addressbook.wasm addressbook.cpp --abigen
 ```
 
-스마트 컨트랙트 외부 프로그램이 직렬화된 데이터를 읽거나 써야 하는 경우 일반적으로 스마트 컨트랙트와 함께 공개되는 ABI(Application Binary Interface)를 사용합니다. EOSIO ABI는 블록체인에 저장하기에 적합한 컴팩트 바이너리 형태와 인간 및 기계가 읽기에 적합한 JSON의 두 가지 방식으로 표현될 수 있습니다. ABI는 스마트 컨트랙트에 정의된 모든 구조체(와 구조체로서의 액션 인수)를 반영합니다. 지갑이나 다른 블록체인 클라이언트와 같은 외부 프로그램은 보통 ABI를 먼저 읽고, 스마트 컨트랙트 테이블 내용을 읽거나, 트랜잭션을 전송하기 전에 액션 인수를 인코딩할 수 있습니다.
+변경된 컨트랙트를 다시 배포하면 온체인에 올라간 스마트 컨트랙트가 업그레이드 됩니다.
 
-## 액션 디스패처(Action dispatcher)
+```cpp
+$ cleos set contract addressbook CONTRACTS_DIR/addressbook
 
-C++ CDT를 사용하여 간단한 스마트 컨트랙트를 작성하는 경우 일반적으로 클래스를 정의한 다음 특정 메서드를 액션으로 표시합니다.&#x20;
-
-그러나 작성된 스마트 컨트랙트를 실행하는 nodeos 는 C++ 클래스 및 메서드에 대해 전혀 알지 못합니다. nodeos 가 하는 일은 새로 초기화된 WASM 가상 시스템 내에서 apply() 함수(WASM 바이너리에서 내보낸 C 함수)를 호출하고 다음과 같은 여러 인수를 전달하는 것입니다.
-
-`void apply( uint64_t receiver, uint64_t code, uint64_t action )`
-
-이는 C 함수이며, eosio::name 오브젝트를 이용하여 사용하지만 사실 이 인수는 정수 값입니다. CDT 헤더 파일이 name 을 정수로 변환하는 것입니다. receiver는 초기 액션을 받은 계정 이름이고, code는 현재 특정 시점에 액션을 실행하는 계정입니다.&#x20;
-
-어떤 액션이 트랜잭션 입력이거나 eosio::action::send() 실행의 결과인 경우 code 는 receiver 와 동일한 계정입니다. 그렇지 않은 경우, 이 호출은 require\_recipient() 호출의 결과이며, receiver 는 require\_recipient()가 호출된 계약의 계정 이름을 보유하므로 code 계정과 다릅니다.&#x20;
-
-기본적으로 code 와 receiver 를 비교하여 원래의 액션 호출 또는 알림을 처리하고 있는지 확인할 수 있습니다.&#x20;
-
-action 인수는 액션 이름에 해당합니다. require\_recipient()의 결과를 처리하는 경우 action은 require\_recipient()가 호출된 원래 액션의 이름입니다. 그렇지 않은 경우 이는 컨트랙트에서 호출된 액션의 이름입니다.
-
-따라서 apply() 함수 내의 디스패처는 다음과 같은 몇 가지 작업을 수행해야 합니다.&#x20;
-
-1. code 와 receiver 를 비교하여 액션 호출인지 알림인지 확인합니다.&#x20;
-2. 이 액션 또는 알림에 대한 핸들러를 찾습니다.&#x20;
-3. 액션 인수를 디코딩하여 핸들러에 전달합니다.&#x20;
-
-보시다시피 action 인수는 apply() 함수에 직접 전달되지 않습니다. 실행 환경은 이를 위해 두 가지 저수준의 C 호출을 제공합니다.&#x20;
-
-1. action\_data\_size()는 직렬화된 인수의 길이를 알려줍니다.
-2. read\_action\_data()는 직렬화된 인수를 제공된 버퍼에 복사합니다.&#x20;
-
-직렬화된 액션 인수는 구조체에 대한 정보를 가지고 있지 않습니다. 클라이언트가 패킹한 것이 무엇이든 간에 바이트 벡터를 전달받습니다. 이제 디스패처는 이 데이터에서 개별 필드를 추출하여 핸들러에게 전달해야 합니다. 그리고 그것이 가지고 있는 유일한 정보는 컨트랙트 소스에 있는 클래스 메소드 정의입니다.&#x20;
-
-여기서 C++는 템플릿을 사용하면 편리합니다. 디스패처 코드는 클래스 메서드를 받는 일반화된 템플릿이며, 타입 목록으로서 인수 목록을 역직렬화기(deserializer)로 전달합니다.&#x20;
-
-따라서 호출자가 잘못된 순서로 인수를 직렬화했거나 잘못된 데이터 유형(예를 들어, 디스패처가 uint32를 예상했지만 실제로는 uint64 를 패킹)을 사용하는 경우, 발송자가 인수를 직렬화하지 못하기 때문에 액션이 핸들러로 전달되기도 전에 실패할 수 있습니다.&#x20;
-
-최신 CDT 키트를 사용하면 CDT가 \[\[eosio::action]] 및 \[\[eosio:on\_notify]] 로 라벨링 된 C++ 소스에서 apply() 함수를 생성하므로 신경 쓸 필요가 없습니다.
-
-위의 challenge 액션 예제를 자세히 살펴보겠습니다. \[\[eosio::action]] 에는 이름 지정자가 없으므로 \[\[eosio::action("challenge")]] 와 동일합니다. paren 에 있는 이름은 액션 이름을 정의하고 이는 디스패처가 사용하며 동시에 ABI에 공개 됩니다. 그런 다음 클래스 메서드 이름이 나오는데, 이 이름은 이론적으로 액션 이름과 다를 수 있습니다. 그러나 실제로는 메소드의 이름이 액션 이름과 같다면 더 편리합니다.&#x20;
-
-통지 핸들러는 다음과 같이 특정 컨트랙트 이름에 특정되거나 와일드카드를 사용하는 일반 계약 이름일 수 있습니다.
-
-```
-/* specific handler reactinhg on transfers in system token only */
-[[eosio::on_notify("eosio.token::transfer")]] 
-void on_payment (name from, name to, asset quantity, string memo) {
-  ...
-}
-
-/* generic handler catching transfers in every token contract */
-[[eosio::on_notify("*::transfer")]] 
-void on_transfer (name from, name to, asset quantity, string memo) {
-  ...
-}
+Publishing contract...
+executed transaction: 1898d22d994c97824228b24a1741ca3bd5c7bc2eba9fea8e83446d78bfb264fd  7320 bytes  747 us
+#         eosio <= eosio::setcode               {"account":"addressbook","vmtype":0,"vmversion":0,"code":"0061736d0100000001a6011a60027f7e0060077f7e...
+#         eosio <= eosio::setabi                {"account":"addressbook","abi":"0e656f73696f3a3a6162692f312e30010c6163636f756e745f6e616d65046e616d65.
 ```
 
-두 경우 모두 다 디폴트 디스패처가 일치하는 핸들러를 찾을 것이며 그에 알맞게 알림 인수를 역직렬화 할 것입니다. [스마트 컨트랙트 보안 챕터](https://cc32d9.gitbook.io/eosio-smart-contract-developers-handbook/design-guidelines/smart-contract-security)에서 이러한 핸들러의 잠재적 보안 리스크를 확인할 수 있습니다.
+## 단계8: 테스트
 
-## 액션 호출하기
+이제 컨트랙트가 수정되고 배포되었으니 테스트 해보겠습니다. 이전 단원의 테스트 단계에서 alice 의 addressbook 레코드를 삭제했었습니다. 따라서 터미널에서 다음과 같이 "create" 케이스 내부에 작성된 upsert 인라인 액션을 호출합니다.
 
-RPC 클라이언트가 트랜잭션을 패킹하는 경우, 컨트랙트의 ABI 만이 해당 인수에 대하여 알 수 있는 유일한 정보 입니다.
+```cpp
+$ cleos push action addressbook upsert '["alice", "alice", "liddell", 21, "123 drink me way", "wonderland", "amsterdam"]' -p alice@active
 
-그러나 eosio::action::send()를 사용하여 컨트랙트 내부에서 어떤 액션을 호출하는 경우에는 ABI가 없습니다.  ABI를 조회하거나 호출된 컨트랙트의 소스 코드를 읽어봄으로써 어떤 인수가 있고 그 타입이 무엇인지을 추정하는 것만이 가능합니다(가능한 경우에만). 호출된 컨트랙트가 해당 액션의 정의를 변경할 경우 호출된 컨트랙트 코드를 업데이트해야 해당 액션을 다시 호출할 수 있습니다.
+executed transaction: e9e30524186bb6501cf490ceb744fe50654eb393ce0dd733f3bb6c68ff4b5622  160 bytes  9810 us
+#   addressbook <= addressbook::upsert          {"user":"alice","first_name":"alice","last_name":"liddell","age":21,"street":"123 drink me way","cit...
+#   addressbook <= addressbook::notify          {"user":"alice","msg":"alicesuccessfully emplaced record to addressbook"}
+#         alice <= addressbook::notify          {"user":"alice","msg":"alicesuccessfully emplaced record to addressbook"}
+```
 
-## 액션 내부에서 보여지는 트랜잭션
+위에 출력된 로그의 마지막 항목은 alice 로 보내진 addressbook::notify 액션을 나타냅니다. cleos get actions 명령으로 alice와 관련된 actions들을 표시해 봅시다.
 
-일단 트랜잭션 실행 중에 스마트 계약이 통제권을 잡으면, 액션 호출 전에 무슨 일이 있었는지에 대한 특정 정보를 얻어낼 수 있지만, 모든 것은 알아낼 수 있는 것은 아닙니다.
+```cpp
+$ cleos get actions alice
 
-[트랜잭션 생애주기](https://cc32d9.gitbook.io/eosio-smart-contract-developers-handbook/how-eosio-works/life-cycle-of-a-transaction)에 설명된 대로 트랜잭션 실행은 일련의 WASM 가상 시스템으로 구성되며, 코드를 가지고는 현재 사용자가 특정 순간에 어떤 위치에 있는지 확인할 수 없습니다. 액션 핸들러는 최상위 액션 목록에서 호출되거나 다른 액션 실행의 결과로 호출될 수 있습니다.&#x20;
-
-우리가 알 수 있는 것은 블록체인에 제출된 초기 트랜잭션의 내용입니다. 이는 트랜잭션 바이트를 제공된 버퍼에 복사하는 내장 메소드입니다. 또한 CDT는 트랜잭션 및 액션 클래스를 제공하여 필요에 따라 트랜잭션 내용을 디코딩하고 역직렬화할 수 있도록 지원합니다. 그러나 이 방법으로는 처음에 호출된 컨트랙트 및 액션과, 실행을 승인한 계정 목록만이 표시됩니다.
+#  seq  when                              contract::action => receiver      trx id...   args
+================================================================================================================
+#   62   2018-09-15T12:57:09.000       addressbook::notify => alice         685ecc09... {"user":"alice","msg":"alice successfully added record to ad...
+```

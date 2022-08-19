@@ -27,7 +27,7 @@ nodeos ... --plugin eosio::http_client_plugin  \\
 ```
 eosio::http_client_plugin 의 설정 옵션:
   --https-client-root-cert arg
-    PEM으로 인코딩된, 신뢰할 수 있는 루트 인증서(또는 그것을 포함하고 있는 파일 경로).
+    PEM으로 인코딩된, 신뢰할 수 있는 루트 인증서(또는 인증서를 포함하고 있는 파일 경로).
     TLS 연결을 확인하는 데 사용된다.(여러 번 지정할 수 있다.)
   --https-client-validate-peers arg (=1)
     true: 피어 인증서가 유효하고 신뢰할 수 있는지 검증한다.

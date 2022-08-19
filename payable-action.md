@@ -69,7 +69,7 @@ asset 인스턴스의 symbol 멤버가 Primary Key 로 사용됩니다. 여기�
 
 ### 생성자
 
-생성자는 hodl\_symbol 을 "SYS"로 초기화 합니다. SYS 는 [토큰 배포, 발급 및 전송](undefined-6.md) 단원에서 만들었던 토큰입니다.
+생성자는 hodl\_symbol 을 "SYS"로 초기화 합니다. SYS 는 [토큰 배포, 발급 및 전송](undefined-2.md) 단원에서 만들었던 토큰입니다.
 
 ```cpp
 public:

@@ -1,137 +1,491 @@
-# 스마트 컨트랙트 개발 워크플로우
+# 다른 스마트 컨트랙트의 인라인 액션 을 호출하는 방법
 
-## 토큰 배포, 발행 및 전송: eosio.token 스마트 컨트랙트 사용법
+## 소개
 
-이 단원에서는 토큰의 개념과 eosio.token 스마트 컨트랙트, 그리고 cleos 를 사용하여 eosio.token 의 액션을 호출하는 방법을 배울 것입니다.
+이전 단원에서 스마트 컨트랙트의 액션에서 인라인 액션을 실행하는 방법을 알아보았습니다. 이번에는 외부에 있는 컨트랙트로 액션을 보내는 방법에 대하여 알아볼 것입니다. 지금까지 컨트랙트를 제법 많이 작성했으므로, 이 컨트랙트는 매우 단순하게 유지 할 것입니다. 여기서 우리는 컨트랙트에 의해 작성된, 액션을 카운트 하는 컨트랙트를 작성할 것입니다. 이 컨트랙트는 실제 상황에서 쓰일 일이 거의 없겠지만, 외부의 스마트 컨트랙트에 대한 인라인 액션 호출 방법을 보여줄 것입니다.
 
-### 단계1: 스마트 컨트랙트 소스 받아오기
+## 단계1: Addressbook 카운팅 컨트랙트
 
-원하는 위치에 contracts 디렉토리를 만들고 이동합니다.
+CONTRACTS\_DIR 로 이동합니다. 그리고 abcounter 라는 디렉토리를 만들고 abcounter.cpp 라는 파일을 만듭니다.
 
-```jsx
-mkdir CONTRACTS_DIR
+```cpp
 cd CONTRACTS_DIR
+mkdir abcounter
+cd abcounter
+touch abcounter.cpp
 ```
 
-github 저장소에서 eosio.contracts 소스를 다운로드 받습니다.
+편집기로 abcounter.cpp 파일을 열고 다음 코드를 붙여넣습니다. 이 컨트랙트는 지금까지 다루었던 내용을 기반으로 매우 기본적인 내용으로 구성되어 있습니다. 몇 가지 예외가 있기는 하지만, 그 내용에 대해서는 아래에 자세히 설명할 것입니다.
 
-```jsx
-git clone <https://github.com/EOSIO/eosio.contracts> --branch v1.7.0 --single-branch
+```cpp
+#include <eosio/eosio.hpp>
+
+using namespace eosio;
+
+class [[eosio::contract("abcounter")]] abcounter : public eosio::contract {
+  public:
+
+    abcounter(name receiver, name code,  datastream<const char*> ds): contract(receiver, code, ds) {}
+
+    [[eosio::action]]
+    void count(name user, std::string type) {
+      require_auth( name("addressbook"));
+      count_index counts(get_first_receiver(), get_first_receiver().value);
+      auto iterator = counts.find(user.value);
+
+      if (iterator == counts.end()) {
+        counts.emplace("addressbook"_n, [&]( auto& row ) {
+          row.key = user;
+          row.emplaced = (type == "emplace") ? 1 : 0;
+          row.modified = (type == "modify") ? 1 : 0;
+          row.erased = (type == "erase") ? 1 : 0;
+        });
+      }
+      else {
+        counts.modify(iterator, "addressbook"_n, [&]( auto& row ) {
+          if(type == "emplace") { row.emplaced += 1; }
+          if(type == "modify") { row.modified += 1; }
+          if(type == "erase") { row.erased += 1; }
+        });
+      }
+    }
+
+    using count_action = action_wrapper<"count"_n, &abcounter::count>;
+
+  private:
+    struct [[eosio::table]] counter {
+      name key;
+      uint64_t emplaced;
+      uint64_t modified;
+      uint64_t erased;
+      uint64_t primary_key() const { return key.value; }
+    };
+
+    using count_index = eosio::multi_index<"counts"_n, counter>;
+};
 ```
 
-이 저장소에는 여러가지 스마트 컨트랙트 소스가 저장되어 있는데, 그 중 eosio.token 컨트랙트가 본 섹션에서 다룰 내용입니다.
+위 코드에서 처음 등장한 개념은, 아래와 코드와 같이 require\_auth() 를 사용하여 특정 계정만이 이 컨트랙트의 어떤 액션 호출할 수 있도록 명시적으로 제한한다는 것입니다.
 
-이제 eosio.contracts/contracts/eosio.token 으로 이동합니다.
-
-```jsx
-cd eosio.contracts/contracts/eosio.token
+```
+// addressbook 계정/컨트랙트에게만 이 명령을 수행할 수 있는 권한을 부여한다.
+require_auth( name("addressbook"));
 ```
 
-### 단계2: 스마트 컨트랙트를 위한 계정 생성
+앞서서는 require\_auth() 를 사용할 때는 user 변수를 사용하였습니다.
 
-토큰 계약을 배포하기 전에 이를 배포하기 위한 계정을 생성합니다. 이 계정은 일반에 공개되어 있는 eosio 개발용 키를 사용할 것입니다. 이 키는 절대로 프로덕션 용으로 써서는 안 됩니다.
+위 코드에서 나타난 또다른 새로운 개념은 [action wrapper](https://developers.eos.io/manuals/eosio.cdt/latest/structeosio\_1\_1action\_\_wrapper) 입니다. 아래에서 볼 수 있듯이 액션 래퍼의 첫 번째 템플릿 매개변수는 우리가 호출하려는 액션이며, 두 번째는 액션 함수를 가리키는 참조자입니다.
 
-```jsx
-cleos create account eosio eosio.token EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
+```cpp
+using count_action = action_wrapper<"count"_n, &abcounter::count>;
 ```
 
-### 단계3: 스마트 컨트랙트 컴파일
+## 단계2: abcounter 컨트랙트를 위한 계정 생성
 
-다음 명령으로 스마트 컨트랙트를 컴파일 합니다. 성공적으로 컴파일하면 eosio.token.wasm 파일이 생성됩니다.
+터미널을 열고 아래 명령을 실행하여 abcounter 사용자를 만듭니다.
 
-```jsx
-eosio-cpp -I include -o eosio.token.wasm src/eosio.token.cpp --abigen
+```cpp
+cleos create account eosio abcounter EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
 ```
 
-### 단계4: 토큰 컨트랙트 배포
+## 단계3: 컴파일 및 배포
 
-이제 배포할 준비가 되었습니다. 다음 명령으로 토큰 컨트랙트를 배포합니다.
+마지막으로 abcounter 컨트랙트를 컴파일하고 배포합니다.
 
-```jsx
-$ cleos set contract eosio.token CONTRACTS_DIR/eosio.contracts/contracts/eosio.token --abi eosio.token.abi -p eosio.token@active
-
-Reading WASM from ...eosio.contracts/contracts/eosio.token/eosio.token.wasm...
-Publishing contract...
-executed transaction: a68299112725b9f2233d56e58b5392f3b37d2a4564bdf99172152c21c7dc323f  6984 bytes  6978 us
-#         eosio <= eosio::setcode               {"account":"eosio.token","vmtype":0,"vmversion":0,"code":"0061736d0100000001a0011b60000060017e006002...
-#         eosio <= eosio::setabi                {"account":"eosio.token","abi":"0e656f73696f3a3a6162692f312e310008076163636f756e7400010762616c616e63...
-warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```cpp
+eosio-cpp abcounter.cpp -o abcounter.wasm
 ```
 
-### 단계5: 토큰 만들기
-
-배포가 성공했으면 토큰을 만들어 봅시다. eosio.token 의 create action 에 적절한 매개변수를 넘겨 호출하면 새로운 토큰을 만들 수 있습니다. 이 액션은 다음과 같은 내용을 가지는 하나의 인수를 필요로 합니다.
-
-* 발행자(issuer)가 되는 eosio 계정: 여기서 alice 라는 계정을 사용하겠습니다. 발행자는 issue 액션을 호출할 수 있는 권한을 가지며 또한 closing account 나 retiring token과 같은 액션을 수행할 수도 있습니다.
-* asset 타입:  이 정보는 두 가지 데이터로 구성됩니다. 첫 번째 인자인 부동소수점 숫자는 토큰의 최대 공급량(maximum supply)이며, 두 번째 인자는 토큰의 심볼을 나타내는 대문자 알파벳(티커)입니다. \
-  예) "1.0000 SYS"
-
-아래는 위치 인수(positional argument) 를 이용한 호출 방법의 예제 입니다.
-
-```jsx
-cleos push action eosio.token create '[ "alice", "1000000000.0000 SYS"]' -p eosio.token@active
+```cpp
+cleos set contract abcounter CONTRACTS_DIR/abcounter
 ```
 
-위 명령으로 소수점 4자리의 정밀도를 가지고, 최대 공급량이 100000000.0000 인 새 토큰 SYS를 만들었습니다. 그리고 alice 도 발행인으로 지정했습니다. 또한 스마트 컨트랙트가 이 토큰을 만들기 위해 eosio.token 의 권한을 필요로 하기 때문에 -p eosio.token@active 옵션으로 권한을 전달하였습니다.
+## 단계4: 주소록 컨트랙트를 수정하여 인라인 액션을 abcounter 로 전송
 
-액션 호출시에 다음과 같이 각 인수에 명확한 이름을 지정하는 형식으로 사용 할 수도 있습니다.
+addressbook 디렉토리로 이동합니다.
 
-```jsx
-cleos push action eosio.token create '{"issuer":"alice", "maximum_supply":"1000000000.0000 SYS"}' -p eosio.token@active
-
-executed transaction: 10cfe1f7e522ed743dec39d83285963333f19d15c5d7f0c120b7db652689a997  120 bytes  1864 us
-#   eosio.token <= eosio.token::create          {"issuer":"alice","maximum_supply":"1000000000.0000 SYS"}
-warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```cpp
+cd CONTRACTS_DIR/addressbook
 ```
 
-### 단계6: 토큰 발행
+에디터로 addressbook.cpp 파일을 엽니다.
 
-이제 발행자(issuer)인 alice 는 새 토큰을 발행할 수 있게 되었습니다. 앞서 설명하였듯이 토큰 발행은 발행자만이 할 수있습니다. 따라서 issue 액션을 호출할 때 반드시 -p alice@active 권한을 같이 넘겨야 합니다.
+이전 단원의 마지막 부분에서, 우리는 우리 자신의 컨트랙트로 인라인 액션을 넘겼었습니다. 이번에는 새로운 컨트랙트인 abcounter 로 인라인 액션을 보낼 것입니다.
 
-```jsx
-$ cleos push action eosio.token issue '[ "alice", "100.0000 SYS", "memo" ]' -p alice@active
+아래와 같이 addressbook 컨트랙트의 private 영역 아래에 increment\_counter 라는 helper 메소드를 만듭니다.
 
-executed transaction: d1466bb28eb63a9328d92ddddc660461a16c405dffc500ce4a75a10aa173347a  128 bytes  205 us
-#   eosio.token <= eosio.token::issue           {"to":"alice","quantity":"100.0000 SYS","memo":"memo"}
-warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```cpp
+void increment_counter(name user, std::string type) {
+    abcounter::count_action count("abcounter"_n, {get_self(), "active"_n});
+    count.send(user, type);
+}
 ```
 
-트랜잭션을 검사하려면 "브로드캐스트 안 함" 및 "트랜잭션을 json으로 반환"을 나타내는 -d 와 -j 옵션을 사용하면 됩니다. 이 옵션은 개발 중에 사용하면 유용합니다.
+위의 코드를 한번 살펴봅시다.
 
-```jsx
-cleos push action eosio.token issue '["alice", "100.0000 SYS", "memo"]' -p alice@active -d -j
+이번에는 함수를 호출하는 대신 abcounter 에서 정의한 count\_action 액션 래퍼를 사용하고 있습니다. 이를 위해 먼저 앞서 정의한 count\_action 객체를 초기화했습니다. 우리가 넘긴 첫 번째 파라미터는 호출되는 컨트랙트 이름인 abcounter 이고, 두 번째 매개 변수는 권한 구조체입니다.
+
+* 인증 권한에 대해 get\_self()는 현재 addressbook 컨트랙트를 반환합니다. 사용되는 권한은 addressbook 의 active 권한입니다.
+
+인라인 액션 추가 단원에서와는 달리 액션 래퍼 타입에 정의된 액션이 포함되므로 따로 액션을 지정할 필요가 없습니다.
+
+세번째 줄에서는 abcounter 컨트랙트에서 요구하는 user 및 type, 즉 데이터가 포함된 액션을 호출합니다.
+
+이제 각 액션 스코프에 있는 helper 에 다음과 같은 호출을 추가합니다.
+
+```cpp
+//Emplace
+increment_counter(user, "emplace");
+//Modify
+increment_counter(user, "modify");
+//Erase
+increment_counter(user, "erase");
 ```
 
-### 단계7: 토큰 전송
+이제 addressbook.cpp 전체 코드는 다음과 같을 것입니다.
 
-이제 alice 가 토큰을 발행했으니 다른 계정 bob으로 토큰을 전송해 보겠습니다.
+```cpp
+#include <eosio/eosio.hpp>
+#include "abcounter.cpp"
 
-```jsx
-$ cleos push action eosio.token transfer '[ "alice", "bob", "25.0000 SYS", "m" ]' -p alice@active
+using namespace eosio;
 
-executed transaction: 800835f28659d405748f4ac0ec9e327335eae579a0d8e8ef6330e78c9ee1b67c  128 bytes  1073 us
-#   eosio.token <= eosio.token::transfer        {"from":"alice","to":"bob","quantity":"25.0000 SYS","memo":"m"}
-#         alice <= eosio.token::transfer        {"from":"alice","to":"bob","quantity":"25.0000 SYS","memo":"m"}
-#           bob <= eosio.token::transfer        {"from":"alice","to":"bob","quantity":"25.0000 SYS","memo":"m"}
-warning: transaction executed locally, but may not be confirmed by the network yet         ]
+class [[eosio::contract("addressbook")]] addressbook : public eosio::contract {
+
+public:
+
+  addressbook(name receiver, name code,  datastream<const char*> ds): contract(receiver, code, ds) {}
+
+  [[eosio::action]]
+  void upsert(name user, std::string first_name, std::string last_name,
+      uint64_t age, std::string street, std::string city, std::string state) {
+    require_auth(user);
+    address_index addresses(get_first_receiver(), get_first_receiver().value);
+    auto iterator = addresses.find(user.value);
+    if( iterator == addresses.end() )
+    {
+      addresses.emplace(user, [&]( auto& row ) {
+       row.key = user;
+       row.first_name = first_name;
+       row.last_name = last_name;
+       row.age = age;
+       row.street = street;
+       row.city = city;
+       row.state = state;
+      });
+      send_summary(user, " successfully emplaced record to addressbook");
+      increment_counter(user, "emplace");
+    }
+    else {
+      std::string changes;
+      addresses.modify(iterator, user, [&]( auto& row ) {
+        row.key = user;
+        row.first_name = first_name;
+        row.last_name = last_name;
+        row.age = age;
+        row.street = street;
+        row.city = city;
+        row.state = state;
+      });
+      send_summary(user, " successfully modified record to addressbook");
+      increment_counter(user, "modify");
+    }
+  }
+
+  [[eosio::action]]
+  void erase(name user) {
+    require_auth(user);
+
+    address_index addresses(get_first_receiver(), get_first_receiver().value);
+
+    auto iterator = addresses.find(user.value);
+    check(iterator != addresses.end(), "Record does not exist");
+    addresses.erase(iterator);
+    send_summary(user, " successfully erased record from addressbook");
+    increment_counter(user, "erase");
+  }
+
+  [[eosio::action]]
+  void notify(name user, std::string msg) {
+    require_auth(get_self());
+    require_recipient(user);
+  }
+
+private:
+  struct [[eosio::table]] person {
+    name key;
+    std::string first_name;
+    std::string last_name;
+    uint64_t age;
+    std::string street;
+    std::string city;
+    std::string state;
+
+    uint64_t primary_key() const { return key.value; }
+    uint64_t get_secondary_1() const { return age;}
+  };
+
+  void send_summary(name user, std::string message) {
+    action(
+      permission_level{get_self(),"active"_n},
+      get_self(),
+      "notify"_n,
+      std::make_tuple(user, name{user}.to_string() + message)
+    ).send();
+  };
+
+  void increment_counter(name user, std::string type) {
+    abcounter::count_action count("abcounter"_n, {get_self(), "active"_n});
+    count.send(user, type);
+  }
+
+  typedef eosio::multi_index<"people"_n, person,
+    indexed_by<"byage"_n, const_mem_fun<person, uint64_t, &person::get_secondary_1>>
+  > address_index;
+};
 ```
 
-이번에는 3개의 transfer 액션이 출력된 것을 볼 수 있습니다. 출력된 내용은 호출된 모든 액션 핸들러와 그들이 호출된 순서, 그리고 액션에 의해 생성된 출력이 있으면 표시합니다.
+## 단계5: addressbook 컨트랙트 재 컴파일 및 재배포
 
-이제 bob이 토큰을 받았는지 확인해 보겠습니다.
+addressbook.cpp 컨트랙트를 다시 컴파일하고 이번엔 ABI 를 다시 만들지 않습니다. 이번에 변경된 내용은 ABI 에 영향을 주지 않기 때문입니다.
 
-```jsx
-cleos get currency balance eosio.token bob SYS
+여기서 -l 옵션으로 abcounter 컨트랙트 폴더를 포함시킬 것입니다.
 
-25.0000 SYS
+```cpp
+eosio-cpp -o addressbook.wasm addressbook.cpp -I ../abcounter/
 ```
 
-alice 의 잔고도 확인해 보겠습니다.
+이제 컨트랙트를 온체인에 다시 배포합니다.
 
-```jsx
-cleos get currency balance eosio.token alice SYS
-
-75.0000 SYS
+```cpp
+cleos set contract addressbook CONTRACTS_DIR/addressbook
 ```
 
-이렇게 eosio.token 스마트 컨트랙트를 컴파일하고 배포한 뒤 컨트랙트 내부의 액션을 호출하는 방법을 알아보았습니다.
+## 단계6: 테스트
+
+이제 abcounter 가 배포되었고 addressbook 도 다시 배포 되었으니 테스트를 해 보겠습니다.
+
+```cpp
+$ cleos push action addressbook upsert '["alice", "alice", "liddell", 19, "123 drink me way", "wonderland", "amsterdam"]' -p alice@active
+
+executed transaction: cc46f20da7fc431124e418ecff90aa882d9ca017a703da78477b381a0246eaf7  152 bytes  1493 us
+#   addressbook <= addressbook::upsert          {"user":"alice","first_name":"alice","last_name":"liddell","street":"123 drink me way","city":"wonde...
+#   addressbook <= addressbook::notify          {"user":"alice","msg":"alice successfully modified record in addressbook"}
+#         alice <= addressbook::notify          {"user":"alice","msg":"alice successfully modified record in addressbook"}
+#     abcounter <= abcounter::count             {"user":"alice","type":"modify"}
+```
+
+출력된 로그에서 counter 가 성공적으로 통지된 것을 확인할 수 있습니다. 이제 테이블을 확인해보겠습니다.
+
+```cpp
+$ cleos get table abcounter abcounter counts --lower alice --limit 1
+{
+  "rows": [{
+      "key": "alice",
+      "emplaced": 1,
+      "modified": 0,
+      "erased": 0
+    }
+  ],
+  "more": false
+}
+```
+
+각각의 액션을 테스트하고 counter 도 체크합니다. 이미 alice 의 레코드가 있으므로 upsert 로 수정하겠습니다.
+
+```cpp
+$ cleos push action addressbook upsert '["alice", "alice", "liddell", 21,"1 there we go", "wonderland", "amsterdam"]' -p alice@active
+
+executed transaction: c819ffeade670e3b44a40f09cf4462384d6359b5e44dd211f4367ac6d3ccbc70  152 bytes  909 us
+#   addressbook <= addressbook::upsert          {"user":"alice","first_name":"alice","last_name":"liddell","street":"1 coming down","city":"normalla...
+#   addressbook <= addressbook::notify          {"user":"alice","msg":"alice successfully emplaced record to addressbook"}
+>> Notified
+#         alice <= addressbook::notify          {"user":"alice","msg":"alice successfully emplaced record to addressbook"}
+#     abcounter <= abcounter::count             {"user":"alice","type":"emplace"}
+warning: transaction executed locally, but may not be confirmed by the network yet    ]
+```
+
+alice 의 레코드는 다음과 같이 삭제할 수 있습니다.
+
+```cpp
+$ cleos push action addressbook erase '["alice"]' -p alice@active
+
+executed transaction: aa82577cb1efecf7f2871eac062913218385f6ab2597eaf31a4c0d25ef1bd7df  104 bytes  973 us
+#   addressbook <= addressbook::erase           {"user":"alice"}
+>> Erased
+#   addressbook <= addressbook::notify          {"user":"alice","msg":"alice successfully erased record from addressbook"}
+>> Notified
+#         alice <= addressbook::notify          {"user":"alice","msg":"alice successfully erased record from addressbook"}
+#     abcounter <= abcounter::count             {"user":"alice","type":"erase"}
+warning: transaction executed locally, but may not be confirmed by the network yet    ]
+Toaster:addressbook sandwich$
+```
+
+이제 abcounter 컨트랙트를 직접 호출하여 데이터를 조작 할 수 있는지 테스트 해 보겠습니다.
+
+```cpp
+cleos push action abcounter count '["alice", "erase"]' -p alice@active
+
+Error 3090004: Missing required authority
+Ensure that you have the related authority inside your transaction!;
+If you are currently using 'cleos push action' command, try to add the relevant authority using -p option.
+Error Details:
+missing authority of addressbook
+pending console output:
+```
+
+권한 때문에 오류가 발생함을 확인할 수 있습니다. abcounter 내의 테이블을 다음과 같이 확인해 보겠습니다.
+
+```cpp
+$ cleos get table abcounter abcounter counts --lower alice
+
+{
+  "rows": [{
+      "key": "alice",
+      "emplaced": 1,
+      "modified": 1,
+      "erased": 1
+    }
+  ],
+  "more": false
+}
+```
+
+데이터 삽입, 수정, 삭제가 한번 씩 이루어졌고 그에 따라 카운터가 1 씩 증가했음을 확인할 수 있습니다. 또한 require\_auth() 에 name("addressbook") 을 넣어 호출했기 때문에 addressbook 컨트랙트만이 이 액션을 실행할 수 있습니다. alice 가 카운팅 된 숫자들을 바꾸기 위해서 직접 abcounter 를 호출하면 권한 오류가 발생하고 테이블 데이터에 영향을 주지 않습니다.
+
+## 부록: 보다 긴 영수증
+
+아래에서 수정할 내용은 변경 모드를 기반으로 하여 사용자 영수증을 보내줄 것입니다. 만약 수정 중에 변경 사항이 없다면 영수증은 이 상황을 반영할 것입니다.
+
+```cpp
+#include <eosio/eosio.hpp>
+#include "abcounter.cpp"
+
+using namespace eosio;
+
+class [[eosio::contract("addressbook")]] addressbook : public eosio::contract {
+
+public:
+
+  addressbook(name receiver, name code,  datastream<const char*> ds): contract(receiver, code, ds) {}
+
+  [[eosio::action]]
+  void upsert(name user, std::string first_name, std::string last_name, uint64_t age, std::string street, std::string city, std::string state) {
+    require_auth(user);
+
+    address_index addresses(get_first_receiver(), get_first_receiver().value);
+
+    auto iterator = addresses.find(user.value);
+    if( iterator == addresses.end() )
+    {
+      addresses.emplace(user, [&]( auto& row ){
+       row.key = user;
+       row.first_name = first_name;
+       row.last_name = last_name;
+       row.age = age;
+       row.street = street;
+       row.city = city;
+       row.state = state;
+       send_summary(user, " successfully emplaced record to addressbook");
+       increment_counter(user, "emplace");
+      });
+    }
+    else {
+      std::string changes;
+      addresses.modify(iterator, user, [&]( auto& row ) {
+
+        if(row.first_name != first_name) {
+          row.first_name = first_name;
+          changes += "first name ";
+        }
+
+        if(row.last_name != last_name) {
+          row.last_name = last_name;
+          changes += "last name ";
+        }
+
+        if(row.age != age) {
+          row.age = age;
+          changes += "age ";
+        }
+
+        if(row.street != street) {
+          row.street = street;
+          changes += "street ";
+        }
+
+        if(row.city != city) {
+          row.city = city;
+          changes += "city ";
+        }
+
+        if(row.state != state) {
+          row.state = state;
+          changes += "state ";
+        }
+      });
+
+      if(!changes.empty()) {
+        send_summary(user, " successfully modified record in addressbook. Fields changed: " + changes);
+        increment_counter(user, "modify");
+      } else {
+        send_summary(user, " called upsert, but request resulted in no changes.");
+      }
+    }
+  }
+
+  [[eosio::action]]
+  void erase(name user) {
+    require_auth(user);
+    address_index addresses(get_first_receiver(), get_first_receiver().value);
+    auto iterator = addresses.find(user.value);
+    check(iterator != addresses.end(), "Record does not exist");
+    addresses.erase(iterator);
+    send_summary(user, " successfully erased record from addressbook");
+    increment_counter(user, "erase");
+  }
+
+  [[eosio::action]]
+  void notify(name user, std::string msg) {
+    require_auth(get_self());
+    require_recipient(user);
+  }
+
+private:
+
+  struct [[eosio::table]] person {
+    name key;
+    std::string first_name;
+    std::string last_name;
+    uint64_t age;
+    std::string street;
+    std::string city;
+    std::string state;
+    uint64_t primary_key() const { return key.value; }
+    uint64_t get_secondary_1() const { return age;}
+  };
+
+  void send_summary(name user, std::string message) {
+    action(
+      permission_level{get_self(),"active"_n},
+      get_self(),
+      "notify"_n,
+      std::make_tuple(user, name{user}.to_string() + message)
+    ).send();
+  };
+
+  void increment_counter(name user, std::string type) {
+
+    action counter = action(
+      permission_level{get_self(),"active"_n},
+      "abcounter"_n,
+      "count"_n,
+      std::make_tuple(user, type)
+    );
+
+    counter.send();
+  }
+
+  typedef eosio::multi_index<"people"_n, person, indexed_by<"byage"_n, const_mem_fun<person, uint64_t, &person::get_secondary_1>>> address_index;
+};
+```

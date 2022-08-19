@@ -6,10 +6,10 @@ description: Bios Boot Sequence
 
 ## 개요
 
-바이오스 부트 시퀀스는 단일 또는 다중 노드를 가지는 Mandel 기반의 프라이빗 로컬 블록체인 네트워크를 만드는 방법으로, 크게 다음과 같이 두 단계를 거치게 됩니다.
+바이오스 부트 시퀀스는 하나 이상의 노드로 구성괴는 Mandel 기반의 프라이빗 로컬 블록체인 네트워크를 만드는 방법으로, 크게 다음과 같이 두 단계를 거치게 됩니다.
 
 1. 제네시스 BP 노드를 설치/구성하고 시작.
-2. BP를 추가하여 다수의 노드에서 스케줄에 맞춰 블록을 생성하도록 구성.
+2. BP 를 추가하여 다수의 노드에서 일정에 맞춰 블록을 생성하도록 구성.
 
 가장 먼저 제네시스 노드부터 만들어 보겠습니다.
 
@@ -877,7 +877,7 @@ tail -f blockchain/nodeos.log
 
 ### 여러 대의 BP 노드 만들기
 
-이제 [여기](undefined-3.md#2.4)서 [여기](undefined-3.md#2.6-bp)까지 과정을 반복하여 각각 자체 스테이크 계정, 자체 전용 디렉토리와 accountnumXY 라고 명명된 계정, 자체 전용 스크립트 파일(genesis\_start.sh, [start.sh](http://start.sh/), [stop.sh](http://stop.sh/), [clean.sh](http://clean.sh))을 사용하여 원하는 만큼 BP를 생성할 수 있습니다.
+이제 [여기](undefined-5.md#2.4)서 [여기](undefined-5.md#2.6-bp)까지 과정을 반복하여 각각 자체 스테이크 계정, 자체 전용 디렉토리와 accountnumXY 라고 명명된 계정, 자체 전용 스크립트 파일(genesis\_start.sh, [start.sh](http://start.sh/), [stop.sh](http://stop.sh/), [clean.sh](http://clean.sh))을 사용하여 원하는 만큼 BP를 생성할 수 있습니다.
 
 또한 만들어낸 노드들을 서로 연결할 수 있어야 합니다. 다음 매개 변수에 주의하여 genesis\_start.sh, [start.sh](http://start.sh/) 및 hard\_start.sh 스크립트를 작성합니다.
 
@@ -916,7 +916,7 @@ cleos push action eosio updateauth '{"account": "eosio", "permission": "owner", 
 cleos push action eosio updateauth '{"account": "eosio", "permission": "active", "parent": "owner", "auth": {"threshold": 1, "keys": [], "waits": [], "accounts": [{"weight": 1, "permission": {"actor": "eosio.prods", "permission": "active"}}]}}' -p eosio@active
 ```
 
-필요시한 [이 단계](undefined-3.md#undefined-10)에서 만든 시스템 계정들 역시 다음 명령을 사용하여 파기할 수 있습니다.
+필요시한 [이 단계](undefined-5.md#undefined-10)에서 만든 시스템 계정들 역시 다음 명령을 사용하여 파기할 수 있습니다.
 
 ```
 cleos push action eosio updateauth '{"account": "eosio.bpay", "permission": "owner", "parent": "", "auth": {"threshold": 1, "keys": [], "waits": [], "accounts": [{"weight": 1, "permission": {"actor": "eosio", "permission": "active"}}]}}' -p eosio.bpay@owner

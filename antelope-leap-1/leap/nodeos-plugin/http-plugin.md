@@ -2,7 +2,7 @@
 
 ## 개요
 
-`http_plugin` 은 nodeos 와 keosd 에서 모두 지원되는 핵심 플러그인 입니다. 이 플러그인을 사용하도록 설정하면 nodeos 또는 keosd 인스턴스에서 제공하는 RPC API 기능을 사용할 수 있습니다.
+`http_plugin` 은 `nodeos` 와 `keosd` 에서 모두 지원되는 핵심 플러그인 입니다. 이 플러그인을 사용하도록 설정하면 `nodeos` 또는 `keosd` 인스턴스에서 제공하는 RPC API 기능을 사용할 수 있습니다.
 
 ## 사용법
 
@@ -21,7 +21,7 @@ keosd ... --plugin eosio::http_plugin [options]
 
 ## HTTP Plugin 설정 옵션
 
-다음은 nodeos 명령줄 또는 `config.ini` 파일에 설정할 수 있는 옵션들 입니다.
+다음은 `nodeos` 명령줄 또는 `config.ini` 파일에 설정할 수 있는 옵션들 입니다.
 
 ```
 eosio::http_plugin 설정 옵션

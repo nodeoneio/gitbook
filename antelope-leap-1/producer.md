@@ -2,7 +2,7 @@
 
 ### 개요
 
-이 단원에서는 Mandel/EOSIO 네트워크에서 블록 생산자(BP) 노드를 설정하는 방법에 대해 설명할 것입니다. 생산자 노드라는 이름에서 알 수 있듯이 Mandel/EOSIO 기반 블록체인에서 블록을 생성하도록 설정되는 노드입니다. `producer_plugin` 뿐만 아니라 [다른 Nodeos 플러그인](nodeos-plugin/)도 설정하여 이 기능을 사용할 수 있습니다.
+이 단원에서는 Mandel/EOSIO 네트워크에서 블록 생산자(BP) 노드를 설정하는 방법에 대해 설명할 것입니다. 생산자 노드라는 이름에서 알 수 있듯이 Mandel/EOSIO 기반 블록체인에서 블록을 생성하도록 설정되는 노드입니다. `producer_plugin` 뿐만 아니라 [다른 Nodeos 플러그인](leap/nodeos-plugin/)도 설정하여 이 기능을 사용할 수 있습니다.
 
 {% hint style="info" %}
 BP 노드를 시작하려면 **System Contract 가 네트워크에 로드**되어 있어야 합니다. 기본 기능만을 사용하는 노드나, System Contract 를 로드하지 않은 기본 개발 노드에서는 이 단원에서 다루는 내용을 적용할 수 없습니다.

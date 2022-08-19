@@ -1,78 +1,137 @@
----
-description: Transaction Lifecycle
----
+# 스마트 컨트랙트 개발 워크플로우
 
-# 트랜잭션 생애주기
+## 토큰 배포, 발행 및 전송: eosio.token 스마트 컨트랙트 사용법
 
-설명을 간결하고 중점적으로 유지하기 위해 EOSIO 헤더 파일에 정의된 일부 필드에 대한 설명(예: 컨텍스트 없는 액션)을 생략하였습니다. 이 문서는 레퍼런스 문서가 아니며 이들이 어떻게 동작하는것인지 설명하는 것이 목적이지 정확히 무엇으로 구성되는지 설명하려는 것이 아닙니다.&#x20;
+이 단원에서는 스마트 컨트랙트를 다루는 가장 기본적인 내용으로, 토큰의 개념과 `eosio.token` 스마트 컨트랙트, 그리고 cleos 를 사용하여 `eosio.token` 의 액션을 호출하는 방법을 배울 것입니다.
 
-또한 name 은 기본적으로 64비트 부호 없는 정수의 텍스트 표현인 EOSIO 데이터 유형 eosio::name을 참조합니다. name 은 계정, 작업, 테이블 및 권한을 지정하기 위해 EOSIO의 모든 곳에서 사용됩니다.
+### 단계1: 스마트 컨트랙트 소스 받아오기
 
-## 트랜잭션 구성하기
+원하는 위치에 contracts 디렉토리를 만들고 이동합니다.
 
-블록체인에서 트랜잭션은 두 가지 형태로 표현됩니다. 즉, 트랜잭션이 HTTP RPC로 푸시되거나 스마트 컨트랙트(지연 트랜잭션을 생성하는 것. 이러한 트랜잭션은 더 이상 사용되지 않으며 해당 트랜잭션에 대한 지원은 중단될 것입니다.)에 의해 생성됩니다.&#x20;
+```jsx
+mkdir CONTRACTS_DIR
+cd CONTRACTS_DIR
+```
 
-&#x20;`/v1/chain/send_transaction` RPC 호출은 트랜잭션 헤더, 작업 및 서명으로 구성된, 직렬화된 `chain::packed_transaction` 오브젝트를 사용합니다. EOSIO 소스 코드의 라이브러리 `/chain/include/eosio/chain/transaction.hpp` 헤더 파일에서 이러한 오브젝트의 세부 정보를 찾아볼 수 있습니다.&#x20;
+github 저장소에서 eosio.contracts 소스를 다운로드 받습니다.
 
-트랜잭션 헤더에는 클라이언트가 트랜잭션을 보내기 전에 검색해야 하는 몇 가지 값이 포함되어 있습니다. 현재 eosjs 라이브러리는 값을 캐시하여 재사용하지 않고 모든 트랜잭션을 보내기 전에 일일히 필요한 값을 요청하고 있습니다. 다른 클라이언트 라이브러리는 RPC 상호 작용을 최적화하고 재사용할 수 있는 값은 재사용하고 있습니다. 다음은 트랜잭션 헤더의 몇 가지 중요한 필드입니다.&#x20;
+```jsx
+git clone <https://github.com/EOSIO/eosio.contracts> --branch v1.8.0 --single-branch
+```
 
-* `time_point_sec expiration` - 트랜잭션이 블록안에 배치되지 않을 경우 트랜잭션이 만료되는 절대 시간값입니다. 트랜잭션이 만료되면 노드에서 트랜잭션을 삭제하고 전파를 중지합니다.&#x20;
-* `uint16_t ref_block_num` - 이 필드는 32비트 블록 번호의 가장 낮은 16비트로 구성됩니다. 즉, 대략 9시간 이상 경과된 블록 번호를 참조하는 경우 트랜잭션을 블록에 배치할 수 없습니다.&#x20;
-* `uint32_t ref_block_prefix` -- 이 필드에는 참조 블록 ID의 가장 낮은 32비트(블록 ID는 블록 컨텐츠의 sha256 해시값입니다)가 포함됩니다.
+이 저장소에는 여러가지 스마트 컨트랙트 소스가 저장되어 있는데, 그 중 eosio.token 컨트랙트가 본 섹션에서 다룰 내용입니다.
 
-따라서 유효한 트랜잭션을 보내려면 클라이언트가 유효한 블록 번호와 ID를 가져와야 합니다. 가장 신뢰할 수 있는 방법은 마지막 "비가역성 블록(되돌릴 수 없는 블록)"(이 정보는 get\_info RPC 호출을 통해 검색됨)을 취하는 것이며 만료 시간은 미래여야 한다는 점을 주의해야 합니다. 그러나 작업 순서가 중요한 일부 애플리케이션의 경우 컨트랙트가 작업 순서를 보장하지 않기 때문에 헤드 블록을 대신에 의존 할 수 있습니다.&#x20;
+이제 eosio.contracts/contracts/eosio.token 으로 이동합니다.
 
-액션은 트랜잭션의 핵심을 구성합니다. 액션은 해당 트랜잭션이 정확히 무엇을 해야 하는지 정의합니다. 트랜잭션에는 여러 가지 액션이 있을 수 있으며 전체 트랜잭션은 해당 트랜잭션의 모든 액션이 성공한 경우에만 성공으로 간주합니다. 또한 트랜잭션의 첫 번째 액션에 대한 첫 번째 권한자에게 CPU 및 NET 리소스가 청구됩니다.&#x20;
+```jsx
+cd eosio.contracts/contracts/eosio.token
+```
 
-헤더 파일 라이브러리 /chain/include/eosio/chain/action.hpp 는 액션 개체와 속성을 정의합니다. 액션에서 가장 중요한 필드는 다음과 같습니다.
+### 단계2: 스마트 컨트랙트를 위한 계정 생성
 
-* name account - WASM 스마트 컨트랙트를 포함하는 계정입니다. 각 액션은 단순히 관련된 WASM 블록을 호출하는 것입니다.&#x20;
-* name name - 다소 혼란스러운 액션 이름이며, 이름 유형입니다. 일반적으로 WASM 코드에는 액션 이름에 따라 다른 함수를 호출하는 디스패처가 있습니다.&#x20;
-* vector\<permission\_level> authorisation - 이 실행을 인증하는 계정 및 권한을 정의합니다. 트랜잭션에는 인증 요구 사항을 충분히 충족할 수 있는 서명이 포함되어야 합니다.&#x20;
-* bytes data - 액션 인수의 바이트 벡터입니다. 일반적으로 이것은 컨트랙트 계정에 의해 선언된 ABI에 해당하는 직렬화된 구조입니다. 하지만 nodeos 는 보내는 순간에 무엇이 들어 있는지 신경 쓰지 않습니다. 데이터 내용을 역직렬화하고 해석하는 것은 전적으로 WASM 코드가 하는 일입니다.
+토큰 계약을 배포하기 전에 이를 배포하기 위한 계정을 생성합니다. 이 계정은 일반에 공개되어 있는 eosio 개발용 키를 사용할 것입니다. 이 키는 절대로 프로덕션 용으로 써서는 안 됩니다.
 
-따라서 트랜잭션을 보내기 전에 액션 호출 방법과 인수를 직렬화하는 방법을 알아야 합니다. 이 정보는 컨트랙트 계정에 의해 WASM 코드와 함께 ABI에 게시됩니다.
+```jsx
+cleos create account eosio eosio.token EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
+```
 
-&#x20;WASM을 사용하고 ABI를 사용하지 않은 계정이 있을 수 있으며(이 경우 인수의 의미를 이해하려면 WASM을 분석해야 합니다), ABI는 사용하지만 WASM을 사용하지 않은 계정도 있을 수 있습니다(이 경우 무엇을 보내든 수락됩니다.)
+### 단계3: 스마트 컨트랙트 컴파일
 
-eosjs 와 같은 일반적인 클라이언트는 transact 메서드에서 컨트랙트 이름, 액션 이름 및 인수의 맵을 얻습니다. 이 경우 지정된 컨트랙트 계정의 ABI를 검색하고 ABI 사양에 따라 액션 인수를 패킹해야 합니다. 이 외에도 참조 블록 정보도 검색합니다. 보시다시피 단 하나의 트랜잭션을 준비하는데에도 많은 일들이 일어나고 있습니다.&#x20;
+다음 명령으로 스마트 컨트랙트를 컴파일 합니다. 성공적으로 컴파일하면 eosio.token.wasm 파일이 생성됩니다.
 
-또한 트랜잭션에는 각 액에 지정된 자동화에 해당하는 타원 곡선 서명(elliptic curve signatures)이 있어야 합니다. 클라이언트는 일반적으로 어떤 키가 필요한지 미리 알지 못하기 때문에 어떤 키가 트랜잭션에 서명해야 하는지 확인하기 위해 다른 RPC 요청을 다시 보냅니다.
+```jsx
+eosio-cpp -I include -o eosio.token.wasm src/eosio.token.cpp --abigen
+```
 
-각 액션은 동일한 트랜잭션에 속하는 액션을 추가로 생성할 수 있습니다. 이러한 액션에는 require\_recipient() 을 호출하여 만들어낸 알림과 eosio::action::send() 메서드로 생성된 새 액션의 두 가지 타입이 있습니다. 현재 실행 중인 액션 내에서 이러한 호출을 할 때마다 스마트 계약이 바로 실행되는 것은 아닙니다. 대신 알림은 액션 실행 대기열의 다른 위치에 삽입됩니다. 알림은 대기열의 맨 앞에 배치되므로 현재 액션이 완료된 후 먼저 실행되고 send()에 의해 생성된 새 액이 대기열의 끝으로 푸시됩니다.&#x20;
+### 단계4: 토큰 컨트랙트 배포
 
-Nodeos는 실행 대기열에서 액션을 하나씩 선택하고 각 액션에 대해 새 WASM 가상 시스템을 생성합니다. 가상 시스템은 실행 속도를 높이기 위해 다양한 캐싱 및 최적화 기술을 사용하고 있습니다. 그러나 일반적으로 각 실행은 빈 가상 환경에서 시작되며 한 번에 하나의 액션만 실행됩니다.
+이제 배포할 준비가 되었습니다. 다음 명령으로 토큰 컨트랙트를 배포합니다.
 
-## 트랜잭션 브로드캐스팅
+```jsx
+$ cleos set contract eosio.token CONTRACTS_DIR/eosio.contracts/contracts/eosio.token --abi eosio.token.abi -p eosio.token@active
 
-트랜잭션이 /v1/chain/send\_transaction RPC 호출 또는 p2p 인터페이스를 통해 노드에 도착하면 해당 트랜잭션이 처리됩니다. 노드가 새로운 WASM 가상 시스템을 생성하고 현재 블록체인 상태에 대해 트랜잭션을 실행합니다. 모든 검사가 성공하고 트랜잭션 성공적으로 완료되면 노드 구성의 읽기 모드 매개 변수에 따라 상태 변경 내용이 삭제되거나 일시적으로 보존됩니다.
+Reading WASM from ...eosio.contracts/contracts/eosio.token/eosio.token.wasm...
+Publishing contract...
+executed transaction: a68299112725b9f2233d56e58b5392f3b37d2a4564bdf99172152c21c7dc323f  6984 bytes  6978 us
+#         eosio <= eosio::setcode               {"account":"eosio.token","vmtype":0,"vmversion":0,"code":"0061736d0100000001a0011b60000060017e006002...
+#         eosio <= eosio::setabi                {"account":"eosio.token","abi":"0e656f73696f3a3a6162692f312e310008076163636f756e7400010762616c616e63...
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
 
-노드는 트랜잭션이 성공하면 인접한 p2p 네트워크로 브로드캐스트하고 트랜잭션이 실패하면 폐기합니다.&#x20;
+### 단계5: 토큰 만들기
 
-트랜잭션이 RPC를 통해 노드에 도착한 후 곧바로 처리되는데 이 때 오류가 발생하면 오류 세부 정보가 RPC 응답으로 클라이언트에 다시 보고됩니다.&#x20;
+배포가 성공했으면 토큰을 만들어 봅시다. eosio.token 의 create action 에 적절한 매개변수를 넘겨 호출하면 새로운 토큰을 만들 수 있습니다. 이 액션은 다음과 같은 내용을 가지는 하나의 인수를 필요로 합니다.
 
-트랜잭션이 p2p 인터페이스를 통해 도착하여 처리가 중에 실패하면 해당 트랜잭션은 조용히 삭제되고 보낸 사람은 즉각적인 피드백을 받지 못합니다.&#x20;
+* 발행자(issuer)가 되는 eosio 계정: 여기서 alice 라는 계정을 사용하겠습니다. 발행자는 issue 액션을 호출할 수 있는 권한을 가지며 또한 closing account 나 retiring token과 같은 액션을 수행할 수도 있습니다.
+* asset 타입:  이 정보는 두 가지 데이터로 구성됩니다. 첫 번째 인자인 부동소수점 숫자는 토큰의 최대 공급량(maximum supply)이며, 두 번째 인자는 토큰의 심볼을 나타내는 대문자 알파벳(티커)입니다. \
+  예) "1.0000 SYS"
 
-노드는 이러한 추측성(_speculative_) 트랜잭션을 전체 p2p 네트워크에 전파하고, 결국 활성화된 블록 생성자 노드에 나타납니다. 이러한 트랜잭션은 지금까지 블록체인 상태 및 트랜잭션 속성이 트랜잭션을 블록에 배치할 수 있다는 낙관적인 가정을 바탕으로 처리되었기 때문에 추측성 트랜잭션이라고 합니다.
+아래는 위치 인수(positional argument) 를 이용한 호출 방법의 예제 입니다.
 
-## 블록 서명
+```jsx
+cleos push action eosio.token create '[ "alice", "1000000000.0000 SYS"]' -p eosio.token@active
+```
 
-블록 생성 스케줄에 포함된 각 BP는 자기 차례가 되면 6초 동안 12개의 블록을 서명합니다. 새 블록 서명이 시작되기 전에 발생한 추측성 트랜잭션은 저장하고 다시 처리한 후 새 블록에 배치합니다. 블록이 서명되는 동안 추측성 트랜잭션이 도착하면 블록에 배치될 수도 있습니다.&#x20;
+위 명령으로 소수점 4자리의 정밀도를 가지고, 최대 공급량이 100000000.0000 인 새 토큰 SYS를 만들었습니다. 그리고 alice 도 발행인으로 지정했습니다. 또한 스마트 컨트랙트가 이 토큰을 만들기 위해 eosio.token 의 권한을 필요로 하기 때문에 -p eosio.token@active 옵션으로 권한을 전달하였습니다.
 
-BP 노드에는 블록이 충분히 큰 시기를 결정하는 여러 구성 매개 변수가 있으며 블록으로 더 많은 트랜잭션을 가져오는 것을 중지해야 합니다. 완료되면 BP 노드는 설정된 블록 서명 키를 사용하여 블록 컨텐츠의 sha256 해시를 가져온 뒤 ECC 서명을 추가합니다.&#x20;
+액션 호출시에 다음과 같이 각 인수에 명확한 이름을 지정하는 형식으로 사용 할 수도 있습니다.
 
-블록 서명 키가 꼭 EOSIO 계정과 연결되어 있을 필요는 없으며, 일반적으로 보안적 관점에서 봤을 때 블록 서명 및 계정 권한에 동일한 키를 사용하지 않는 것이 좋습니다.&#x20;
+```jsx
+cleos push action eosio.token create '{"issuer":"alice", "maximum_supply":"1000000000.0000 SYS"}' -p eosio.token@active
 
-액티브  BP 가 블록에 서명하면 근처의 모든 p2p 네트워크로 전송하고, 다시 더 넓은 p2p 네트워크로 블록을 전파합니다.
+executed transaction: 10cfe1f7e522ed743dec39d83285963333f19d15c5d7f0c120b7db652689a997  120 bytes  1864 us
+#   eosio.token <= eosio.token::create          {"issuer":"alice","maximum_supply":"1000000000.0000 SYS"}
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
 
-## 포크와 최종성(Fork and Finality)
+### 단계6: 토큰 발행
 
-네트워크 최적화 및 블록체인 안정성에 있어 중요한 요소 중 하나는, 새로운 블록을 만들기 시작하기 전에 현 BP 의 마지막 블록이 다음 BP 에게 일정내에 도착해야 한다는 것입니다.&#x20;
+이제 발행자(issuer)인 alice 는 새 토큰을 발행할 수 있게 되었습니다. 앞서 설명하였듯이 토큰 발행은 발행자만이 할 수있습니다. 따라서 issue 액션을 호출할 때 반드시 -p alice@active 권한을 같이 넘겨야 합니다.
 
-이전 BP 의 마지막 블록이 현재 BP 에게 도착하지 않은 경우 새 블록을 생성할 시간이 되면 마이크로포크(Microfork) 상황이 발생합니다. 즉, 동일한 번호를 가진 두 버전의 블록이 p2p 네트워크를 통해 전파됩니다. 동일한 블록의 이전 버전을 이미 수신하고 처리한 노드는 상태를 롤백하고 새 블록을 가져와야 합니다. 이로 인해 블록체인 클라이언트는 다음 순간에 사라질 수 있는 트랜잭션을 보거나 여전히 존재할 수 있지만 블록 내 트랜잭션 순서는 다릅니다.&#x20;
+```jsx
+$ cleos push action eosio.token issue '[ "alice", "100.0000 SYS", "memo" ]' -p alice@active
 
-마이크로포크의 원인이 될 수 있는 몇 가지 장애 시나리오가 있습니다. 예를 들어, BP 노드의 서버 클럭이 시간을 제대로 동기화하고 있지 못한 경우 입니다. 최악의 시나리오는 현역 BP 의 3분의 1이 오프라인 상태가 되어 LIB가 전진하지 못하는 경우입니다. 이러한 상황이 발생하면 LIB 이후의 모든 블록이 폐기될 수 있습니다.&#x20;
+executed transaction: d1466bb28eb63a9328d92ddddc660461a16c405dffc500ce4a75a10aa173347a  128 bytes  205 us
+#   eosio.token <= eosio.token::issue           {"to":"alice","quantity":"100.0000 SYS","memo":"memo"}
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
 
-블록은 다수의 액티브 BP 가 블록에 두 번 서명하는 즉시 최종 블록이 됩니다. 즉, 각각 6초씩의 4/3+2 생성 구간에서 최종 블록이 결정되기 전에 통과해야 하며 이후 마이크로포크로 인해 다시 쓰여질 수 없습니다. 따라서 약 2분 정도의 비가역 지연이 발생합니다.&#x20;
+트랜잭션을 검사하려면 "브로드캐스트 안 함" 및 "트랜잭션을 json으로 반환"을 나타내는 -d 와 -j 옵션을 사용하면 됩니다. 이 옵션은 개발 중에 사용하면 유용합니다.
 
-현재 최종 시간을 1-2블록으로 줄여 블록체인의 안정성과 사용성을 크게 높이는 것을 목표로 작업이 진행 중입니다.
+```jsx
+cleos push action eosio.token issue '["alice", "100.0000 SYS", "memo"]' -p alice@active -d -j
+```
+
+### 단계7: 토큰 전송
+
+이제 alice 가 토큰을 발행했으니 다른 계정 bob으로 토큰을 전송해 보겠습니다.
+
+```jsx
+$ cleos push action eosio.token transfer '[ "alice", "bob", "25.0000 SYS", "m" ]' -p alice@active
+
+executed transaction: 800835f28659d405748f4ac0ec9e327335eae579a0d8e8ef6330e78c9ee1b67c  128 bytes  1073 us
+#   eosio.token <= eosio.token::transfer        {"from":"alice","to":"bob","quantity":"25.0000 SYS","memo":"m"}
+#         alice <= eosio.token::transfer        {"from":"alice","to":"bob","quantity":"25.0000 SYS","memo":"m"}
+#           bob <= eosio.token::transfer        {"from":"alice","to":"bob","quantity":"25.0000 SYS","memo":"m"}
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+
+이번에는 3개의 transfer 액션이 출력된 것을 볼 수 있습니다. 출력된 내용은 호출된 모든 액션 핸들러와 그들이 호출된 순서, 그리고 액션에 의해 생성된 출력이 있으면 표시합니다.
+
+이제 bob이 토큰을 받았는지 확인해 보겠습니다.
+
+```jsx
+cleos get currency balance eosio.token bob SYS
+
+25.0000 SYS
+```
+
+alice 의 잔고도 확인해 보겠습니다.
+
+```jsx
+cleos get currency balance eosio.token alice SYS
+
+75.0000 SYS
+```
+
+이렇게 eosio.token 스마트 컨트랙트를 컴파일하고 배포한 뒤 컨트랙트 내부의 액션을 호출하는 방법을 알아보았습니다.
