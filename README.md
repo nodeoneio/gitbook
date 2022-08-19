@@ -1,73 +1,59 @@
 # 🔎 Antelope Leap 의 모든 것
 
+# 시작하기에 앞서...
+
+최근 몇 년간 블록체인 기술은 엄청난 속도로 발전해 왔고 여러 블록체인들이 경쟁적으로 변화에 발맞춰 나아가고 있습니다. 하지만, EOS 의 기반을 이루는 블록체인 소프트웨어인 EOSIO 는 개발사인 블록원이 개발에서 손을 뗀 후 오랜 기간 기술적으로 정체되어 있었습니다. 한 때 빛나던 최고의 기술력이라는 수식어가 점차 퇴색되어가던 중, 2021년 말 부터 EOS 는 이브 라 로즈(Yves La Rose)가 이끄는 ENF(EOS Network Foundation) 안에 새로운 둥지를 틀게 되었고 다시 비상 할 준비를 하고 있습니다.
+
+ENF 는 2021년 8월 이후로 개발이 중지되었던 EOSIO 의 코드를 포킹(forking) 하여 Mandel 이라는 코드네임으로 개명한 뒤 커뮤니티, BPs, 개발자들과 합심하여 그동안 멈춰 있던 소프트웨어 개발과 유지보수 작업에 박차를 가하기 시작하였습니다.
+
+그리고 2022년 9월 21일의 컨센서스 업그레이드를 약 한 달여 남긴 8월 17일, ENF 는 코드네임 Mandel 로 불리던 블록체인 프로토콜의 이름을 정식으로 Antelope 이라는 이름으로, 그리고 특별히 이름이 없었던 프로토콜의 C++ 구현체 소프트웨어 이름을 Leap 으로 리브랜딩하여 공개하였습니다.
+
+# 한글화된 기술 문서
+
+소프트웨어의 개발은 이렇게 착실히 진행되어가고 있지만 불행히도 개발자들을 위한 문서는 아직 많이 부족합니다. [Antelope Leap 의 공식 깃허브 저장소]([AntelopeIO/leap: C++ implementation of the Antelope protocol (github.com)](https://github.com/AntelopeIO/leap))에서 제공하는 문서들은 아직 많이 빈약하고, 이미 유지보수를 멈춘 블록원의 [개발자 포털]([EOSIO Developer Portal - EOSIO Development Documentation | EOSIO Developer Docs](https://developers.eos.io/)) 에는 아직 많은 정보들이 남아 있지만 오래되어 변경되거나 잘못된 정보들 또한 적지 않습니다. 거기에 한국의 개발자를 위하여 한글화 된 최신 정보는 거의 없다시피 한게 현실입니다.
+
+이 모든 점들이 EOS 에서 일어나는 변화들을 보며 관심을 갖고 진입하려는 한국의 신규 개발자들에게 높은 허들이 되고 있습니다.
+
+그리하여 노드원에서는 EOS 를 비롯한 Antelope 블록체인 프로토콜을 베이스로 하는 블록체인 네트워크에서의 서비스나 디앱을 구상하는 개발자들을 위하여 한글화된 기술 문서를 구축하려 합니다. 초기에는 기초적인 컨텐츠와 함께 블록원의 개발자 포털 자료나 해외 개발자들의 자료를 가져와 적절히 번역/편집하는 정도의 문서를 제공하려는 계획이지만, 점차 노드원 독자의 컨텐츠를 추가하고 블록체인 기반 서비스를 개발하는데 필요한 정보가 보다 체계적으로 구성된 문서를 구축함으로서, 한국의 개발자들이 보다 쉽게 Antelope 기반 블록체인에 접근할 수 있게 하고 결과적으로 EOS 생태계가 확장되고 번성하는데 기여하고자 합니다.
+
+본 문서는 완성된 버전이 아니며 공개 이후에도 꾸준히 컨텐츠를 추가하고 업데이트 할 것입니다. 보다 적절하고 정확하며 효율적으로 학습할 수 있는 문서를 작성하려면 개발자 여러분의 적극적인 피드백 또한 필요합니다. 만약 본 문서에서 잘못된 부분이나 오타/오역 등을 발견하시거나 문의사항, 건의사항 등이 있다면 담당자 [이메일](junhank@nodeone.io) 또는 [노드원 텔레그램 채널]([Telegram: Contact @nodeone_group](https://t.me/nodeone_group))로 연락 주시기 바랍니다.
 
 
-{% hint style="info" %}
-**Good to know:** providing a brief overview of your product and its core use cases is a great place to start with product docs. Your product might seem obvious to you – you made it! However, to others, even folks who are trying your product after reading your site or getting a sales demo, it can still be unclear. This is your chance to clarify your product and set the right expectations!
-{% endhint %}
 
-Here are a couple of examples of succinct overviews from products with really great docs:
+# 문서의 구성
 
-> Loom is a video messaging tool that helps you get your message across through instantly shareable videos.
->
-> With Loom, you can record your camera, microphone, and desktop simultaneously. Your video is then instantly available to share through Loom's patented technology.
->
-> — From the [Loom Docs](https://support.loom.com/hc/en-us/articles/360002158057-What-is-Loom-)
+본 문서는 다음과 같이 구성되어 있습니다.
 
-> The Mailchimp Marketing API provides programmatic access to Mailchimp data and functionality, allowing developers to build custom features to do things like sync email activity and campaign analytics with their database, manage audiences and campaigns, and more.
->
-> — From the [Mailchimp Marketing API docs](https://mailchimp.com/developer/marketing/docs/fundamentals/)
+- Antelope Leap
+  스마트 컨트랙트 작성에 앞서 반드시 알아야 할 Antelope 과 Leap 의 기초적인 내용
+  기초적인 노드 구성, nodeos, cleos, keosd 명령, 키, 트랜잭션, 액션, 계정 권한 등등에 대한 개요
 
-## Getting Started
+- 환경 구성
+  로컬노드를 구성하여 스마트 컨트랙트를 개발할 수 있는 환경을 만들어 보기
+  바이너리 설치, 컴파일(Advanced), DUNE 사용, 테스트넷에 연결된 로컬 노드 구성.
 
-**Got 2 minutes?** Check out a video overview of our product:
+- 스마트 컨트랙트와 CDT, SDK
+  스마트 컨트랙트의 개요와 스마트 컨트랙트 컴파일에 필요한 도구인 CDT, EOSJS 와 같은 SDK.
 
-{% embed url="https://www.loom.com/share/3bfa83acc9fd41b7b98b803ba9197d90" %}
+- Basic Smart Contract Tutorial - Hello World
+  아주 간단한 스마트 컨트랙트를 작성하고 컴파일 및 배포, 실행, 테스트 해 보는 기본적인 절차를 진행
 
-{% hint style="info" %}
-**Good to know:** A succinct video overview is a great way to introduce folks to your product. Embed a Loom, Vimeo or YouTube video and you're good to go! We love this video from the fine folks at [Loom](https://loom.com) as a perfect example of a succinct feature overview.
-{% endhint %}
+- Advanced Smart Contract
+  인라인 액션, 인덱스(Primary/Secondary), ABI, 리카르디안 컨트랙트, 액션 래퍼, 반환값 처리
 
-### Guides: Jump right in
+- Advanced Tutorial
+  World 보다 조금 더 많은 기능을 가진 컨트랙트 작성(인라인 액션, ABI 적용, 리카르디안 컨트랙트 등) 인덱스(Primary/Secondary)
 
-Follow our handy guides to get started on the basics as quickly as possible:
+- Antelope Deep Dive
+  Antelope 에 대하여 보다 심화된 내용을 다룸 
+  프로토콜 가이드, 체인베이스 상세, 트랜잭션 생애주기, 바이오스 부트 시퀀스(다수의 BP 노드를 가진 로컬 블록체인 네트워크), 계정과 권한, CFD 등
 
-{% content-ref url="broken-reference" %}
-[Broken link](broken-reference)
-{% endcontent-ref %}
+- Nodeos 구성 파일 옵션 상세
 
-{% content-ref url="broken-reference" %}
-[Broken link](broken-reference)
-{% endcontent-ref %}
+- API Reference 상세
 
-{% content-ref url="broken-reference" %}
-[Broken link](broken-reference)
-{% endcontent-ref %}
+- API Swagger 를 제공하면 어떨까.(정글넷 활용)
+  
+  
 
-{% hint style="info" %}
-**Good to know:** your product docs aren't just a reference of all your features! use them to encourage folks to perform certain actions and discover the value in your product.
-{% endhint %}
-
-### Fundamentals: Dive a little deeper
-
-Learn the fundamentals of MyProduct to get a deeper understanding of our main features:
-
-{% content-ref url="cdt/cdt-contract-development-toolkit.md" %}
-[cdt-contract-development-toolkit.md](cdt/cdt-contract-development-toolkit.md)
-{% endcontent-ref %}
-
-{% content-ref url="cdt/best-practices.md" %}
-[best-practices.md](cdt/best-practices.md)
-{% endcontent-ref %}
-
-{% content-ref url="broken-reference" %}
-[Broken link](broken-reference)
-{% endcontent-ref %}
-
-{% content-ref url="broken-reference" %}
-[Broken link](broken-reference)
-{% endcontent-ref %}
-
-{% hint style="info" %}
-**Good to know:** Splitting your product into fundamental concepts, objects, or areas can be a great way to let readers deep dive into the concepts that matter most to them. Combine guides with this approach to 'fundamentals' and you're well on your way to great documentation!
-{% endhint %}
+문서의 구성은 추후 컨텐츠가 추가되고 수정됨에 따라 변경될 수 있습니다.
