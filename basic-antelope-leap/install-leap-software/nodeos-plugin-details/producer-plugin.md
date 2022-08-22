@@ -2,10 +2,10 @@
 
 ## 개요
 
-`producer_plugin` 을 설정하면 nodeos 가 블록을 생성하는데 필요한 기능을 사용할 수 있습니다.
+`producer_plugin` 을 설정하면 nodeos 가 블록 생산자(Block Producer, BP)로서 블록을 생성하는데 필요한 기능을 사용할 수 있습니다.
 
 {% hint style="info" %}
-블록 생성을 하려면 추가적인 설정이 필요합니다. [블록 생산자(BP) 노드 설정](../../setup-producer-node.md) 단원을 참조합니다.
+블록 생성을 하려면 플러그인 설정 외에도 추가 설정이 더 필요합니다. 상세한 내용은 [블록 생산자(BP) 노드 설정](../../setup-producer-node.md) 단원을 참조합니다.
 {% endhint %}
 
 ## 사용법
@@ -43,10 +43,10 @@ eosio::producer_plugin 설정 옵션
    [public key, WIF private key]의 튜플
   --signature-provider arg (=EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV=KEY:5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3)
     <public-key>=<provider-spec> 형태로 표현되는 Key=Value 쌍
-    <public-key>    문자열 형태의 유효한 EOSIO public key 
+    <public-key>    문자열 형태의 유효한 Antelope public key 
     <provider-spec> <provider-type>:<data> 형태의 문자열
     <provider-type> "KEY" 또는 "KEOSD"
-    KEY:<data>      제공된 public key에 매핑되는, 문자열 형태의 유효한 EOSIO private key.
+    KEY:<data>      제공된 public key에 매핑되는, 문자열 형태의 유효한 Antelope private key.
     KEOSD:<data>    사용할 수 있는 KEOSD 가 있는 URL. 지갑은 unlocked 되어 있어야 한다.
   --keosd-provider-timeout arg (=5)
     서명하기 위해 keosd 공급자에게 블록을 보내는 데 허용되는 최대 시간(ms).
@@ -102,16 +102,6 @@ eosio::producer_plugin 설정 옵션
 
 * chain\_plugin
 
-## 트랜잭션 우선순위
-
-지연된 트랜잭션이 `producer_plugin` 의 대기열에 있을 경우, 어떤 타입의 트랜잭션에 다른 트랜잭션 타입보다 높은 우선 순위를 줄 수 있습니다. 아래 옵션은 지연된 트랜잭션과 수신되는 트랜잭션 간의 비율을 설정합니다.
-
-`--incoming-defer-ratio arg (=1)`
-
-기본값인 '1'로 설정하면 `producer_plugin` 은 하나의 지연된 트랜잭션 당 수신된 트랜잭션 하나를 처리합니다. arg 을 10으로 설정하면`producer_plugin` 은 하나의 지연된 트랜잭션 당 10개의 수신된 트랜잭션을 처리합니다.
-
-'arg' 가 적당히 큰 숫자로 설정된 경우 플러그인은 트랜잭션의 대기열이 빌 때까지 항상 수신되는 트랜잭션을 먼저 처리합니다. 'arg'가 0 이면 `producer_plugin` 은 대기열에 있는의 지연된 트랜잭션을 먼저 처리합니다.
-
 ### 의존성 로딩 예제
 
 다음과 같이 `chain_plugin` 을 사용하도록 설정되어 있어야 합니다.
@@ -125,3 +115,16 @@ nodeos ... --plugin eosio::chain_plugin [operations] [options]`
 ```
 
 [블록 생성에 대한 상세](../../block-producing-explained.md) 참조
+
+## 트랜잭션 우선순위
+
+지연된 트랜잭션이 `producer_plugin` 의 대기열에 있을 경우, 트랜잭션 타입에 따라 높은 우선 순위를 줄 수 있습니다. 아래 옵션은 지연된 트랜잭션과 수신되는 트랜잭션 간의 비율을 설정합니다.
+
+`--incoming-defer-ratio arg (=1)`
+
+예를 들면 다음과 같습니다.
+
+* 기본값인 '1'로 설정하면 `producer_plugin` 은 하나의 지연된 트랜잭션 당 수신된 트랜잭션 하나를 처리합니다.&#x20;
+* arg 을 10으로 설정하면`producer_plugin` 은 하나의 지연된 트랜잭션 당 10개의 수신된 트랜잭션을 처리합니다.
+
+'arg' 가 적당히 큰 숫자로 설정된 경우 플러그인은 트랜잭션의 대기열이 빌 때까지 항상 수신되는 트랜잭션을 먼저 처리합니다. 'arg'가 0 이면 `producer_plugin` 은 대기열에 있는의 지연된 트랜잭션을 먼저 처리합니다.

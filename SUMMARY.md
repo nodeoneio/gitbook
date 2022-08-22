@@ -6,8 +6,10 @@
 
 * [Antelop Leap 란?](basic-antelope-leap/what-is-antelope-leap.md)
 * [Leap 소프트웨어 설치](basic-antelope-leap/install-leap-software/README.md)
-  * [Nodoes 설정 옵션](basic-antelope-leap/install-leap-software/nodeos-setup-options.md)
-  * [Nodeos Plugin 상세](basic-antelope-leap/install-leap-software/nodeos-plugin-details/README.md)
+  * [Leap 바이너리 인스톨](basic-antelope-leap/install-leap-software/leap.md)
+  * [Leap 소스코드를 컴파일 후 인스톨](basic-antelope-leap/install-leap-software/leap-1.md)
+  * [nodoes 설정 및 실행](basic-antelope-leap/install-leap-software/nodeos-setup-options.md)
+  * [nodeos Plugin 상세](basic-antelope-leap/install-leap-software/nodeos-plugin-details/README.md)
     * [Chain Plugin](basic-antelope-leap/install-leap-software/nodeos-plugin-details/chain-plugin.md)
     * [Net Plugin](basic-antelope-leap/install-leap-software/nodeos-plugin-details/net-plugin.md)
     * [Producer Plugin](basic-antelope-leap/install-leap-software/nodeos-plugin-details/producer-plugin.md)
@@ -33,7 +35,7 @@
 * [데이터 설계](basic-antelope-leap/data-design.md)
 * [바이오스 부트 시퀀스](basic-antelope-leap/bios-boot-sequence.md)
 
-## 스마트 컨트랙트 <a href="#smart-contracts" id="smart-contracts"></a>
+## 스마트 컨트랙트 개발 <a href="#smart-contracts" id="smart-contracts"></a>
 
 * [개발 환경 설정](smart-contracts/setup-dev-env.md)
 * [Hello World Contract!](smart-contracts/hello-world-contract.md)

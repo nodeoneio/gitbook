@@ -2,7 +2,7 @@
 
 ## 개요
 
-`http_client_plugin` 은 `producer_plugin` 이 외부 `keosd` 인스턴스를 블록 서명자로 안전하게 사용할 수 있는 기능을 제공하는 내부 유틸리티 플러그인 입니다. `producer_plugin` 을 사용하여 블록을 생성하도록 설정한 경우에만 사용할 수 있습니다.
+`http_client_plugin` 은 `producer_plugin` 이 외부 `keosd` 인스턴스를 안전하게 블록 서명자로 사용할 수 있도록 기능을 지원하는 내부 유틸리티 플러그인 입니다. `producer_plugin` 을 사용하여 블록을 생성하도록 설정한 경우에만 사용할 수 있습니다.
 
 ## 사용법
 

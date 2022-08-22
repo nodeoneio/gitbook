@@ -2,7 +2,7 @@
 
 ## 개요
 
-`net_plugin` 은 노드를 지속적으로 동기화하기 위하여 인증된 p2p 프로토콜을 제공합니다.
+`net_plugin` 은 인증된 p2p 프로토콜을 제공하여 노드를 지속적으로 동기화 합니다.
 
 ## 사용법
 
@@ -63,7 +63,7 @@ eosio::net_plugin 설정 옵션
   --net-threads arg (=2)
     net_plugin 스레드 풀에서 동작하는 worker 스레드 수.
   --sync-fetch-span arg (=100)
-    피어 동기화 중에 상대 피어로 부터 수신하는 블록 덩어리(chunk) 안에 들어가는 블록 개수.
+    피어 동기화 중에 상대 피어 노로 부터 수신하는 블록 덩어리(chunk) 안에 들어가는 블록 개수.
   --use-socket-read-watermark arg (=0)
     socket read watermark 최적화를 사용. (실험적 옵션)
   --peer-log-format arg (=["${_name}" ${_ip}:${_port}])
@@ -77,7 +77,7 @@ eosio::net_plugin 설정 옵션
      _lip   peer 에 연결하는데 사용하는 로컬 IP 주소
      _lport peer 에 연결하는데 사용하는 로컬 port 번호
   --p2p-keepalive-interval-ms arg (=32000)
-    피어의 heartbeat keepalive 메시지 간격. (ms 단위)
+    피어 노드의 heartbeat keepalive 메시지 간격. (ms 단위)
 ```
 
 ## 의존성

@@ -4,7 +4,7 @@
 
 `resource_monitor_plugin` 은  `nodeos` 가 실행되고 있는 컴퓨터의 공간 사용량을 모니터링 합니다. 특히 `resource-monitor-interval-seconds` 에 설정된 시간 간격(초 단위) 동안 `data-dir`, `state-dir`, `blocks-log-dir`, `snapshots-dir`, `state-history-dir`, `trace-dir`에 마운트 된 각각의 파일 시스템이 사용하는 개별 공간을 측정합니다.&#x20;
 
-모니터링 되는 파일 시스템의 공간 사용량이 `resource-monitor-space-threshold`에 설정된 임계치의 5% 이내가 되면 해당 파일 시스템의 경로와 공간 사용량이 포함된 경고 메시지가 출력됩니다. 공간 사용량이 임계치를 넘어가게 되는 경우, 만약 `resource-monitor-not-shutdown-on-threshold-exceeded` 가 설정되지 않았다면,  nodeos 는 임계치 미만으로 공간 사용량이 줄어들 때 까지 경고 메시지를 출력합니다.
+모니터링 되는 파일 시스템의 공간 사용량이 `resource-monitor-space-threshold`에 설정된 임계치의 5% 이내가 되면, 해당 파일 시스템의 경로와 공간 사용량이 포함된 경고 메시지를 출력합니다. 공간 사용량이 임계치를 넘어가게 되는 경우, 만약 `resource-monitor-not-shutdown-on-threshold-exceeded` 가 설정되지 않았다면,  nodeos 는 임계치 미만으로 공간 사용량이 줄어들 때 까지 경고 메시지를 출력합니다.
 
 `resource_monitor_plugin` 는 항상 로딩되어 있습니다.
 
