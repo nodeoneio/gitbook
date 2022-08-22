@@ -162,4 +162,4 @@ info  2022-08-22T14:34:21.906 nodeos    producer_plugin.cpp:2434      produce_bl
 
 정상적으로 nodeos 가 동작 중이라면 위와 같이 로그에서 블록이 생성되고 있는 과정을 확인할 수 있습니다.
 
-이제 로컬에서 단독으로 실행되는 Antelope 노드 만들어 보았습니다. 다음 단원에서 nodeos 에서 사용하는 플러그인과 옵션에 대한 상세한 내용을 알아보겠습니다.
+이제 로컬에서 단독으로 실행되는 Antelope 노드 만들어 보았습니다. 일단 여기까지 진행되었으면 개발용 노드가 완성된 것입니다. 만약 nodeos 에서 사용하는 플러그인과 옵션에 대한 상세한 내용이 필요하면 [nodeos Plugin 상세](https://app.gitbook.com/s/YZT0OiBQKuAU7OjJoCgQ/\~/changes/mhCOoiYoXaVjjMMGXHdI/basic-antelope-leap/nodeos-plugin-details) 단원을 참조합니다.

@@ -2,7 +2,7 @@
 
 ## 개요
 
-이 단원에서는 Antelope 네트워크에서 블록 생산자(BP) 노드를 설정하는 방법에 대해 설명할 것입니다. 생산자 노드라는 이름에서 알 수 있듯이 Antelope 기반 블록체인에서 블록을 생성하도록 설정되는 노드입니다. `producer_plugin` 뿐만 아니라 [다른 Nodeos 플러그인](install-leap-software/nodeos-plugin-details/)도 같이 설정해야 이 기능을 사용할 수 있습니다.
+이 단원에서는 Antelope 네트워크에서 블록 생산자(BP) 노드를 설정하는 방법에 대해 설명할 것입니다. 생산자 노드라는 이름에서 알 수 있듯이 Antelope 기반 블록체인에서 블록을 생성하도록 설정되는 노드입니다. `producer_plugin` 뿐만 아니라 [다른 Nodeos 플러그인](nodeos-plugin-details/)도 같이 설정해야 이 기능을 사용할 수 있습니다.
 
 {% hint style="info" %}
 BP 노드를 시작하려면 **System Contract 가 네트워크에 로드**되어 있어야 합니다. 기본 기능만을 사용하는 노드나, System Contract 를 로드하지 않은 기본 개발 노드에서는 이 단원에서 다루는 내용을 적용할 수 없습니다.
@@ -121,9 +121,9 @@ leapblockprd  EOS84BLRbGbFahNJEpnnJHYCoW9QPbQEk2iHsHGGS6qcVUq9HhutG             
 ...
 ```
 
-그러나 아직 이 노드는 아직 투표를 받지 못했기 때문에 BP 로 등록은 되었으나 활성 BP 스케줄에는 포함되어 있지 않습니다. 이 노드가 블록을 생성하게 하려면 BP 계정이 투표를 받고 활성 블록 스케줄에 포함되어야 합니다. 투표 방법은 해당 단원을 참조합니다.
+그러나 이 계정은 아직 투표를 받지 못했기 때문에 BP 로 등록은 되었으나 활성 BP 스케줄에는 포함되어 있지 않습니다. 이 노드가 블록을 생성하게 하려면 BP 계정이 투표를 받고 활성 블록 스케줄에 포함되어야 합니다. 투표 방법은 해당 단원을 참조합니다.
 
-만약 nodeos 의 stdout 로그를 콘솔에 출력하거나 파일에 기록하고 있다면, 등록한 BP가 투표를 받고 활성 스케줄에 포함되어 블록을 생성할 차례가 되었을 때 다음 예시와과 같은 로그가 출력되는 것을 확인할 수 있습니다.
+만약 nodeos 의 stdout 로그를 콘솔에 출력하거나 파일에 기록하고 있다면, 등록한 BP가 투표를 받고 활성 스케줄에 포함되어 블록을 생성할 차례가 되었을 때 다음 예시와 같은 로그가 출력되는 것을 확인할 수 있습니다.
 
 ```
 info  2022-08-22T14:34:18.906 nodeos    producer_plugin.cpp:2434      produce_block        ] Produced block 76c79aac6ddd6f3b... #3 @ 2022-08-22T14:34:19.000 signed by leapblockprd [trxs: 0, lib: 2, confirmed: 0]
