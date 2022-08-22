@@ -1,4 +1,4 @@
-# Cleos
+# Cleos 기초
 
 ## 개요
 

@@ -1,4 +1,4 @@
-# nodoes 설정 및 실행
+# Nodeos 기초
 
 ## 개요
 
@@ -128,12 +128,12 @@ $ cleos get info
   "last_irreversible_block_id": "00000031970ed16f014146449729c4c3b9a396b83f14d153821062cf6d4306ac",
   "head_block_id": "000000324d365da43cca85cf200d7c1b8b3b37d5376c2f05f2fec5cf4dde6824",
   "head_block_time": "2022-08-22T14:22:40.500",
-  "head_block_producer": "eosio",
+  "head_block_producer": "leap",
   "virtual_block_cpu_limit": 210026,
   "virtual_block_net_limit": 1101237,
   "block_cpu_limit": 200000,
   "block_net_limit": 1048576,
-  "server_version_string": "v3.1.0-rc4",
+  "server_version_string": "v3.1.0",
   "fork_db_head_block_num": 50,
   "fork_db_head_block_id": "000000324d365da43cca85cf200d7c1b8b3b37d5376c2f05f2fec5cf4dde6824",
   "server_full_version_string": "v3.1.0-rc4-579d3f659b2dda2d2a515dd7bd866770f93f4e0d",
