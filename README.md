@@ -36,9 +36,3 @@ ENF 는 2021년 8월 이후로 개발이 중지되었던 EOSIO 의 코드를 포
 * API Swagger 를 제공하면 어떨까.(정글넷 활용)
 
 문서의 구성은 추후 컨텐츠가 추가되고 수정됨에 따라 변경될 수 있습니다.
-
-## 참조 문서
-
-본 문서는 다음 문서들을 기반으로 작성하였으며 각 문서에 명시된 라이선스를 따르고 있습니다.
-
-[https://github.com/EOSIO/eos/blob/master/LICENSE](https://github.com/EOSIO/eos/blob/master/LICENSE)

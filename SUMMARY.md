@@ -64,3 +64,4 @@
 * [액션 래퍼 사용법](cdt/how-to-use-action-wrapper.md)
 * [액션으로부터 값을 반환하는 방법](cdt/how-to-return-from-action.md)
 * [스마트 컨트랙트에서 사용자 인증 방법](cdt/smart-contract-authorization.md)
+* [Change Log](cdt/change-log.md)
