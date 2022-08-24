@@ -21,7 +21,7 @@ n = network tcp/ip latency
 
 아래 다이어그램에 표시된 것과 같이 네 개의 BP를 가진 네트워크 토폴로지를 예로 들어 설명하겠습니다.
 
-![](<../.gitbook/assets/image (4) (1).png>)
+![](<../.gitbook/assets/image (4).png>)
 
 * BP-A 는 p시간에 블록을 전송한다.
 * BP-B는 t시간에 블록이 필요하며 그렇지 않으면 드랍시킨다.

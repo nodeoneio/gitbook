@@ -66,6 +66,6 @@ DUNE (Docker Utilities for Node Execution) 은 Leap 의 프로그램과 CDT 를 
 
 지금까지 알아본 컴포넌트들의 관계를 그림으로 나타내면 다음과 같습니다.
 
-![](../.gitbook/assets/image.png)
+![](<../.gitbook/assets/image (1).png>)
 
 Antelope Leap 에 대한 핵심 내용은 앞으로 계속하여 컨텐츠로 추가 할 계획이지만, 그 전에 보다 자세한 내용이 필요하시면 Antelope 공식 웹 페이지나 [깃허브 저장소](https://github.com/AntelopeIO) 혹은 최신 자료는 아니지만 [EOSIO 개발자 포털](https://developers.eos.io/)에서도 확인해 보실 수 있습니다.
