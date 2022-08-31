@@ -6,7 +6,7 @@ description: Bios Boot Sequence
 
 ## 개요
 
-바이오스 부트 시퀀스는 하나 이상의 노드로 구성괴는 Mandel 기반의 프라이빗 로컬 블록체인 네트워크를 만드는 방법으로, 크게 다음과 같이 두 단계를 거치게 됩니다.
+바이오스 부트 시퀀스는 하나 이상의 노드로 구성되는 Antelope 기반의 프라이빗 로컬 블록체인 네트워크를 만드는 방법으로, 크게 다음과 같이 두 단계를 거치게 됩니다.
 
 1. 제네시스 BP 노드를 설치/구성하고 시작.
 2. BP 를 추가하여 다수의 노드에서 일정에 맞춰 블록을 생성하도록 구성.
@@ -21,72 +21,88 @@ description: Bios Boot Sequence
 
 이 단계에서는 먼저 몇 가지 사전 준비 작업을 거친 후 다음과 같은 내용을 설정 할 것입니다.
 
-* Mandel 노드 실행 환경을 설정.
-* Mandel 제네시스 노드를 시작.
-* 제네시스 노드와에 연결하는 추가 Mandel 노드들을 설정.
+* Antelope 노드 실행 환경을 설정.
+* Antelope 제네시스 노드를 시작.
+* 제네시스 노드와 연결하는 추가 Antelope BP 노드를 설정.
 
-이 튜토리얼을 끝까지 진행하면 로컬에서 완전하게 동작하는 Mandel 기반 블록체인을 만들 수 있게 될 것입니다.
-
-{% hint style="info" %}
-만약 모든 과정을 자동으로 실행 하고 싶다면 다음의 bios-boot-tutorial.py 파이썬 스크립트를 사용하여 준비 단계를 구성할 수 있습니다.&#x20;
-
-https://github.com/EOSIO/eos/blob/release/2.1.x/tutorials/bios-boot-tutorial/bios-boot-tutorial.py
-
-스크립트를 바로 쓸 수는 없고 별도의 외부 데이터값을 사용해야 합니다. BP 이름과 사용자 계정을 확인하려면 accounts.json 을 열어보면 됩니다. 자동으로 완전하게 동작하는 EOSIO 로컬 블록 체인을 만들고 싶다면 README.md 파일 내용을 따라서 bios-boot-tutorial.py 스크립트를 실행합니다.
-{% endhint %}
+이 튜토리얼을 끝까지 진행하면 로컬에서 완전하게 동작하는 Antelope 기반 블록체인을 만들 수 있게 될 것입니다.
 
 이 튜토리얼을 따라하면 스크립트가 무슨 일을 하는지 각 단계마다 상세한 설명을 볼 수 있습니다.
 
 ### 바이너리 인스톨
 
-#### 사전 컴파일 된 Mandel 바이너리 인스톨
+#### 사전 컴파일 된 Antelope Leap 바이너리 인스톨
 
-아래 링크에 설명된 방법을 따라서 nodeos 바이너리를 인스톨 합니다. 단, 현 단계에서는 인스톨만 하고 nodeos 를 실행 하지는 않습니다.
+아래 링크에 설명된 방법을 따라서 Leap 바이너리를 인스톨 합니다. 단, 현 단계에서는 인스톨만 하고 nodeos 를 실행 하지는 않습니다.
 
-[https://developers.eos.io/manuals/eos/latest/install/install-prebuilt-binaries](https://developers.eos.io/manuals/eos/latest/install/install-prebuilt-binaries)
+{% embed url="https://app.gitbook.com/s/YZT0OiBQKuAU7OjJoCgQ/~/changes/FJVBH0OqxreZ45Nlpwy2/basic-antelope-leap/install-leap-software/leap" %}
 
-#### CDT 바이너리
+#### CDT 바이너리 인스톨
 
 아래 링크 내용을 따라서 CDT 바이너리를 인스톨 합니다.
 
-[https://developers.eos.io/manuals/eosio.cdt/latest/installation](https://developers.eos.io/manuals/eosio.cdt/latest/installation)
+{% embed url="https://app.gitbook.com/s/YZT0OiBQKuAU7OjJoCgQ/~/changes/FJVBH0OqxreZ45Nlpwy2/cdt/install-cdt" %}
 
 #### 개발용 지갑 생성
 
-디폴트 지갑을 만들고 구성을 한 뒤 개발용 키 쌍를 만듭니다. 그리고 지갑으로 키를 가져옵니다. 이 단원에서는 편의상 앞으로 공개키를 EOS\_PUB\_DEV\_KEY 라고 하고 개인키를 EOS\_PRIV\_DEV\_KEY 라고 하겠습니다.
+디폴트 지갑을 만들고 구성을 한 뒤 개발용 키 쌍를 만든 뒤 지갑으로 키를 가져옵니다. 이 단원에서는 편의상 앞으로 공개키를 `EOS_PUB_DEV_KEY` 라고 하고 개인키를 `EOS_PRIV_DEV_KEY` 라고 하겠습니다.
 
-지갑을 만드는 방법과 지갑 안의 키들을 안전하게 보관하는 방법을 알아보려면 다음 튜토리얼을 확인합니다.
+먼저 디폴트 지갑을 만들어 봅시다. 디폴트 지갑은 다음과 같이 만듭니다.
 
-[https://developers.eos.io/welcome/latest/getting-started-guide/local-development-environment/development-wallet](https://developers.eos.io/welcome/latest/getting-started-guide/local-development-environment/development-wallet)
+```
+$ cleos wallet create --to-console
+Creating wallet: default
+Save password to use in the future to unlock this wallet.
+Without password imported keys will not be retrievable.
+"PW5KKKpPwUQ5jEEYANZVeDtP3VUPchyCdj7icdPv5jgbGEyKSftLb"
+```
 
-#### \~/biosboot/genesis 디렉토리 작성
+`--to-console` 옵션을 사용하면 지갑의 패스워드가 콘솔 화면에 표시됩니다. 패스워드가 화면에 표시되기를 원하지 않는다면 `--to-file` 을 사용하여 파일로 출력할 수 있습니다. 지갑 관리 데몬인 keosd 를 따로 실행하지 않았더라도 위 명령을 실행하면 자동으로 keosd 가 실행됩니다.
 
-다음과 같이 \~/biosboot/genesis 디렉토리를 만듭니다. 나중에 제네시스 노드를 시작할 때 특정한 파라미터 들을 사용할 것인데, 제네시스 노드가 블록체인 데이터베이스를 만들 때 사용할 로그 파일과 설정 파일이 이 디렉토리 내부에 저장될 것입니다.
+이 단원에서 사용할 키는 다음과 같습니다.
+
+* `EOS_PUB_DEV_KEY` : EOS6Pxs3oiKT7y6eP58qr6KzYSPA5hbe7XtDciNNFM8qrVwPWBszW
+* `EOS_PRIV_DEV_KEY`: 5HtKjCM8k54K3ZQziNBaACCKgzGieWHFMzakiFkQXXzfGVeqczG
+
+진행상의 편의를 위해 이 단원에서 사용하는 모든 키 쌍은 위 키를 사용할 것입니다. 이 키는 개발/테스트 외 프로덕션 용으로 사용해서는 안 됩니다. 만약 다른 키를 사용하고 싶다면 `cleos create key` 명령으로 새 키를 만들 수 있습니다.&#x20;
+
+키를 디폴트 지갑으로 가져오려면 다음과 같이 `cleos wallet import` 명령을 실행하고 `private key:` 프롬프트에서 개인키를 붙여넣으면 됩니다.
+
+```
+$ cleos wallet import
+private key: imported private key for: EOS6Pxs3oiKT7y6eP58qr6KzYSPA5hbe7XtDciNNFM8qrVwPWBszW
+```
+
+{% hint style="info" %}
+지갑은 15분동안 사용하지 않으면 잠금 상태가 됩니다. 만약 지갑의 잠금 해제 시간을 늘리고 싶다면 keosd 의 환경 설정 파일(디폴트로 `~/eosio-wallet/config.ini`) 에서 `unlock-timeout` 값(초 단위)을 원하는 만큼 늘려주면 됩니다.&#x20;
+
+변경하고 나서는 keosd 데몬의 PID 를 찾아서 `kill PID` 명령으로 데몬을 내린뒤 적당한 지갑 관련 명령(ex: `cleos wallet list`) 을 실행하면 설정이 적용된 keosd 가 실행됩니다.
+{% endhint %}
+
+#### Leap 데이터 디렉토리 작성
+
+다음과 같이 `~/home/nodeos` 디렉토리를 만듭니다. 제네시스 노드를 시작할 때 이런저런 매개변수들을 사용하여 제네시스 노드가 블록체인 데이터베이스를 만들 때 사용할 로그 파일과 설정 파일을 이 디렉토리 내부에 저장할 것입니다.
 
 ```
 cd ~
-mkdir biosboot
-cd biosboot
-mkdir genesis
-cd genesis
+mkdir nodeos
+cd nodeos
 ```
 
-#### **\~/biosboot/ 디렉토리에 JSON 파일 작성**
+#### **데이터 디렉토리에 제네시스 파일 작성**
 
-빈 genesis.json 파일을 \~/biosboot/ 디렉토리 안에 작성합니다.
+데이터 디렉토리(`/home/nodeos`)에서 genesis.json 파일을 작성합니다.
 
 ```
-cd ~/biosboot
-touch genesis.json
 nano genesis.json
 ```
 
-다음의 jSON 파일을 복사합니다.
+다음의 jSON 파일을 복사하여 제네시스 파일이 붙여넣고 저장합니다.
 
 ```
 {
-  "initial_timestamp": "2018-12-05T08:55:11.000",
-  "initial_key": "EOS_PUB_DEV_KEY",
+  "initial_timestamp": "2022-08-29T09:00:00.000",
+  "initial_key": "<EOS_PUB_DEV_KEY>",
   "initial_configuration": {
     "max_block_net_usage": 1048576,
     "target_block_net_usage_pct": 1000,
@@ -105,165 +121,161 @@ nano genesis.json
     "max_inline_action_size": 4096,
     "max_inline_action_depth": 4,
     "max_authority_depth": 6
-  },
-  "initial_chain_id": "0000000000000000000000000000000000000000000000000000000000000000"
+  }
 }
 ```
 
-genesis.json 파일에 위 내용을 붙여넣습니다. 위 내용 중 initial\_key 항목의 “EOS\_PUB\_DEV\_KEY” 를 앞서 '개발용 지갑 생성' 파트에서 개발용 지갑에 넣었던 공개키로 바꿉니다. 그리고 파일을 저장하고 나갑니다.
+위 내용 중 `initial_key` 항목의 “`EOS_PUB_DEV_KEY`” 를 앞서 '개발용 지갑 생성' 파트에서 개발용 지갑에 넣었던 공개키로 바꿉니다. 그리고 파일을 저장하고 나갑니다.
 
-#### 제네시스 노드를 시작
+#### 환경설정 파일 작성
 
-다음 단계를 따라서 제네시스 노드를 만듭니다.
-
-\~/biosboot/genesis/ 에 다음과 같이 genesis\_start.sh 쉘 스크립트 파일을 만듭니다.
+노드의 실행 옵션은 명령줄이나 환경설정 파일에서 지정할 수 있습니다. 다음과 같이 데이터 디렉토리 안에 `config.ini` 파일을 만듭니다.
 
 ```
-cd ~/biosboot/genesis
-touch genesis_start.sh
-nano genesis_start.sh
+nano config.ini
 ```
 
-다음의 스크립트를 복사하여 genesis\_start.sh 파일에 복사해 넣습니다.
+그리고 아래 내용을 붙여넣습니다.&#x20;
 
 ```
-#!/bin/bash
-DATADIR="./blockchain"
+wasm-runtime = eos-vm
+abi-serializer-max-time-ms = 15
+chain-state-db-size-mb = 65536
+contracts-console = true
+http-server-address = 127.0.0.1:8888
+p2p-listen-endpoint = 0.0.0.0:9876
+state-history-endpoint = 127.0.0.1:8080
+verbose-http-errors = true
+agent-name = "Nodeone Local"
+net-threads = 2
+max-transaction-time = 100
+producer-name = eosio
+enable-stale-production = true
+resource-monitor-not-shutdown-on-threshold-exceeded=true
 
-if [ ! -d $DATADIR ]; then
-  mkdir -p $DATADIR;
-fi
+signature-provider=<EOS_PUB_DEV_KEY>=KEY:<EOS_PRIV_DEV_KEY>
 
-nodeos \\
---genesis-json $DATADIR"/../../genesis.json" \\
---signature-provider EOS_PUB_DEV_KEY=KEY:EOS_PRIV_DEV_KEY \\
---plugin eosio::producer_plugin \\
---plugin eosio::producer_api_plugin \\
---plugin eosio::chain_plugin \\
---plugin eosio::chain_api_plugin \\
---plugin eosio::http_plugin \\
---plugin eosio::history_api_plugin \\
---plugin eosio::history_plugin \\
---data-dir $DATADIR"/data" \\
---blocks-dir $DATADIR"/blocks" \\
---config-dir $DATADIR"/config" \\
---producer-name eosio \\
---http-server-address 0.0.0.0:8888 \\
---p2p-listen-endpoint 0.0.0.0:9010 \\
---access-control-allow-origin=* \\
---contracts-console \\
---http-validate-host=false \\
---verbose-http-errors \\
---enable-stale-production \\
---p2p-peer-address [PEER_ADDR1:9010] \\
---p2p-peer-address [PEER_ADDR2:9010] \\
---p2p-peer-address [PEER_ADDR3:9010] \\
->> $DATADIR"/nodeos.log" 2>&1 & \\
-echo $! > $DATADIR"/eosd.pid"
+plugin = eosio::chain_api_plugin
+plugin = eosio::http_plugin
+plugin = eosio::producer_plugin
+plugin = eosio::producer_api_plugin
 ```
 
-위 스크립트의 EOS\_PUB\_DEV\_KEY 와 EOS\_PRIV\_DEV\_KEY 를 1.2 단계에서 만든 공개키와 개인키로 바꿉니다.
-
-또한 나중에 --p2p-peer-address 의 \[PEER\_ADDR1,2,3] 에 p2p 로 연결할 노드들의 주소를 기입할 것입니다.
-
-이제 파일을 저장하고 나옵니다.
-
-genesis\_start.sh 쉘 스크립트에 실행 권한을 주고 실행하면 nodeos 를 시작할 수 있습니다.
-
-```
-cd ~/biosboot/genesis/
-chmod +x genesis_start.sh
-./genesis_start.sh
-```
+`signature-provider` 옵션의 `EOS_PUB_DEV_KEY` 와 `EOS_PRIV_DEV_KEY` 를 각각의 키로 변경한 다음 저장하고 빠져나옵니다.
 
 {% hint style="info" %}
-여기서 작성한 제네시스 노드의 특성은 다음과 같습니다.
+위 제네시스 노드 설정 내용을 간략히 정리하면은 다음과 같습니다.
 
 * 블록을 생성합니다.
-* 0.0.0.0:8888 에서 HTTP 요청을 받습니다.
-* 0.0.0.0:9010 에서 p2p 연결 요청을 받습니다.
-* PEER\_ADDR1:9010, PEER\_ADDR2:9010, PEER\_ADDR3:9010 에 주기적으로 p2p 연결을 시도합니다. 아직 이 노드들이 실행되고 있지는 않으므로 연결 시도가 실패하더라도 무시합니다.
+* 127.0.0.1:8888 에서 HTTP 요청을 받습니다.
+* 0.0.0.0:9876 에서 p2p 연결 요청을 받습니다.
+* 127.0.0.1:8080 에서 블록 이력과 관련된 요청을 받습니다.
+* 아직은 단독 노드이기 때문에 p2p 연결은 하지 않습니다. 나중에 BP 노드를 추가하게 되면 그 때 p2p 노드 정보를 추가할 것입니다.
 * 스마트 컨트랙트의 출력을 콘솔에 표시하는 --contracts-console 매개 변수가 있는데, 여기서 표시하는 정보는 문제가 발생했을 때 해결의 실마리가 될 수 있습니다.
 {% endhint %}
 
-#### 제네시스 노드 중지 방법
+#### 노드를 시작/중지하는 스크립트 작성
 
-nodeos 를 중지하려면 다음과 같이 설정합니다.
+노드를 실행하기 전에 노드 시작과 중지를 간편하게 해 주는 두 개의 스크립트를 다음과 같이 작성합니다.
 
-\~/biosboot/genesis/ 에 [stop.sh](http://stop.sh) 쉘 스크립트 파일을 만들고 다음 내용을 복사해 넣습니다.
+* **start.sh**
 
 ```
 #!/bin/bash
-DATADIR="./blockchain/"
 
-if [ -f $DATADIR"/eosd.pid" ]; then
-pid=`cat $DATADIR"/eosd.pid"`
-echo $pid
-kill $pid
-rm -r $DATADIR"/eosd.pid"
-echo -ne "Stoping Node"
-while true; do
-[ ! -d "/proc/$pid/fd" ] && break
-echo -ne "."
-sleep 1
+# option
+# 스냅샷에서 시작할 경우: -s [snapshot path]
+# Genesis.json 에서 시작할 경우: -g [genesis.json path]
+
+NODEOSBINDIR="/usr/local/bin"
+DATADIR="/home/nodeos"
+SNAPSHOT=""
+GENESIS=""
+
+$DATADIR/stop.sh
+printf "Starting Nodeos \n";
+
+ulimit -n 65535
+ulimit -s 64000
+
+while getopts g:s: flag
+do
+    case "${flag}" in
+        s) SNAPSHOT="--snapshot ${OPTARG}";;
+        g) GENESIS="--genesis-json ${OPTARG}";;
+    esac
 done
-echo -ne "\\rNode Stopped. \\n"
+
+$NODEOSBINDIR/nodeos $GENESIS $SNAPSHOT --data-dir $DATADIR --config-dir $DATADIR 2>> $DATADIR/stderr.txt &  echo $! > $DATADIR/nodeos.pid
+```
+
+* **stop.sh**
+
+```
+#!/bin/bash
+
+DIR="/home/nodeos"
+
+if [ -f $DIR"/nodeos.pid" ]; then
+  pid=`cat $DIR"/nodeos.pid"`
+  kill $pid
+
+  printf "Stopping Nodeos [$pid]"
+
+  while true; do
+      [ ! -d "/proc/$pid/fd" ] && break
+      printf "."
+      sleep 1
+  done
+  printf "\n"
+  rm -r $DIR"/nodeos.pid"
+
+  DATE=$(date -d "now" +'%Y_%m_%d-%H_%M')
+  if [ ! -d $DIR/logs ]; then
+      mkdir $DIR/logs
+  fi
+  tar -pcvzf $DIR/logs/stderr-$DATE.txt.tar.gz stderr.txt
+
+  printf "\rNodeos Stopped.    \n"
 fi
 ```
 
-[stop.sh](http://stop.sh) 쉘 스크립트에 적절한 권한을 주고 실행합니다.
+두 스크립트를 작성한 후 실행 권한 (ex: `chmod +x start.sh`) 를 부여합니다.&#x20;
+
+#### 노드 실행 방법
+
+다음과 같이 제네시스 노드를 실행합니다.
 
 ```
-cd ~/biosboot/genesis/
-chmod +x stop.sh
-./stop.sh
+./start.sh -g genesis.json
 ```
+
+노드가 정상적으로 실행중이라면 같은 디렉토리 안에 `stderr.txt` 파일이 생성될 것이며, 여기에 nodeos 의 콘솔 로그가 출력될 것입니다. `tail -f stderr.txt` 명령으로 로그가 기록되는 상황을 실시간으로 확인할 수 있습니다.
+
+#### 노드 중지 방법
+
+노드를 중지하려면 다음과 같이 실행합니다.&#x20;
+
+```
+./stop.sh
+```
+
+만약 nodeos 데몬을 강제 종료하면 블록체인 상태 데이터베이스가 망가질 수 있기 때문에 가능한 스크립트로 안전하게 종료 하는 것이 좋습니다.
 
 #### 노드를 재시작 하는 방법
 
-일단 nodeos 프로세스를 시작한 다음 중지하게 되면 앞서 만든 genesis\_start.sh 스크립트로 다시 시작할 수 없습니다. 일단 노드가 실행되고 블록을 생성하면 블록체인 데이터베이스가 초기화되고 채워지기 시작하는데, 이 상태가 되면 nodeos 를 시작할 때 start.sh 에서 --genesis-json 파라미터를 사용할 수 없게 되므로 노드를 재시작 할 스크립트를 별도로 만드는 것이 좋습니다. 앞서 설명한 것과 동일한 단계를 따라 제네시스 노드를 시작하고 아래 내용으로 start.sh  스크립트를 만든 뒤 실행 권한을 할당합니다. 나중에 프로세스를 중지한 후 다시 시작할 때는 이 파일을 사용하면 됩니다.
+앞서 nodeos 프로세스를 시작할 때 `start.sh` 에서 `-g` 옵션을 추가하여 제네시스 파일을 지정하였습니다. 다시 시작할 때는 이 옵션을 빼고 다음과 같이 `start.sh` 만 실행하면 됩니다.
 
 ```
-#!/bin/bash
-DATADIR="./blockchain"
-
-if [ ! -d $DATADIR ]; then
-  mkdir -p $DATADIR;
-fi
-
-nodeos \\
---signature-provider EOS_PUB_DEV_KEY=KEY:EOS_PRIV_DEV_KEY \\
---plugin eosio::producer_plugin \\
---plugin eosio::producer_api_plugin \\
---plugin eosio::chain_plugin \\
---plugin eosio::chain_api_plugin \\
---plugin eosio::http_plugin \\
---plugin eosio::history_api_plugin \\
---plugin eosio::history_plugin \\
---data-dir $DATADIR"/data" \\
---blocks-dir $DATADIR"/blocks" \\
---config-dir $DATADIR"/config" \\
---producer-name eosio \\
---http-server-address 127.0.0.1:8888 \\
---p2p-listen-endpoint 127.0.0.1:9010 \\
---access-control-allow-origin='*' \\
---contracts-console \\
---http-validate-host=false \\
---verbose-http-errors \\
---enable-stale-production \\
---p2p-peer-address localhost:9011 \\
---p2p-peer-address localhost:9012 \\
---p2p-peer-address localhost:9013 \\
->> $DATADIR"/nodeos.log" 2>&1 & \\
-echo $! > $DATADIR"/eosd.pid"
+./start.sh
 ```
 
 #### nodeos 재시작 시 오류 해결 방법
 
-* `"perhaps we need to replay"`: 이 메시지는 nodeos 를 `-hard-replay` 파라미터 없이 시작했을 때 나타날 수 있습니다. 이 파라미터는 제네시스 노드부터 모든 트랜잭션을 재생하는 옵션입니다. 이 오류를 없애고 싶다면 `-hard-replay` 파라미터를 `hard_replay.sh` 쉘 스크립트에 추가합니다.
+* `"perhaps we need to replay"`: 이 메시지는 nodeos 를 `-hard-replay-blockchain` 옵션 없이 시작했을 때 나타날 수 있습니다. 이 옵션은 제네시스 블록부터 모든 트랜잭션을 재생하는 옵션입니다. 이 오류를 없애고 싶다면 `-hard-replay-blockchain` 파라미터를 `config.ini` 환경설정 파일에 추가합니다.
 
 {% hint style="info" %}
-nodeos 를 재시작할 때 사용할 수 있는 파라미터들은 다음과 같습니다.
+nodeos 를 재시작할 때 다음과 같은 옵션들을 사용할 수 있습니다.
 
 \--truncate-at-block
 
@@ -274,75 +286,41 @@ nodeos 를 재시작할 때 사용할 수 있는 파라미터들은 다음과 �
 \--hard-replay-blockchain
 {% endhint %}
 
-예를 들어 다음은 `-hard-replay-blockchain` 파라미터를 사용한  `hard_replay.sh` 쉘 스크립트입니다.
+#### 처음부터 노드를 재시작하기.
+
+노드를 처음부터 다시 시작하려면 현재 노드의 블록 로그 파일과 상태 파일을 먼저 삭제해야 합니다.
+
+먼저 다음과 같은 내용으로 `clean.sh` 라는 스크립트 파일을 만듭니다. 그리고 적절한 실행 권한을 줍니다.
 
 ```
 #!/bin/bash
-DATADIR="./blockchain"
-
-if [ ! -d $DATADIR ]; then
-  mkdir -p $DATADIR;
-fi
-
-nodeos \\
---signature-provider EOS_PUB_DEV_KEY=KEY:EOS_PRIV_DEV_KEY \\
---plugin eosio::producer_plugin \\
---plugin eosio::producer_api_plugin \\
---plugin eosio::chain_plugin \\
---plugin eosio::chain_api_plugin \\
---plugin eosio::http_plugin \\
---plugin eosio::history_api_plugin \\
---plugin eosio::history_plugin \\
---data-dir $DATADIR"/data" \\
---blocks-dir $DATADIR"/blocks" \\
---config-dir $DATADIR"/config" \\
---producer-name eosio \\
---http-server-address 127.0.0.1:8888 \\
---p2p-listen-endpoint 127.0.0.1:9010 \\
---access-control-allow-origin=* \\
---contracts-console \\
---http-validate-host=false \\
---verbose-http-errors \\
---enable-stale-production \\
---p2p-peer-address localhost:9011 \\
---p2p-peer-address localhost:9012 \\
---p2p-peer-address localhost:9013 \\
---hard-replay-blockchain \\
->> $DATADIR"/nodeos.log" 2>&1 & \\
-echo $! > $DATADIR"/eosd.pid"
+rm -rf /home/nodeos/blocks/*
+rm -rf /home/nodeos/state/*
+rm /home/nodeos/stderr.txt
+touch /home/nodeos/stderr.txt
 ```
 
-#### 처음부터 nodeos 를 재시작하기.
-
-다음 내용으로 [clean.sh](http://clean.sh) 라는 스크립트 파일을 만듭니다. 그리고 적절한 실행 권한을 줍니다.
+다음으로 stop.sh 스크립트를을 실행하여 블록체인을 중지한 후 clean.sh 스크립트를 실행하여 현재 설정 파일 및 로그, 블록체인 데이터를 지웁니다. 이는 다음과 같은 순서로 진행하면 됩니다.
 
 ```
-#!/bin/bash
-rm -fr blockchain
-ls -al
-```
-
-현재 설정 파일 및 로그, 블록체인 데이터를 지우고 싶다면 먼저 [stop.sh](http://stop.sh) 스크립트를 실행하여 블록체인을 중지한 후 [clean.sh](http://clean.sh) 를 실행합니다. 이는 다음과 같은 순서로 진행하면 됩니다.
-
-```
-cd ~/biosboot/genesis/
+cd /home/nodeos
 ./stop.sh
 ./clean.sh
-./genesis_start.sh
+./start.sh -h genesis.json
 ```
 
-#### nodeos.log 파일 확인하기
+#### stderr.txt 파일 확인하기
 
-다음 명령으로 nodeos.log 파일에 기록되는 로그를 볼 수 있습니다.
+다음 명령으로 stderr.txt 파일에 기록되는 로그를 볼 수 있습니다.
 
 ```
-cd ~/biosboot/genesis/
-tail -f ./blockchain/nodeos.log
+cd /home/nodeos
+tail -f stderr.txt
 ```
 
-#### 핵심 시스템 계정 생성
+#### 핵심 시스템 계정
 
-다음과 같이 노드 운영에 필요한 시스템 계정들이 있습니다.
+노드를 운영하려면 다음과 같은 시스템 계정들이 필요합니다.
 
 ```
 eosio.bpay
@@ -357,36 +335,38 @@ eosio.vpay
 eosio.rex
 ```
 
-아래 순서를 반복하여 각각의 시스템 계정을 생성합니다. 이 튜토리얼에서는 owner 계정의 키와 active 계정의 키에 동일한 키 쌍을 사용할 것이기 때문에 계정 생성 명령에 키를 한 번만 지정하면 됩니다. 하지만 보안상 대부분의 일반적인 계정에서는 공개키와 개인키를 분리하는 것이 더 좋습니다.
+아래의 '시스템 계정 만들기' 파트를 반복하여 각각의 시스템 계정을 생성합니다. 이 단원에서는 계정의 `owner` 키와 `active` 키를 동일한 키 쌍으로 지정할 것이기 때문에 계정 생성 명령에 키를 한 번만 지정하면 됩니다. 하지만 대부분의 일반적인 계정에서는 보안상 `owner` 키와 `active` 키를 분리하는 것이 더 좋습니다.
 
-이 스크립트에서는 모든 eosio.\* 계정이 같은 키를 사용하도록 할 것이지만 원한다면 다른 키를 사용해도 됩니다.
+이 스크립트에서는 모든 eosio.\* 계정이 모두 같은 키를 사용하도록 할 것이지만 원한다면 다른 키를 만들어 사용해도 됩니다.
 
-다음 명령어를 명령줄에 입력하여 키를 생성합니다.
+#### 시스템 계정 만들기
 
-```
-cleos create key --to-console
-```
-
-그러면 다음과 같은 결과를 볼 수 있습니다.
+시스템 계정에는 다음 키 쌍을를 사용할 것입니다.
 
 ```
 Private key: 5KAVVPzPZnbAx8dHz6UWVPFDVFtU1P5ncUzwHGQFuTxnEbdHJL4
 Public key: EOS84BLRbGbFahNJEpnnJHYCoW9QPbQEk2iHsHGGS6qcVUq9HhutG
 ```
 
-이 키를 지갑에 넣으려면 다음과 같이 입력합니다.&#x20;
+다음과 같이 입력하여 이 키를 디폴트 지갑에 넣습니다.
 
 ```
-cleos wallet import --private-key
+cleos wallet import --private-key 5KAVVPzPZnbAx8dHz6UWVPFDVFtU1P5ncUzwHGQFuTxnEbdHJL4
 ```
 
-그리고 이전 단계에서 만든 개인 키를 입력합니다. 그러면 디폴트 지갑으로 키를 가져오게 되며 해당 키의 공개키가 콘솔상에 표시 됩니다.
+디폴트 지갑에 키가 성공적으로 들어가면 해당 키의 공개키가 콘솔상에 표시 됩니다.
 
 ```
 private key: imported private key for: EOS84BLRbGbFahNJEpnnJHYCoW9QPbQEk2iHsHGGS6qcVUq9HhutG
 ```
 
-이제 앞서 만든 키를 가지고 계정을 만들 수 있습니다. 다음은 eosio.bpay 계정을 만드는 명령이며 같은 식으로 위에 나열한 모든 계정을 만듭니다.
+다른 키를 사용하려면 다음 명령어를 명령줄에 입력하여 키를 생성합니다.
+
+```
+cleos create key --to-console
+```
+
+이제 지갑에 넣은 키를 가지고 계정을 만들 수 있습니다. 다음은 `eosio.bpay` 계정을 만드는 명령이며, 같은 식으로 위에 나열한 모든 계정을 만듭니다.
 
 ```
 cleos create account eosio eosio.bpay EOS84BLRbGbFahNJEpnnJHYCoW9QPbQEk2iHsHGGS6qcVUq9HhutG
@@ -397,10 +377,9 @@ executed transaction: ca68bb3e931898cdd3c72d6efe373ce26e6845fc486b42bc5d185643ea
 
 ### 시스템 컨트랙트 빌드 및 배포하기
 
-EOSIO 기반 블록체인으로서 기능하려면 다음과 같은 몇 가지 시스템 스마트 컨트랙트를 인스톨 해야 합니다.
+다음과 같은 몇 가지 시스템 스마트 컨트랙트를 인스톨 해야 합니다.
 
-* `eosio.contracts`저장소에 있는`eosio.system`, `eosio.msig` ,`eosio.token`
-* `eos` 저장소에 있는 `eosio.boot`
+* `eosio.contracts` `eosio.boot`,`eosio.system`, `eosio.msig` ,`eosio.token`
 
 먼저 빌드 도구를 설치합니다.
 
@@ -408,102 +387,13 @@ EOSIO 기반 블록체인으로서 기능하려면 다음과 같은 몇 가지 �
 sudo apt install build-essential cmake
 ```
 
-#### eosio.contracts 빌드
-
-eosio.contracts 를 빌드하려면 전용 디렉토리인 eosio.contracts 를 만들고 eosio.contracts 저장소를 클론하여 소스를 빌드합니다. 현재 디렉토리는 pwd로 출력하여 기록해둡니다. 이는 `EOSIO_CONTRACTS_DIRECTORY` 라는 이름으로 참조할 것입니다.
-
-```
-cd ~
-git clone <https://github.com/EOSIO/eosio.contracts.git>
-cd ./eosio.contracts
-git checkout release/1.9.x
-./build.sh // 빌드 중 eosio.cdt 설치 디렉토리를 묻는데 /usr/opt/eosio.cdt 에 설치되어 있다.
-cd ./build/contracts/
-pwd
-```
-
-#### eosio.boot 시스템 컨트랙트
-
-eos 저장소의 eosio.boot 를 빌드하려면 전용 디렉토리인 eos 를 만들고 eos 저장소를 클론한 뒤 eosio.boot 시스템 계약 소스를 빌드합니다.
-
-```
-cd ~
-git clone <https://github.com/EOSIO/eos.git>
-cd eos
-git checkout release/2.1.x
-cd ./contracts/contracts/eosio.boot/
-cmake
-make
-pwd
-```
-
-pwd 명령으로 출력되는 현재 디렉토리는 EOSIO\_BOOT\_DIRECTORY 라는 이름으로 참조할 것입니다.
-
-#### eosio.token 컨트랙트 배포
-
-이제 eosio.token 컨트랙트를 배포합니다. 이 컨트랙트는 토큰을 발행하거나 정보를 얻거나 이체할 수 있도록 합니다. eosio.token 을 배포하려면 다음과 같이 합니다.
-
-```
-//cleos set contract eosio.token EOSIO_CONTRACTS_DIRECTORY/eosio.token/
-cleos set contract eosio.token /home/eosuser/eosio.contracts/build/contracts/eosio.token
-
-Reading WAST/WASM from /users/documents/eos/contracts/eosio.token/eosio.token.wasm...
-Using already assembled WASM...
-Publishing contract...
-executed transaction: 17fa4e06ed0b2f52cadae2cd61dee8fb3d89d3e46d5b133333816a04d23ba991  8024 bytes  974 us
-#         eosio <= eosio::setcode               {"account":"eosio.token","vmtype":0,"vmversion":0,"code":"0061736d01000000017f1560037f7e7f0060057f7e...
-#         eosio <= eosio::setabi                {"account":"eosio.token","abi":{"types":[],"structs":[{"name":"transfer","base":"","fields":[{"name"...
-```
-
-#### eosio.msig 컨트랙트 배포
-
-eosio.msig 는 퍼미션 레벨과 멀티시그 프로세스를 사용할 수 있게 하고 또한 이들을 쉽게 정의하고 관리 할 수 있게 합니다. eosio.msig 컨트랙트를 배포 하려면 다음과 같이 합니다.
-
-```
-//cleos set contract eosio.msig EOSIO_CONTRACTS_DIRECTORY/eosio.msig/
-cleos set contract eosio.token /home/eosuser/eosio.contracts/build/contracts/eosio.msig
-
-Reading WAST/WASM from /users/documents/eos/build/contracts/eosio.msig/eosio.msig.wasm...
-Using already assembled WASM...
-Publishing contract...
-executed transaction: 007507ad01de884377009d7dcf409bc41634e38da2feb6a117ceced8554a75bc  8840 bytes  925 us
-#         eosio <= eosio::setcode               {"account":"eosio.msig","vmtype":0,"vmversion":0,"code":"0061736d010000000198011760017f0060047f7e7e7...
-#         eosio <= eosio::setabi                {"account":"eosio.msig","abi":{"types":[{"new_type_name":"account_name","type":"name"}],"structs":[{...
-```
-
-#### SYS 화폐를 만들고 할당
-
-SYS 화폐를 만들고 토큰을 최대 100억 개 까지 발행할 수 있도록 설정합니다. 그리고 일단 먼저 10억개를 발행해 보도록 하겠습니다. 원한다면 SYS 는 다른 화폐명으로 바꿔도 상관없습니다.
-
-첫 단계로 eosio.token 계정을 사용하여 인증하게 되는 eosio.token 컨트랙트의 create 액션을 사용하여 100억개의 SYS 토큰을 생성합니다. 이는 토큰의 최대 공급량만 설정하는 것으로 실제로 토큰을 발행하지는 않습니다. 발행되지 않은 토큰은 일종의 적립금인 상태라고 생각하면 됩니다.
-
-```
-cleos push action eosio.token create '[ "eosio", "10000000000.0000 SYS" ]' -p eosio.token@active
-
-executed transaction: 0440461e0d8816b4a8fd9d47c1a6a53536d3c7af54abf53eace884f008429697  120 bytes  326 us
-#   eosio.token <= eosio.token::create          {"issuer":"eosio","maximum_supply":"10000000000.0000 SYS"}
-```
-
-두 번째로, eosio.token 컨트랙트의 issue 액션을 사용하여 10억 개의 SYS 토큰을 적립된 상태로부터 발행하도록 합니다. 발행한 순간부터 토큰들은 eosio 계정에 귀속됩니다. eosio 계정이 아직 발행되지 않은, 적립된 토큰을 가지고 있기 때문에 액션을 수행하려면 이 계정으로 인증해야 합니다.
-
-```
-cleos push action eosio.token issue '[ "eosio", "1000000000.0000 SYS", "memo" ]' -p eosio@active
-
-executed transaction: a53961a566c1faa95531efb422cd952611b17d728edac833c9a55582425f98ed  128 bytes  432 us
-#   eosio.token <= eosio.token::issue           {"to":"eosio","quantity":"1000000000.0000 SYS","memo":"memo"}
-```
-
-{% hint style="info" %}
-경제적 관점에서 보면, 토큰을 발행 함으로서 토큰을 적립금에서 유통되는 상태로 이동시키면, 그로 인해 인플레이션이 발생하게 됩니다. 토큰 발행은 인플레이션을 발생시키는 하나의 방법입니다.
-{% endhint %}
-
-#### 시스템 컨트랙트를 배포
-
-v1.8 및 이후 버전에서 도입된 모든 프로토콜 업그레이드 기능을 사용하려면 특수 프로토콜 기능(코드명 PREACTIVATE\_FEATURE)을 활성화하고 이 기능에 의해 도입된 기능을 사용하는, 업데이트된 버전의 시스템 컨트랙트를 배포해야 합니다.
+Antelope 기반 블록체인으로서 기능하려면 먼저 프로토콜 기능(Protocol Features) 을 사용할 수 있게 해야 합니다.
 
 #### PREACTIVATE\_FEATURE 을 활성화
 
-PREACTIVATE\_FEATURE 을 활성화 하려면 다음 코드를 입력합니다.
+EOSIO v1.8 및 이후 버전에서 도입된 모든 프로토콜 기능을 사용하려면 특수 프로토콜 기능(코드명 `PREACTIVATE_FEATURE`)을 활성화한 뒤 시스템 컨트랙트를 배포해야 합니다.
+
+`PREACTIVATE_FEATURE` 을 활성화 하려면 다음 명령을 입력합니다.
 
 ```
 curl --request POST \\
@@ -513,17 +403,20 @@ curl --request POST \\
 {"result":"ok"}
 ```
 
-#### eosio.boot 계약 설정
+#### eosio.boot 컨트랙트 설정
 
-시스템 컨트랙트는 토큰 기반의 행동에 대한 모든 액션을 제공합니다. 시스템 컨트랙트를 배포하기 전 까지는 경제적 운영과는 무관하게 액션이 수행됩니다. 일단 시스템 컨트랙트가 활성화되면 액션을 실행할 때 경제적 요소들을 고려해야 합니다. 즉, 시스템 리소스(CPU, 네트워크, 메모리)에 대한 비용을 지불해야 하며 마찬가지로 계정을 새로 만들 때 비용을 지불해야 합니다. 시스템 컨트랙트를 통해 토큰을 스테이크 및 언스테이크 할 수 있고, 자원을 구입해야 하며, 잠재적 BP를 등록하고 나중에 투표할 수 있으며, BP 보상을 청구할 수 있고, 이런저런 권한과 제약을 설정할 수 있습니다.
+시스템 컨트랙트는 토큰 기반의 행동에 대한 모든 액션을 제공합니다. 시스템 컨트랙트를 배포하기 전 까지는 경제적 요건들을 고려할 필요 없이 액션을 수행할 수 있습니다.&#x20;
 
-이제 eosio.boot 컨트랙트를 설치하면 EOSIO 기반 블록체인에서 매우 권장되는 일련의 프로토콜 기능을 사용할 수 있게 됩니다.
+그러나 일단 시스템 컨트랙트가 활성화되면 액션을 실행할 때 경제적 요소들을 고려해야 합니다. 즉, 시스템 리소스(CPU, 네트워크, 메모리)에 대한 비용을 지불해야 하며 마찬가지로 계정을 새로 만들 때 비용을 지불해야 합니다. 시스템 컨트랙트를 통해 토큰을 스테이크 및 언스테이크 할 수 있고, 자원을 구입해야 하며, 잠재적 BP를 등록하고 나중에 투표할 수 있으며, BP 보상을 청구할 수 있고, 이런저런 권한과 제약을 설정할 수 있습니다.
+
+이제 `eosio.boot` 컨트랙트를 설치하면 Antelope 기반 블록체인에서 권장되는 일련의 프로토콜 기능을 사용할 수 있게 됩니다.
 
 ```
-//cleos set contract eosio EOSIO_BOOT_DIRECTORY/eosio.boot/
-cleos set contract eosio /home/eosuser/eos/contracts/contracts/eosio.boot/build
+//cleos set contract eosio.boot <eosio.boot.wasm 파일 경로>
+cd /home/nodeos/eos-system-contracts/build/contracts/eosio.boot
+cleos set contract eosio.boot .
 
-Reading WAST/WASM from /users/documents/eos/contracts/contracts/eosio.boot/build/eosio.boot.wasm...
+Reading WAST/WASM from /home/nodeos/eos-system-contracts/build/contracts/eosio.boot/eosio.boot.wasm...
 Using already assembled WASM...
 Publishing contract...
 executed transaction: 2150ed87e4564cd3fe98ccdea841dc9ff67351f9315b6384084e8572a35887cc  39968 bytes  4395 us
@@ -531,35 +424,31 @@ executed transaction: 2150ed87e4564cd3fe98ccdea841dc9ff67351f9315b6384084e8572a3
 #         eosio <= eosio::setabi                {"account":"eosio","abi":{"types":[],"structs":[{"name":"buyrambytes","base":"","fields":[{"name":"p...
 ```
 
-#### 프로토콜 기능을 활성화
+#### 다른 프로토콜 기능 활성화하기
 
-eosio.boot 컨트랙트를 배포 한 후 다음 명령을 사용하여 나머지 기능들을 활성화 합니다.
-
-{% hint style="info" %}
-아래 단계는 선택사항이며 이러한 기능 없이도 사용할 수 있지만 EOSIO 기반 블록체인에서는 사용하는것을 적극 권장합니다.
-{% endhint %}
+어떤 프로토콜 기능을 사용하려면 `activate` 액션에 원하는 프로토콜 기능의 다이제스트를 전달하여 활성화 시킵니다. Antelope 블록체인의 프로토콜 기능 다이제스트는 다음 명령으로 확인할 수 있습니다.
 
 ```
-# KV_DATABASE
+curl -X POST http://127.0.0.1:8888/v1/producer/get_supported_protocol_features | jq .
 ```
 
+아래 예제는 leap 3.1.0 에서 사용 가능한 프로토콜 기능을 활성화시키는 명령입니다. 무엇을 사용할 것인가는 어디까지나 선택사항이며 이러한 프로토콜 기능 없이도 블록체인을 사용할 수는 있지만, 가능하면 Antelope 기반 블록체인에서는 전부 활성화하여 사용하는 것이 좋습니다.
+
 ```
-cleos push action eosio activate '["825ee6288fb1373eab1b5187ec2f04f6eacb39cb3a97f356a07c91622dd61d16"]' -p eosio
+# ONLY_LINK_TO_EXISTING_PERMISSION
+cleos push action eosio activate '["1a99a59d87e06e09ec5b028a9cbb7749b4a5ad8819004365d02dc4379a8b7241"]' -p eosio
+
+# FORWARD_SETCODE
+cleos push action eosio activate '["2652f5f96006294109b3dd0bbde63693f55324af452b799ee137a81a905eed25"]' -p eosio
 
 # ACTION_RETURN_VALUE
 cleos push action eosio activate '["c3a6138c5061cf291310887c0b5c71fcaffeab90d5deb50d3b9e687cead45071"]' -p eosio
-
-# CONFIGURABLE_WASM_LIMITS
-cleos push action eosio activate '["bf61537fd21c61a60e542a5d66c3f6a78da0589336868307f94a82bccea84e88"]' -p eosio
 
 # BLOCKCHAIN_PARAMETERS
 cleos push action eosio activate '["5443fcf88330c586bc0e5f3dee10e7f63c76c00249c87fe4fbf7f38c082006b4"]' -p eosio
 
 # GET_SENDER
 cleos push action eosio activate '["f0af56d2c5a48d60a4a5b5c903edfb7db3a736a94ed589d0b797df33ff9d3e1d"]' -p eosio
-
-# FORWARD_SETCODE
-cleos push action eosio activate '["2652f5f96006294109b3dd0bbde63693f55324af452b799ee137a81a905eed25"]' -p eosio
 
 # ONLY_BILL_FIRST_AUTHORIZER
 cleos push action eosio activate '["8ba52fe7a3956c5cd3a656a3174b931d3bb2abb45578befc59f283ecd816a405"]' -p eosio
@@ -579,9 +468,6 @@ cleos push action eosio activate '["ef43112c6543b88db2283a2e077278c315ae2c84719a
 # NO_DUPLICATE_DEFERRED_ID
 cleos push action eosio activate '["4a90c00d55454dc5b059055ca213579c6ea856967712a56017487886a4d4cc0f"]' -p eosio
 
-# ONLY_LINK_TO_EXISTING_PERMISSION
-cleos push action eosio activate '["1a99a59d87e06e09ec5b028a9cbb7749b4a5ad8819004365d02dc4379a8b7241"]' -p eosio
-
 # RAM_RESTRICTIONS
 cleos push action eosio activate '["4e7bf348da00a945489b2a681749eb56f5de00b900014e137ddae39f48f69d67"]' -p eosio
 
@@ -590,28 +476,133 @@ cleos push action eosio activate '["4fca8bd82bbd181e714e283f83e1b45d95ca5af40fb8
 
 # WTMSIG_BLOCK_SIGNATURES
 cleos push action eosio activate '["299dcb6af692324b899b39f16d5a530a33062804e41f09dc97e9f156b4476707"]' -p eosio
+
+# CONFIGURABLE_WASM_LIMITS2
+cleos push action eosio activate '["d528b9f6e9693f45ed277af93474fd473ce7d831dae2180cca35d907bd10cb40"]' -p eosio
+
+# GET_CODE_HASH
+cleos push action eosio activate '["bcd2a26394b36614fd4894241d3c451ab0f6fd110958c3423073621a70826e99"]' -p eosio
+
+# CRYPTO_PRIMITIVES
+cleos push action eosio activate '["6bcb40a24e49c26d0a60513b6aeb8551d264e4717f306b81a37a5afb3b47cedc"]' -p eosio
+
+# GET_BLOCK_NUM
+cleos push action eosio activate '["35c2186cc36f7bb4aeaf4487b36e57039ccf45a9136aa856a5d569ecca55ef2b"]' -p eosio
 ```
+
+만약 현재 활성화된 프로토콜 기능 목록을 확인하고 싶다면 다음과 같이 입력합니다.
+
+```
+curl http://127.0.0.1:8888/v1/chain/get_activated_protocol_features | jq .
+```
+
+이제 시스템 스마트 컨트랙트를 빌드해 보겠습니다.
+
+#### eosio.contracts 빌드
+
+`eosio.contracts` 저장소를 클론하고 저장소에 포함된 빌드 스크립트로여 소스를 빌드합니다.&#x20;
+
+```
+cd /home/nodeos
+git clone https://github.com/eosnetworkfoundation/eos-system-contracts.git
+cd ./eos-system-contracts
+./build.sh // 빌드 중 eosio.cdt 설치 디렉토리를 입력해야 할 수도 있는데, /usr/opt/cdt/<version> 아래에 설치되어 있다.
+cd ./build/contracts/
+pwd
+```
+
+`build.sh` 파일로 빌드하는 도중 경고를 볼 수 있는데, 이는 리카르디안 컨트랙트가 없다는 경고로, 무시해도 문제 없습니다.
+
+#### eosio.token 컨트랙트 배포
+
+이제 `eosio.token` 컨트랙트를 배포합니다. 이 컨트랙트는 토큰을 발행하거나 정보를 얻거나 이체할 수 있도록 합니다. `eosio.token` 을 배포하려면 다음과 같이 합니다.
+
+```
+//cleos set contract eosio.token <eosio.token.wasm 파일 경로>
+cd /home/nodeos/eos-system-contracts/build/contracts/eosio.token
+cleos set contract eosio.token .
+
+Reading WAST/WASM from /home/nodeos/eos-system-contracts/build/contracts/eosio.token/eosio.token.wasm...
+Using already assembled WASM...
+Publishing contract...
+executed transaction: 17fa4e06ed0b2f52cadae2cd61dee8fb3d89d3e46d5b133333816a04d23ba991  8024 bytes  974 us
+#         eosio <= eosio::setcode               {"account":"eosio.token","vmtype":0,"vmversion":0,"code":"0061736d01000000017f1560037f7e7f0060057f7e...
+#         eosio <= eosio::setabi                {"account":"eosio.token","abi":{"types":[],"structs":[{"name":"transfer","base":"","fields":[{"name"...
+```
+
+#### eosio.msig 컨트랙트 배포
+
+`eosio.msig` 는 퍼미션 레벨과 다중서명(multisig) 프로세스를 사용할 수 있게 하고 또한 이들을 쉽게 정의하고 관리 할 수 있게 합니다. leap 3.1 에서 이 기능을 사용하려면 먼저 `CRYPTO_PRIMITIVE` 프로토콜 기능을 활성화해야 합니다.
+
+```
+# CRYPTO_PRIMITIVES
+cleos push action eosio activate '["6bcb40a24e49c26d0a60513b6aeb8551d264e4717f306b81a37a5afb3b47cedc"]' -p eosio
+```
+
+이제 다음과 같이 `eosio.msig` 컨트랙트를 배포합니다.
+
+```
+//cleos set contract eosio.msig <eosio.msig.wasm 파일 경로>
+cd /home/nodeos/eos-system-contracts/build/contracts/eosio.msig
+cleos set contract eosio.msig .
+
+Reading WAST/WASM from /users/documents/eos/build/contracts/eosio.msig/eosio.msig.wasm...
+Using already assembled WASM...
+Publishing contract...
+executed transaction: 007507ad01de884377009d7dcf409bc41634e38da2feb6a117ceced8554a75bc  8840 bytes  925 us
+#         eosio <= eosio::setcode               {"account":"eosio.msig","vmtype":0,"vmversion":0,"code":"0061736d010000000198011760017f0060047f7e7e7...
+#         eosio <= eosio::setabi                {"account":"eosio.msig","abi":{"types":[{"new_type_name":"account_name","type":"name"}],"structs":[{...
+```
+
+#### SYS 화폐를 만들고 할당
+
+이제 새로운 토큰을 만들 준비가 되었습니다. 여기서는 SYS 화폐를 만들고 토큰을 최대 100억 개 까지 발행할 수 있도록 설정해 보겠습니다. 그리고 일단 먼저 10억개를 발행해 보도록 하겠습니다. 원한다면 SYS 는 다른 화폐명으로 바꿔도 상관없습니다.
+
+첫 단계로 `eosio.token` 계정을 사용하여 인증하게 되는 `eosio.token` 컨트랙트의 `create` 액션을 사용하여 100억개의 SYS 토큰을 생성합니다. 이는 토큰의 최대 공급량을 설정하는 것으로 실제로 토큰을 발행하지는 않습니다. 발행되지 않은 토큰은 일종의 적립금인 상태라고 생각하면 됩니다.
+
+```
+cleos push action eosio.token create '[ "eosio", "10000000000.0000 SYS" ]' -p eosio.token@active
+
+executed transaction: 0440461e0d8816b4a8fd9d47c1a6a53536d3c7af54abf53eace884f008429697  120 bytes  326 us
+#   eosio.token <= eosio.token::create          {"issuer":"eosio","maximum_supply":"10000000000.0000 SYS"}
+```
+
+두 번째로, `eosio.token` 컨트랙트의 `issue` 액션을 사용하여 10억 개의 SYS 토큰을 적립된 상태로부터 발행하도록 합니다. 발행한 순간부터 토큰들은 `eosio` 계정에 귀속됩니다. `eosio` 계정이 아직 발행되지 않은, 적립된 토큰을 가지고 있기 때문에 액션을 수행하려면 이 계정으로 인증해야 합니다.
+
+```
+cleos push action eosio.token issue '[ "eosio", "1000000000.0000 SYS", "memo" ]' -p eosio@active
+
+executed transaction: a53961a566c1faa95531efb422cd952611b17d728edac833c9a55582425f98ed  128 bytes  432 us
+#   eosio.token <= eosio.token::issue           {"to":"eosio","quantity":"1000000000.0000 SYS","memo":"memo"}
+```
+
+{% hint style="info" %}
+경제적 관점에서 보면, 토큰을 발행함 으로서 유동성을 공급하면, 즉 토큰을 적립금에서 유통되는 상태로 이동시키면, 그로 인해 인플레이션이 발생하게 됩니다. 토큰 발행은 인플레이션을 발생시키는 하나의 방법입니다.
+{% endhint %}
 
 #### eosio.system 컨트랙트 배포
 
-다음과 같이 eosio.system 컨트랙트를 배포합니다.
+마지막으로 다음과 같이 `eosio` 계정에 `eosio.system` 컨트랙트를 배포합니다.
 
 ```
-# cleos set contract eosio EOSIO_CONTRACTS_DIRECTORY/eosio.system/
-cleos set contract eosio /home/eosuser/eosio.contracts/build/contracts/eosio.system/
+//cleos set contract eosio <eosio.system.wasm 파일 경로>
+cd /home/nodeos/eos-system-contracts/build/contracts/eosio.system
+cleos set contract eosio .
 ```
+
+이것으로 단일 제네시스 노드로 동작하는 블록체인 설정을 완료하였습니다.
 
 ## 단일 제네시스 BP에서 다중 BP로 전환하기
 
-이제 단일 BP(제네시스 노드)에서 다중 BP로 전환하는 방법을 알아보겠습니다. 지금까지는 기본으로 제공된 eosio 계정만 권한이 있으면 블록에 서명할 수 있었습니다. 이번 챕터의 목표는 무엇이 최종 블록인지에 동의하는 2/3+1 BP의 규칙에 따라 운영되는, 선출된 다수의 블록 프로듀서(BP)들이 모여 블록체인을 관리하는 것이 목표입니다.
+이제 단일 BP(제네시스 노드)에서 다중 BP로 전환하는 방법을 알아보겠습니다. 지금까지는 기본으로 제공된 eosio 계정만 권한이 있으면 블록에 서명할 수 있었습니다. 이번 단원의 목표는 2/3+1의 BP 들이 무엇이 최종 블록인지에 동의하는 규칙에 따라 운영되는, 선출된 다수의 블록 프로듀서(BP)들이 모여 블록체인을 관리하는 것이 목표입니다.
 
-BP 는 투표에 의해 선정되며 그 결과에 따라 BP 목록이 변경될 수 있습니다. EOSIO의 거버넌스 규칙 하에서는 특정 BP에게 직접 권한을 부여하기 보다는 기본으로 제공되는 eosio.prods 라는 특별한 계정으로 연결됩니다. 이 계정은 선출된 프로듀서 그룹을 나타냅니다. 사실상 BP들의 그룹이나 마찬가지인 eosio.prods 계정은 eosio.msig 계약에 의해 정의된 권한을 운영하고 사용합니다.
+BP 는 투표에 의해 선정되며 그 결과에 따라 BP 목록이 변경될 수 있습니다. Antelope 의 거버넌스 규칙 하에서는 특정 BP에게 직접 권한을 부여하기 보다는 기본으로 제공되는 `eosio.prods` 라는 특별한 계정으로 연결됩니다. 이 계정은 선출된 프로듀서 그룹을 나타냅니다. 사실상 BP들의 그룹이나 마찬가지인 `eosio.prods` 계정은 `eosio.msig` 계약에 의해 정의된 권한을 운영하고 사용합니다.
 
-eosio.system 컨트랙트를 배포한 후에 eosio.msig 를 특권 있는 계정으로 지정하면 eosio 계정 대신 이 계정으로 권한을 부여할 수 있습니다. 이렇게 하여 eosio 계정은 원래 가지고 있던 권한을 내려놓게 되고 eosio.prods 계정이 그 권한을 대신하게 됩니다.
+`eosio.system` 컨트랙트를 배포한 후에 `eosio.msig` 를 특권 있는 계정으로 지정하면 `eosio` 계정 대신 이 계정으로 권한을 부여할 수 있습니다. 이렇게 하여 `eosio` 계정은 원래 가지고 있던 권한을 내려놓게 되고 `eosio.prods` 계정이 그 권한을 대신하게 됩니다.
 
 ### 특권 있는 계정으로 eosio.msig 지정
 
-eosio.msig 을 특권 있는 계정으로 지정하려면 다음과 같이 합니다.
+`eosio.msig` 을 특권 있는 계정으로 지정하려면 다음과 같이 합니다.
 
 ```
 cleos push action eosio setpriv '["eosio.msig", 1]' -p eosio@active
@@ -619,7 +610,7 @@ cleos push action eosio setpriv '["eosio.msig", 1]' -p eosio@active
 
 ### 시스템 계정 초기화
 
-다음 명령은 system 계정을 코드 제로(초기화 시간에 필요함) 로 초기화하고 SYS 토큰의 정밀도를 4로 지정합니다. 정밀도는 0\~18까지 지정할 수 있습니다.
+다음 명령은 system 계정을 코드 제로(초기화 시간에 필요함) 로 초기화하고 SYS 토큰의 정밀도(소수점 이하 자릿수)를 4로 지정합니다. 정밀도는 0\~18까지 지정할 수 있습니다.
 
 ```
 cleos push action eosio init '["0", "4,SYS"]' -p eosio@active
@@ -639,7 +630,9 @@ eosio 와 eosio.msig 는 특권을 가진 계정이며 다른 eosio.\* 계정들
 
 ### 스테이크 된 계정 만들기
 
-스테이크 한다는 것은 EOSIO 시스템 내의 계정에 토큰을 할당하는 프로세스를 의미합니다. 스테이킹과 언스테이킹은 블록체인의 수명 전반에 걸쳐 진행되는 과정입니다만, 바이오스 부트 시퀀스 과정에서 수행되는 초기 스테이킹은 조금 특별합니다. 바이오스 부트 시퀀스 중에는 계정의 토큰이 스테이킹 됩니다. 하지만, BP가 선출되기 전까지 이 토큰은 사실상 동결 상태에 있게 됩니다. 즉, 바이오스 부팅 시퀀스 동안 수행되는 초기 스테이킹의 목표는, 토큰을 계정에 할당하여 사용 가능한 상태로 만들고, 투표 프로세스를 시작하여 BP가 선출되고 블록체인이 "라이브" 상태로 운영되도록 하는 것입니다.
+스테이크 한다는 것은 Antelope 블록체인 시스템 내의 계정에 토큰을 할당하는 프로세스를 의미합니다. 스테이킹과 언스테이킹은 블록체인의 수명 전반에 걸쳐 진행되는 과정이지만, 바이오스 부트 시퀀스 과정에서 수행되는 초기 스테이킹은 조금 특별합니다.&#x20;
+
+바이오스 부트 시퀀스 중에는 계정의 토큰이 스테이킹 됩니다. 하지만, BP가 선출되기 전까지 이 토큰은 사실상 동결 상태에 있게 됩니다. 즉, 바이오스 부트 시퀀스 동안 수행되는 초기 스테이킹의 목표는, 토큰을 계정에 할당하여 사용 가능한 상태로 만들고, 투표 프로세스를 시작하여 BP가 선출되고 블록체인이 "라이브" 상태로 운영되도록 하는 것입니다.
 
 다음은 초기 스테이킹 프로세스에서의 권장 사항입니다.
 
@@ -654,7 +647,7 @@ eosio 와 eosio.msig 는 특권을 가진 계정이며 다른 eosio.\* 계정들
 > 예시 2.\
 > accountnum33 계정은 5 SYS 를 가집니다. 이 계정은 0.1000 SYS 를 RAM 에, 0.4500 SYS 를 CPU 에, 0.4500 SYS 를 network 에 스테이킹 합니다. 그리고 4.0000 SYS 를 유동성 토큰으로 가집니다.
 
-이 튜토리얼을 보다 사실적으로 만들려면 10억 개의 토큰을 계정에 배포하고 파레토 분포를 사용할 수 있습니다. 파레토 분포는 80-20 규칙을 모델링 한 것입니다. 예를 들어, 토큰의 80%를 토큰 보유자의 20%가 가지는 것입니다. 이 예제에서는 분포를 생성하는 방법은 다루지 않을 것이며 스테이킹을 수행하는 명령에 초점을 맞추고 있습니다. 이 튜토리얼에서 제공되는 스크립트 [bios-boot-tutorial.py](http://bios-boot-tutorial.py) 는 Python NumPy(numpy) 라이브러리를 사용하여 파레토 분포를 생성할 수 있습니다.
+이 튜토리얼을 보다 사실적으로 만들려면 10억 개의 토큰을 계정에 배포하고 파레토 분포를 사용할 수 있습니다. 파레토 분포는 80-20 규칙을 모델링 한 것으로, 예를 들어 토큰의 80%를 토큰 보유자의 20%가 가지게 됩니다. 이 예제에서는 분포를 생성하는 방법은 다루지 않을 것이며 스테이킹을 수행하는 명령에 초점을 맞추고 있습니다.
 
 다음 단계를 따라 각 계정에서 토큰을 스테이크 합니다. 이 단계들은 각각의 계정마다 따로 수행해야 합니다.
 
@@ -964,6 +957,12 @@ tail -f ./blockchain/nodeos.log
 새 계정을 만들려면 Create test account 튜토리얼을 확인합니다.
 
 토큰을 발행하고 할당하거나고 계정간에 전송하려면 Deploy, Issue,and Transfer 섹션을 확인 합니다.
+
+## 블록 익스플로러 연결하기
+
+bloks.io 에는 로컬 테스트넷에 연결할 수 있는 기능이 있습니다. 이 기능을 사용하여 로컬 테스트넷을 쉽게 사용해 볼 수 있습니다.
+
+[https://local.bloks.io/](https://local.bloks.io/)
 
 
 

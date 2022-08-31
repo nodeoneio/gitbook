@@ -58,6 +58,7 @@
 ## CDT
 
 * [CDT(Contract Development Toolkit) 이란](cdt/cdt-contract-development-toolkit.md)
+* [CDT 설치](cdt/install-cdt.md)
 * [스마트 컨트랙트 컴파일](cdt/how-to-compile-smart-contract.md)
 * [모범 사례](cdt/best-practices.md)
 * [기능(Features)](cdt/features.md)
