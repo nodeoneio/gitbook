@@ -81,23 +81,28 @@ private key: imported private key for: EOS6Pxs3oiKT7y6eP58qr6KzYSPA5hbe7XtDciNNF
 
 #### Leap 데이터 디렉토리 작성
 
-다음과 같이 `~/home/nodeos` 디렉토리를 만듭니다. 제네시스 노드를 시작할 때 이런저런 매개변수들을 사용하여 제네시스 노드가 블록체인 데이터베이스를 만들 때 사용할 로그 파일과 설정 파일을 이 디렉토리 내부에 저장할 것입니다.
+다음과 같이 `/home/nodeos` 디렉토리를 만듭니다. 제네시스 노드를 시작할 때 이런저런 매개변수들을 사용하여 제네시스 노드가 블록체인 데이터베이스를 만들 때 사용할 로그 파일과 설정 파일을 이 디렉토리 내부에 저장할 것입니다.
 
 ```
-cd ~
-mkdir nodeos
-cd nodeos
+mkdir -p /home/nodeos/genesis
+cd /home/nodeos/genesis
 ```
+
+{% hint style="info" %}
+root 사용자가 아닌 경우 데이터 디렉토리 작성시 sudo 명령을 사용하여 데이터 디렉토리를 만든 뒤, 다음과 같이 현재 사용자의 소유로 변경해 줍니다.\
+\
+sudo chown -R \<username>:\<username> /home/nodeos/
+{% endhint %}
 
 #### **데이터 디렉토리에 제네시스 파일 작성**
 
-데이터 디렉토리(`/home/nodeos`)에서 genesis.json 파일을 작성합니다.
+데이터 디렉토리(`/home/nodeos/genesis`)에서 genesis.json 파일을 작성합니다.
 
 ```
 nano genesis.json
 ```
 
-다음의 jSON 파일을 복사하여 제네시스 파일이 붙여넣고 저장합니다.
+다음의 jSON 파일을 복사하여 제네시스 파일에 붙여넣고 저장합니다.
 
 ```
 {
@@ -149,11 +154,18 @@ verbose-http-errors = true
 agent-name = "Nodeone Local"
 net-threads = 2
 max-transaction-time = 100
-producer-name = eosio
 enable-stale-production = true
 resource-monitor-not-shutdown-on-threshold-exceeded=true
 
+http-validate-host = false
+http-threads = 6
+access-control-allow-origin = *
+access-control-allow-headers = Origin, X-Requested-With, Content-Type, Accept
+http-max-response-time-ms = 100
+
+#p2p-peer-address = <p2p address> :9876
 signature-provider=<EOS_PUB_DEV_KEY>=KEY:<EOS_PRIV_DEV_KEY>
+producer-name = eosio
 
 plugin = eosio::chain_api_plugin
 plugin = eosio::http_plugin
@@ -188,7 +200,7 @@ plugin = eosio::producer_api_plugin
 # Genesis.json 에서 시작할 경우: -g [genesis.json path]
 
 NODEOSBINDIR="/usr/local/bin"
-DATADIR="/home/nodeos"
+DATADIR="/home/nodeos/genesis"
 SNAPSHOT=""
 GENESIS=""
 
@@ -214,7 +226,7 @@ $NODEOSBINDIR/nodeos $GENESIS $SNAPSHOT --data-dir $DATADIR --config-dir $DATADI
 ```
 #!/bin/bash
 
-DIR="/home/nodeos"
+DIR="/home/nodeos/genesis"
 
 if [ -f $DIR"/nodeos.pid" ]; then
   pid=`cat $DIR"/nodeos.pid"`
@@ -294,19 +306,19 @@ nodeos 를 재시작할 때 다음과 같은 옵션들을 사용할 수 있습�
 
 ```
 #!/bin/bash
-rm -rf /home/nodeos/blocks/*
-rm -rf /home/nodeos/state/*
-rm /home/nodeos/stderr.txt
-touch /home/nodeos/stderr.txt
+rm -rf /home/nodeos/genesis/blocks/*
+rm -rf /home/nodeos/genesis/state/*
+rm /home/nodeos/genesis/stderr.txt
+touch /home/nodeos/genesis/stderr.txt
 ```
 
-다음으로 stop.sh 스크립트를을 실행하여 블록체인을 중지한 후 clean.sh 스크립트를 실행하여 현재 설정 파일 및 로그, 블록체인 데이터를 지웁니다. 이는 다음과 같은 순서로 진행하면 됩니다.
+다음으로 `stop.sh` 스크립트를 실행하여 블록체인을 중지한 후 clean.sh 스크립트를 실행하여 현재 설정 파일 및 로그, 블록체인 데이터를 지웁니다. 이는 다음과 같은 순서로 진행하면 됩니다.
 
 ```
-cd /home/nodeos
+cd /home/nodeos/genesis
 ./stop.sh
 ./clean.sh
-./start.sh -h genesis.json
+./start.sh -g genesis.json
 ```
 
 #### stderr.txt 파일 확인하기
@@ -314,7 +326,7 @@ cd /home/nodeos
 다음 명령으로 stderr.txt 파일에 기록되는 로그를 볼 수 있습니다.
 
 ```
-cd /home/nodeos
+cd /home/nodeos/genesis
 tail -f stderr.txt
 ```
 
@@ -394,7 +406,7 @@ sudo apt install build-essential cmake
 `eosio.contracts` 저장소를 클론하고 저장소에 포함된 빌드 스크립트로 소스를 빌드합니다.&#x20;
 
 ```
-cd /home/nodeos
+cd /home/nodeos/genesis
 git clone https://github.com/eosnetworkfoundation/eos-system-contracts.git
 cd ./eos-system-contracts
 ./build.sh # 빌드 중 eosio.cdt 설치 디렉토리를 입력해야 할 수도 있는데, /usr/opt/cdt/<version> 아래에 설치되어 있다.
@@ -425,10 +437,10 @@ curl --request POST \\
 
 ```
 //cleos set contract eosio.boot <eosio.boot.wasm 파일 경로>
-cd /home/nodeos/eos-system-contracts/build/contracts/eosio.boot
+cd /home/nodeos/genesis/eos-system-contracts/build/contracts/eosio.boot
 cleos set contract eosio.boot .
 
-Reading WAST/WASM from /home/nodeos/eos-system-contracts/build/contracts/eosio.boot/eosio.boot.wasm...
+Reading WAST/WASM from /home/nodeos/genesis/eos-system-contracts/build/contracts/eosio.boot/eosio.boot.wasm...
 Using already assembled WASM...
 Publishing contract...
 executed transaction: 2150ed87e4564cd3fe98ccdea841dc9ff67351f9315b6384084e8572a35887cc  39968 bytes  4395 us
@@ -516,10 +528,10 @@ curl http://127.0.0.1:8888/v1/chain/get_activated_protocol_features | jq .
 
 ```
 //cleos set contract eosio.token <eosio.token.wasm 파일 경로>
-cd /home/nodeos/eos-system-contracts/build/contracts/eosio.token
+cd /home/nodeos/genesis/eos-system-contracts/build/contracts/eosio.token
 cleos set contract eosio.token .
 
-Reading WAST/WASM from /home/nodeos/eos-system-contracts/build/contracts/eosio.token/eosio.token.wasm...
+Reading WAST/WASM from /home/nodeos/genesis/eos-system-contracts/build/contracts/eosio.token/eosio.token.wasm...
 Using already assembled WASM...
 Publishing contract...
 executed transaction: 17fa4e06ed0b2f52cadae2cd61dee8fb3d89d3e46d5b133333816a04d23ba991  8024 bytes  974 us
@@ -540,7 +552,7 @@ cleos push action eosio activate '["6bcb40a24e49c26d0a60513b6aeb8551d264e4717f30
 
 ```
 //cleos set contract eosio.msig <eosio.msig.wasm 파일 경로>
-cd /home/nodeos/eos-system-contracts/build/contracts/eosio.msig
+cd /home/nodeos/genesis/eos-system-contracts/build/contracts/eosio.msig
 cleos set contract eosio.msig .
 
 Reading WAST/WASM from /users/documents/eos/build/contracts/eosio.msig/eosio.msig.wasm...
@@ -583,7 +595,7 @@ executed transaction: a53961a566c1faa95531efb422cd952611b17d728edac833c9a5558242
 
 ```
 //cleos set contract eosio <eosio.system.wasm 파일 경로>
-cd /home/nodeos/eos-system-contracts/build/contracts/eosio.system
+cd /home/nodeos/genesis/eos-system-contracts/build/contracts/eosio.system
 cleos set contract eosio .
 ```
 
@@ -697,7 +709,7 @@ accountnum11  EOS8mUftJXepGzdQ2TaCduNuSPAfXJHf22uex4u41ab1EVv9EAhWt  <https://ac
 
 ### 추가 BP 설정 및 시작
 
-추가 BP를 설정하고 이전에 만든 accountnum11 계정을 사용해 보겠습니다. 추가 BP를 설정하려면 다음과 같이 수행합니다.
+추가 BP를 설정하고 위에서 만든 bp.account.1 계정을 사용해 보겠습니다. 추가 BP를 설정하려면 다음과 같이 수행합니다.
 
 ```
 cd /home/nodeos
@@ -710,176 +722,91 @@ copy /home/nodeos/genesis/clean.sh .
 copy /home/nodeos/genesis/config.ini .
 ```
 
-다음과 같은 3개의 쉘 스크립트를 만들고 실행 권한을 줍니다.
-
-`genesis_start.sh`
-
-```
-#!/bin/bash
-DATADIR="./blockchain"
-CURDIRNAME=${PWD##*/}
-
-if [ ! -d $DATADIR ]; then
-  mkdir -p $DATADIR;
-fi
-
-nodeos \\
---genesis-json $DATADIR"/../../genesis.json" \\
---signature-provider EOS8mUftJXepGzdQ2TaCduNuSPAfXJHf22uex4u41ab1EVv9EAhWt=KEY:5K7EYY3j1YY14TSFVfqgtbWbrw3FA8BUUnSyFGgwHi8Uy61wU1o \\
---plugin eosio::producer_plugin \\
---plugin eosio::producer_api_plugin \\
---plugin eosio::chain_plugin \\
---plugin eosio::chain_api_plugin \\
---plugin eosio::http_plugin \\
---plugin eosio::history_api_plugin \\
---plugin eosio::history_plugin \\
---data-dir $DATADIR"/data" \\
---blocks-dir $DATADIR"/blocks" \\
---config-dir $DATADIR"/config" \\
---producer-name $CURDIRNAME \\
---http-server-address 127.0.0.1:8011 \\
---p2p-listen-endpoint 127.0.0.1:9011 \\
---access-control-allow-origin=* \\
---contracts-console \\
---http-validate-host=false \\
---verbose-http-errors \\
---enable-stale-production \\
---p2p-peer-address localhost:9010 \\
---p2p-peer-address localhost:9012 \\
---p2p-peer-address localhost:9013 \\
->> $DATADIR"/nodeos.log" 2>&1 & \\
-echo $! > $DATADIR"/eosd.pid"
-```
-
-`start.sh`
-
-```
-#!/bin/bash
-DATADIR="./blockchain"
-CURDIRNAME=${PWD##*/}
-
-if [ ! -d $DATADIR ]; then
-  mkdir -p $DATADIR;
-fi
-
-nodeos \\
---signature-provider EOS8mUftJXepGzdQ2TaCduNuSPAfXJHf22uex4u41ab1EVv9EAhWt=KEY:5K7EYY3j1YY14TSFVfqgtbWbrw3FA8BUUnSyFGgwHi8Uy61wU1o \\
---plugin eosio::producer_plugin \\
---plugin eosio::producer_api_plugin \\
---plugin eosio::chain_plugin \\
---plugin eosio::chain_api_plugin \\
---plugin eosio::http_plugin \\
---plugin eosio::history_api_plugin \\
---plugin eosio::history_plugin \\
---data-dir $DATADIR"/data" \\
---blocks-dir $DATADIR"/blocks" \\
---config-dir $DATADIR"/config" \\
---producer-name $CURDIRNAME \\
---http-server-address 127.0.0.1:8011 \\
---p2p-listen-endpoint 127.0.0.1:9011 \\
---access-control-allow-origin=* \\
---contracts-console \\
---http-validate-host=false \\
---verbose-http-errors \\
---enable-stale-production \\
---p2p-peer-address localhost:9010 \\
---p2p-peer-address localhost:9012 \\
---p2p-peer-address localhost:9013 \\
->> $DATADIR"/nodeos.log" 2>&1 & \\
-echo $! > $DATADIR"/eosd.pid"
-```
-
-`hard_start.sh`
-
-```
-#!/bin/bash
-DATADIR="./blockchain"
-CURDIRNAME=${PWD##*/}
-
-if [ ! -d $DATADIR ]; then
-  mkdir -p $DATADIR;
-fi
-
-nodeos \\
---signature-provider EOS8mUftJXepGzdQ2TaCduNuSPAfXJHf22uex4u41ab1EVv9EAhWt=KEY:5K7EYY3j1YY14TSFVfqgtbWbrw3FA8BUUnSyFGgwHi8Uy61wU1o \\
---plugin eosio::producer_plugin \\
---plugin eosio::producer_api_plugin \\
---plugin eosio::chain_plugin \\
---plugin eosio::chain_api_plugin \\
---plugin eosio::http_plugin \\
---plugin eosio::history_api_plugin \\
---plugin eosio::history_plugin \\
---data-dir $DATADIR"/data" \\
---blocks-dir $DATADIR"/blocks" \\
---config-dir $DATADIR"/config" \\
---producer-name $CURDIRNAME \\
---http-server-address 127.0.0.1:8011 \\
---p2p-listen-endpoint 127.0.0.1:9011 \\
---access-control-allow-origin=* \\
---contracts-console \\
---http-validate-host=false \\
---verbose-http-errors \\
---enable-stale-production \\
---p2p-peer-address localhost:9010 \\
---p2p-peer-address localhost:9012 \\
---p2p-peer-address localhost:9013 \\
---hard-replay-blockchain \\
->> $DATADIR"/nodeos.log" 2>&1 & \\
-echo $! > $DATADIR"/eosd.pid"
-```
-
 오류 없이 모든 과정이 제대로 수행된다면 다음과 같은 폴더가 보일 것입니다.
 
 ```
-cd ~/biosboot/accountnum11/
+cd /home/nodeos/bp.account.1/
 ls -al
 drwxr-xr-x   8 owner  group   256 Dec  7 14:17 .
 drwxr-xr-x   3 owner  group   960 Dec  5 10:00 ..
 -rwxr-xr-x   1 owner  group   40  Dec  5 13:08 clean.sh
--rwxr-xr-x   1 owner  group   947 Dec  5 14:31 genesis_start.sh
--rwxr-xr-x   1 owner  group   888 Dec  5 13:08 hard_start.sh
+-rwxr-xr-x   1 owner  group   947 Dec  5 14:31 genesis.json
+-rwxr-xr-x   1 owner  group   888 Dec  5 13:08 config.ini
 -rwxr-xr-x   1 owner  group   901 Dec  6 15:44 start.sh
 -rwxr-xr-x   1 owner  group   281 Dec  5 13:08 stop.sh
 ```
 
+제네시스 노드에서 복사해 온 파일 중 다음 파일들의 내용을을 수정합니다.
+
+**start.sh**
+
+```
+DATADIR="/home/nodeos/bp.account.1"
+```
+
+**stop.sh**
+
+```
+DIR="/home/nodeos/bp.account.1"
+```
+
+**clean.sh**
+
+```
+rm -rf /home/nodeos/bp.account.1/blocks/*
+rm -rf /home/nodeos/bp.account.1/state/*
+rm /home/nodeos/bp.account.1/stderr.txt
+touch /home/nodeos/bp.account.1/stderr.txt
+```
+
+**config.ini**
+
+```
+p2p-peer-address = 10.117.126.249:9876
+signature-provider=EOS8mUftJXepGzdQ2TaCduNuSPAfXJHf22uex4u41ab1EVv9EAhWt=KEY:5K7EYY3j1YY14TSFVfqgtbWbrw3FA8BUUnSyFGgwHi8Uy61wU1o
+producer-name = bp.account.1
+```
+
+#### 두 번째 BP 노드 시작하기
+
 다음 명령으로 두 번째 BP노드를 시작합니다.
 
 ```
-cd ~/biosboot/accountnum11/
-./genesis_start.sh
-tail -f blockchain/nodeos.log
+cd /home/nodeos/bp.account.1/
+./start.sh -g genesis.json
+tail -f stderr.txt
 ```
 
-위 명령을 실행한 후 nodeos 가 생성하는 로그 스트림이 nodeos.log 에 출력되는 것을 콘솔에서 볼 수 있습니다. CTRL+C 키를 누르면 로그 스트림의 콘솔 출력을 중지합니다.
+위 명령을 실행한 후 nodeos 가 생성하는 로그 스트림이 `stderr.txt` 에 출력되는 것을 콘솔에서 볼 수 있습니다. CTRL+C 키를 누르면 로그 스트림의 콘솔 출력을 중지합니다.
 
-새 노드를 중지하려면 [stop.sh](http://stop.sh) 를 실행합니다. 노드를 다시 시작하려면 genesis\_start.sh가 아니라 [start.sh](http://start.sh/) 스크립트를 실행합니다. (genesis\_start.sh 는 제네시스 노드 시작 시 한 번만 사용합니다).
+제네시스 노드와 마찬가지로 새 노드를 중지하려면 `stop.sh` 를 실행합니다. 노드를 다시 시작하려면 `start.sh` 스크립트를 `-g <파일명>` 옵션 없이 실행합니다.
 
 모든 것을 지우고 처음부터 다시 시작하려면 다음 명령을 실행합니다.
 
 ```
-cd ~/biosboot/accountnum11/
+cd /home/nodeos/bp.account.1/
 ./stop.sh
 ./clean.sh
-./genesis_start.sh
-tail -f blockchain/nodeos.log
+./start.sh -g genesis.json
+tail -f stderr.txt
 ```
 
 ### 여러 대의 BP 노드 만들기
 
-이제 [여기](bios-boot-sequence.md#2.4)서 [여기](bios-boot-sequence.md#2.6-bp)까지 과정을 반복하여 각각 자체 스테이크 계정, 자체 전용 디렉토리와 accountnumXY 라고 명명된 계정, 자체 전용 스크립트 파일(genesis\_start.sh, [start.sh](http://start.sh/), [stop.sh](http://stop.sh/), [clean.sh](http://clean.sh))을 사용하여 원하는 만큼 BP를 생성할 수 있습니다.
+이제 위의 과정을 반복하여 각각 자체 스테이크 계정, 자체 전용 디렉토리와 bp.accountXY 라고 명명된 계정, 자체 전용 스크립트 파일(`start.sh`, `stop.sh`, `clean.sh`)을 사용하여 원하는 만큼 BP를 생성할 수 있습니다.
 
-또한 만들어낸 노드들을 서로 연결할 수 있어야 합니다. 다음 매개 변수에 주의하여 genesis\_start.sh, [start.sh](http://start.sh/) 및 hard\_start.sh 스크립트를 작성합니다.
+또한 만들어낸 노드들이 p2p 로 서로 연결할 수 있어야 합니다. 다음의 `config.ini` 파일 옵션을 주의하여 설정합니다.
 
 ```
---producer-name $CURDIRNAME \\ # Producer name, set in the script to be the parent directory name
+--producer-name <BP 계정 이름>
 ...
---http-server-address 127.0.0.1:8011 \\ # http listening port for API incoming requests
---p2p-listen-endpoint 127.0.0.1:9011 \\ # p2p listening port for incoming connection requests
+--http-server-address 0.0.0.0:8888 # API 요청을 받는 http 주소와 포트. 충돌하지 않도록 주의한다.
+--p2p-listen-endpoint 0.0.0.0:9876 # p2p 연결을 위한 주소와 포트. 충돌하지 않도록 주의한다.
 ...
 ...
---p2p-peer-address localhost:9010 \\   # Meshing with peer `genesis` node
---p2p-peer-address localhost:9012 \\   # Meshing with peer `accountnum12` node
---p2p-peer-address localhost:9013 \\.  # Meshing with peer `accountnum13` node
+--p2p-peer-address localhost:9876    # 제네시스 노드 p2p
+--p2p-peer-address localhost:9875    # bp.account.1 노드 p2p
+--p2p-peer-address localhost:9874    # bp.account.2 노드 p2p
 ```
 
 ### 새로 생성한 BP에게 투표하기
@@ -888,24 +815,29 @@ tail -f blockchain/nodeos.log
 
 #### 15% 요구사항
 
-노드가 블록을 생성하려면 토큰 공급량의 총 15%를 스테이크한 후 준비가 된 모든 BP 들에게 투표해야 합니다. accountnum11 계정에는 이미 이전에 할당된 토큰이 충분히 있습니다. BP 를 더 선출하려면 다음 명령을 실행합니다. 한 계정은 계정 이름으로 식별 가능한 최대 30명의 BP 에게 투표할 수 있습니다.
+노드가 블록을 생성하려면 토큰 공급량의 총 15%를 스테이크한 후 준비가 된 모든 BP 들에게 투표해야 합니다. `bp.account.1` 계정에는 이미 이전에 할당된 토큰이 충분히 있습니다. BP 를 더 선출하려면 다음 명령을 실행합니다. 한 계정은 계정 이름으로 식별 가능한 최대 30명의 BP 에게 투표할 수 있습니다.
+
+다음은 `bp.account.1` 이 `bp.account.1` \~ `bp.account.3` 에게 투표하는 예제입니다.
 
 ```
-cleos system voteproducer prods accountnum11 accountnum11 accountnum12 accountnum13
+cleos system voteproducer prods bp.account.1 bp.account.1 bp.account.2 bp.account.3
+
 ```
+
+투표가 완료되면 더 이상 eosio 노드는 블록을 생성하지 않고 투표를 받은 노드들이 블록을 생산하게 됩니다.
 
 ## eosio 계정 파기와 시스템 계정
 
-BP 가 선출되고 최소한 15% 의 토큰이 투표를 위해 스테이킹 되어 있어야 한다 라는 최소한의 요구사항이 만족된 후, eosio 는 파기할 수 있습니다. 그러면 eosio.msig 만이 유일하게 특권을 가진 계정이 됩니다.
+BP 가 선출되고 최소한 15% 의 토큰이 투표를 위해 스테이킹 되어 있어야 한다 라는 최소한의 요구사항이 만족된 후, `eosio` 는 파기할 수 있습니다. 그러면 `eosio.msig` 만이 유일하게 특권을 가진 계정이 됩니다.
 
-eosio.\* 계정을 파기하려면 eosio.\* 의 키 세트를을 null 로 설정하면 됩니다. 다음 명령을 사용하여 eosio.\* 계정의 owner 키와 active 키를 삭제합니다.
+`eosio.*` 계정을 파기하려면 `eosio.*` 의 키 세트를을 null 로 설정하면 됩니다. 다음 명령을 사용하여 `eosio.*` 계정의 `owner` 키와 `active` 키를 삭제합니다.
 
 ```
 cleos push action eosio updateauth '{"account": "eosio", "permission": "owner", "parent": "", "auth": {"threshold": 1, "keys": [], "waits": [], "accounts": [{"weight": 1, "permission": {"actor": "eosio.prods", "permission": "active"}}]}}' -p eosio@owner
 cleos push action eosio updateauth '{"account": "eosio", "permission": "active", "parent": "owner", "auth": {"threshold": 1, "keys": [], "waits": [], "accounts": [{"weight": 1, "permission": {"actor": "eosio.prods", "permission": "active"}}]}}' -p eosio@active
 ```
 
-필요시한 [이 단계](bios-boot-sequence.md#undefined-10)에서 만든 시스템 계정들 역시 다음 명령을 사용하여 파기할 수 있습니다.
+필요시 위에서 만든 시스템 계정들 역시 다음 명령을 사용하여 파기할 수 있습니다.
 
 ```
 cleos push action eosio updateauth '{"account": "eosio.bpay", "permission": "owner", "parent": "", "auth": {"threshold": 1, "keys": [], "waits": [], "accounts": [{"weight": 1, "permission": {"actor": "eosio", "permission": "active"}}]}}' -p eosio.bpay@owner
@@ -938,14 +870,14 @@ cleos push action eosio updateauth '{"account": "eosio.vpay", "permission": "act
 
 ## 모니터링하고 테스트하기
 
-실행중인 nodeos(제네시스 노드와 BP 노드) 를 다음과 같이 모니터링 할 수 있습니다.
+실행중인 nodeos (제네시스 노드와 추가한 BP 노드) 를 다음과 같이 모니터링 할 수 있습니다.
 
 ```
-cd ~/biosboot/genesis/
-tail -f ./blockchain/nodeos.log
+cd /home/nodeos/genesis/
+tail -f stderr.txt
 
-cd ~/biosboot/accountnum11/
-tail -f ./blockchain/nodeos.log
+cd /home.nodeos/bp.account.1
+tail -f stderr.txt
 ```
 
 이제 여러 명령이나 계정 생성, 잔고 확인, 토큰 전송등을 테스트 할 수 있습니다.
