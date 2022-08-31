@@ -335,10 +335,6 @@ eosio.vpay
 eosio.rex
 ```
 
-아래의 '시스템 계정 만들기' 파트를 반복하여 각각의 시스템 계정을 생성합니다. 이 단원에서는 계정의 `owner` 키와 `active` 키를 동일한 키 쌍으로 지정할 것이기 때문에 계정 생성 명령에 키를 한 번만 지정하면 됩니다. 하지만 대부분의 일반적인 계정에서는 보안상 `owner` 키와 `active` 키를 분리하는 것이 더 좋습니다.
-
-이 스크립트에서는 모든 eosio.\* 계정이 모두 같은 키를 사용하도록 할 것이지만 원한다면 다른 키를 만들어 사용해도 됩니다.
-
 #### 시스템 계정 만들기
 
 시스템 계정에는 다음 키 쌍을를 사용할 것입니다.
@@ -366,32 +362,50 @@ private key: imported private key for: EOS84BLRbGbFahNJEpnnJHYCoW9QPbQEk2iHsHGGS
 cleos create key --to-console
 ```
 
-이제 지갑에 넣은 키를 가지고 계정을 만들 수 있습니다. 다음은 `eosio.bpay` 계정을 만드는 명령이며, 같은 식으로 위에 나열한 모든 계정을 만듭니다.
+이제 지갑에 넣은 키를 가지고 계정을 만들 수 있습니다. 아래 명령을 실행하여 각각의 시스템 계정을 생성합니다. 이 단원에서는 계정의 `owner` 키와 `active` 키를 동일한 키 쌍으로 지정할 것이기 때문에 계정 생성 명령에 키를 한 번만 지정하면 됩니다. 하지만 대부분의 일반적인 계정에서는 보안상 `owner` 키와 `active` 키를 분리하는 것이 더 좋습니다.
+
+이 스크립트에서는 모든 eosio.\* 계정이 모두 같은 키를 사용하도록 할 것이지만 원한다면 다른 키를 만들어 사용해도 됩니다.
 
 ```
 cleos create account eosio eosio.bpay EOS84BLRbGbFahNJEpnnJHYCoW9QPbQEk2iHsHGGS6qcVUq9HhutG
-
-executed transaction: ca68bb3e931898cdd3c72d6efe373ce26e6845fc486b42bc5d185643ea7a90b1  200 bytes  280 us
-#         eosio <= eosio::newaccount            {"creator":"eosio","name":"eosio.bpay","owner":{"threshold":1,"keys":[{"key":"EOS84BLRbGbFahNJEpnnJH...
+cleos create account eosio eosio.msig EOS84BLRbGbFahNJEpnnJHYCoW9QPbQEk2iHsHGGS6qcVUq9HhutG
+cleos create account eosio eosio.names EOS84BLRbGbFahNJEpnnJHYCoW9QPbQEk2iHsHGGS6qcVUq9HhutG
+cleos create account eosio eosio.ram EOS84BLRbGbFahNJEpnnJHYCoW9QPbQEk2iHsHGGS6qcVUq9HhutG
+cleos create account eosio eosio.ramfee EOS84BLRbGbFahNJEpnnJHYCoW9QPbQEk2iHsHGGS6qcVUq9HhutG
+cleos create account eosio eosio.saving EOS84BLRbGbFahNJEpnnJHYCoW9QPbQEk2iHsHGGS6qcVUq9HhutG
+cleos create account eosio eosio.stake EOS84BLRbGbFahNJEpnnJHYCoW9QPbQEk2iHsHGGS6qcVUq9HhutG
+cleos create account eosio eosio.token EOS84BLRbGbFahNJEpnnJHYCoW9QPbQEk2iHsHGGS6qcVUq9HhutG
+cleos create account eosio eosio.vpay EOS84BLRbGbFahNJEpnnJHYCoW9QPbQEk2iHsHGGS6qcVUq9HhutG
+cleos create account eosio eosio.rex EOS84BLRbGbFahNJEpnnJHYCoW9QPbQEk2iHsHGGS6qcVUq9HhutG
 ```
 
 ### 시스템 컨트랙트 빌드 및 배포하기
 
-다음과 같은 몇 가지 시스템 스마트 컨트랙트를 인스톨 해야 합니다.
+Antelope 블록체인의 기본 시스템 스마트 컨트랙트를 인스톨 하려면 먼저 시스템 컨트랙트 소스를 다운로드 받고 컴파일 한 후 몇 가지 프로토콜 기능을 활성화해야 합니다.
 
-* `eosio.contracts` `eosio.boot`,`eosio.system`, `eosio.msig` ,`eosio.token`
-
-먼저 빌드 도구를 설치합니다.
+먼저 스마트 컨트랙트 빌드를 위한 도구를 설치합니다.
 
 ```
 sudo apt install build-essential cmake
 ```
 
-Antelope 기반 블록체인으로서 기능하려면 먼저 프로토콜 기능(Protocol Features) 을 사용할 수 있게 해야 합니다.
+#### eosio.contracts 빌드
+
+`eosio.contracts` 저장소를 클론하고 저장소에 포함된 빌드 스크립트로 소스를 빌드합니다.&#x20;
+
+```
+cd /home/nodeos
+git clone https://github.com/eosnetworkfoundation/eos-system-contracts.git
+cd ./eos-system-contracts
+./build.sh # 빌드 중 eosio.cdt 설치 디렉토리를 입력해야 할 수도 있는데, /usr/opt/cdt/<version> 아래에 설치되어 있다.
+cd ./build/contracts/
+```
+
+`build.sh` 파일로 빌드하는 도중 경고를 볼 수 있는데, 이는 리카르디안 컨트랙트가 없다는 경고로, 무시해도 문제 없습니다.
 
 #### PREACTIVATE\_FEATURE 을 활성화
 
-EOSIO v1.8 및 이후 버전에서 도입된 모든 프로토콜 기능을 사용하려면 특수 프로토콜 기능(코드명 `PREACTIVATE_FEATURE`)을 활성화한 뒤 시스템 컨트랙트를 배포해야 합니다.
+EOSIO v1.8 및 이후 버전에서 도입된 모든 프로토콜 기능을 사용하려면 특수한 프로토콜 기능(`PREACTIVATE_FEATURE`)을 먼저 활성화한 뒤 시스템 컨트랙트를 배포해야 합니다.
 
 `PREACTIVATE_FEATURE` 을 활성화 하려면 다음 명령을 입력합니다.
 
@@ -399,8 +413,6 @@ EOSIO v1.8 및 이후 버전에서 도입된 모든 프로토콜 기능을 사�
 curl --request POST \\
     --url <http://127.0.0.1:8888/v1/producer/schedule_protocol_feature_activations> \\
     -d '{"protocol_features_to_activate": ["0ec7e080177b2c02b278d5088611686b49d739925a92d9bfcacd7fc6b74053bd"]}'
-
-{"result":"ok"}
 ```
 
 #### eosio.boot 컨트랙트 설정
@@ -426,13 +438,15 @@ executed transaction: 2150ed87e4564cd3fe98ccdea841dc9ff67351f9315b6384084e8572a3
 
 #### 다른 프로토콜 기능 활성화하기
 
-어떤 프로토콜 기능을 사용하려면 `activate` 액션에 원하는 프로토콜 기능의 다이제스트를 전달하여 활성화 시킵니다. Antelope 블록체인의 프로토콜 기능 다이제스트는 다음 명령으로 확인할 수 있습니다.
+이제 `eosio.boot` 와 `PREACTIVATE_FEATURE` 를 활성화하여 다른 프로토콜 기능과 시스템 스마트 컨트랙트를 사용할 수 있게 되었습니다.
+
+어떤 프로토콜 기능을 사용하려면 `activate` 액션에 원하는 프로토콜 기능의 해시 다이제스트를 전달하여 활성화 시킵니다. Antelope 블록체인의 프로토콜 기능 다이제스트는 다음 명령으로 확인할 수 있습니다.
 
 ```
 curl -X POST http://127.0.0.1:8888/v1/producer/get_supported_protocol_features | jq .
 ```
 
-아래 예제는 leap 3.1.0 에서 사용 가능한 프로토콜 기능을 활성화시키는 명령입니다. 무엇을 사용할 것인가는 어디까지나 선택사항이며 이러한 프로토콜 기능 없이도 블록체인을 사용할 수는 있지만, 가능하면 Antelope 기반 블록체인에서는 전부 활성화하여 사용하는 것이 좋습니다.
+아래 예제는 Leap 3.1.0 에서 사용 가능한 프로토콜 기능을 활성화시키는 명령입니다. 무엇을 사용할 것인가는 어디까지나 선택사항이며 이러한 프로토콜 기능 없이도 블록체인을 사용할 수는 있지만, 가능하면 Antelope 기반 블록체인에서는 전부 활성화하여 사용하는 것이 좋습니다.
 
 ```
 # ONLY_LINK_TO_EXISTING_PERMISSION
@@ -495,23 +509,6 @@ cleos push action eosio activate '["35c2186cc36f7bb4aeaf4487b36e57039ccf45a9136a
 ```
 curl http://127.0.0.1:8888/v1/chain/get_activated_protocol_features | jq .
 ```
-
-이제 시스템 스마트 컨트랙트를 빌드해 보겠습니다.
-
-#### eosio.contracts 빌드
-
-`eosio.contracts` 저장소를 클론하고 저장소에 포함된 빌드 스크립트로여 소스를 빌드합니다.&#x20;
-
-```
-cd /home/nodeos
-git clone https://github.com/eosnetworkfoundation/eos-system-contracts.git
-cd ./eos-system-contracts
-./build.sh // 빌드 중 eosio.cdt 설치 디렉토리를 입력해야 할 수도 있는데, /usr/opt/cdt/<version> 아래에 설치되어 있다.
-cd ./build/contracts/
-pwd
-```
-
-`build.sh` 파일로 빌드하는 도중 경고를 볼 수 있는데, 이는 리카르디안 컨트랙트가 없다는 경고로, 무시해도 문제 없습니다.
 
 #### eosio.token 컨트랙트 배포
 
@@ -624,7 +621,7 @@ cleos push action eosio init '["0", "4,SYS"]' -p eosio@active
 * eosio.msig
 * eosio.system
 
-eosio 와 eosio.msig 는 특권을 가진 계정이며 다른 eosio.\* 계정들은 특권을 가진 계정이 아닙니다.
+`eosio` 와 `eosio.msig` 는 특권을 가진 계정이며 다른 eosio.\* 계정들은 특권을 가진 계정이 아닙니다.
 
 이제 스테이크를 하고 BP 네트워크를 확장 할 준비가 되었습니다.
 
@@ -636,7 +633,7 @@ eosio 와 eosio.msig 는 특권을 가진 계정이며 다른 eosio.\* 계정들
 
 다음은 초기 스테이킹 프로세스에서의 권장 사항입니다.
 
-1. 0.1 토큰(계정 토큰의 10%가 아닌 문자 그대로 0.1 개)이 RAM 용으로 준비됩니다. 기본적으로 cleos 는 계정 생성 시 8KB의 RAM 을 스테이크 하며 이는 계정 생성자가 지불합니다. 초기 스테이킹에서 eosio 계정이 스테이킹을 하는 계정 생성자가 됩니다. 초기 토큰 스테이킹 프로세스 동안 스테이킹된 토큰은 최소 투표 요구 사항이 충족될 때까지는 언스테이킹하여 유동 자산화 할 수 없습니다.
+1. 0.1 토큰(계정 토큰의 10%가 아닌 문자 그대로 0.1 개)이 RAM 용으로 준비됩니다. 기본적으로 cleos 는 계정 생성 시 8KB의 RAM 을 스테이크 하며 이는 계정 생성자가 지불합니다. 초기 스테이킹에서 `eosio` 계정이 스테이킹을 하는 계정 생성자가 됩니다. 초기 토큰 스테이킹 프로세스 동안 스테이킹된 토큰은 최소 투표 요구 사항이 충족될 때까지는 언스테이킹하여 유동 자산화 할 수 없습니다.
 2. CPU의 경우 0.45 토큰이, 네트워크의 경우 0.45 토큰이 스테이크 됩니다.
 3. 그 다음으로 사용 가능한 토큰 중 총 9개까지 유동성 토큰으로 보유됩니다.
 4. 나머지 토큰은 50/50 으로 CPU 및 네트워크에 할당됩니다.
@@ -647,16 +644,15 @@ eosio 와 eosio.msig 는 특권을 가진 계정이며 다른 eosio.\* 계정들
 > 예시 2.\
 > accountnum33 계정은 5 SYS 를 가집니다. 이 계정은 0.1000 SYS 를 RAM 에, 0.4500 SYS 를 CPU 에, 0.4500 SYS 를 network 에 스테이킹 합니다. 그리고 4.0000 SYS 를 유동성 토큰으로 가집니다.
 
-이 튜토리얼을 보다 사실적으로 만들려면 10억 개의 토큰을 계정에 배포하고 파레토 분포를 사용할 수 있습니다. 파레토 분포는 80-20 규칙을 모델링 한 것으로, 예를 들어 토큰의 80%를 토큰 보유자의 20%가 가지게 됩니다. 이 예제에서는 분포를 생성하는 방법은 다루지 않을 것이며 스테이킹을 수행하는 명령에 초점을 맞추고 있습니다.
+학습 내용을 보다 사실적으로 구성하려면 10억 개의 토큰을 계정에 배포하고 파레토 분포를 사용할 수 있습니다. 파레토 분포는 80-20 규칙을 모델링 한 것으로, 예를 들어 토큰의 80%를 토큰 보유자의 20%가 가지게 됩니다. 이 예제에서는 분포를 생성하는 방법은 다루지 않을 것이며 스테이킹을 수행하는 명령에 초점을 맞추고 있습니다.
 
 다음 단계를 따라 각 계정에서 토큰을 스테이크 합니다. 이 단계들은 각각의 계정마다 따로 수행해야 합니다.
 
 {% hint style="info" %}
-이 튜토리얼에서는 아래의 키 쌍을 사용할 것입니다. 실제 프로덕션 환경에서 계정의 키 값과 토큰은 잘 정의된 프로세스를 통해 이미 공유되어 있어야 합니다.
+이 단원에서는 새로운 계정 생성 시 아래의 키 쌍을 사용할 것입니다. 실제 프로덕션 환경에서 사용해서는 안 되며 별도의 계정 키 값과 토큰을 만들어 사용해야 합니다.
 {% endhint %}
 
 ```
-cleos create key --to-console
 Private key: 5K7EYY3j1YY14TSFVfqgtbWbrw3FA8BUUnSyFGgwHi8Uy61wU1o
 Public key: EOS8mUftJXepGzdQ2TaCduNuSPAfXJHf22uex4u41ab1EVv9EAhWt
 
@@ -664,36 +660,33 @@ cleos wallet import --private-key 5K7EYY3j1YY14TSFVfqgtbWbrw3FA8BUUnSyFGgwHi8Uy6
 imported private key for: EOS8mUftJXepGzdQ2TaCduNuSPAfXJHf22uex4u41ab1EVv9EAhWt
 ```
 
-초기 리소스와 공개키로 스테이크된 계정을 생성합니다.
+새로운 계정 `bp.account.1` 을 다음과 같이 만듭니다.
 
 ```
-cleos system newaccount eosio --transfer accountnum11 EOS8mUftJXepGzdQ2TaCduNuSPAfXJHf22uex4u41ab1EVv9EAhWt --stake-net "100000000.0000 SYS" --stake-cpu "100000000.0000 SYS" --buy-ram-kbytes 8192
+cleos system newaccount eosio --transfer bp.account.1 EOS8mUftJXepGzdQ2TaCduNuSPAfXJHf22uex4u41ab1EVv9EAhWt --stake-net "100000000.0000 SYS" --stake-cpu "100000000.0000 SYS" --buy-ram-kbytes 8192
 
-775292ms thread-0   main.cpp:419                  create_action        ] result: {"binargs":"0000000000ea30551082d4334f4d113200200000"} arg: {"code":"eosio","action":"buyrambytes","args":{"payer":"eosio","receiver":"accountnum11","bytes":8192}}
-775295ms thread-0   main.cpp:419                  create_action        ] result: {"binargs":"0000000000ea30551082d4334f4d113200ca9a3b00000000045359530000000000ca9a3b00000000045359530000000001"} arg: {"code":"eosio","action":"delegatebw","args":{"from":"eosio","receiver":"accountnum11","stake_net_quantity":"100000.0000 SYS","stake_cpu_quantity":"100000.0000 SYS","transfer":true}}
-executed transaction: fb47254c316e736a26873cce1290cdafff07718f04335ea4faa4cb2e58c9982a  336 bytes  1799 us
-#         eosio <= eosio::newaccount            {"creator":"eosio","name":"accountnum11","owner":{"threshold":1,"keys":[{"key":"EOS8mUftJXepGzdQ2TaC...
-#         eosio <= eosio::buyrambytes           {"payer":"eosio","receiver":"accountnum11","bytes":8192}
-#         eosio <= eosio::delegatebw            {"from":"eosio","receiver":"accountnum11","stake_net_quantity":"100000.0000 SYS","stake_cpu_quantity...
+executed transaction: 07ec321e34d09e9becfdc3a15f4eacade2bfe14c56056040f609b1c5ed5754b5  336 bytes  2493 us
+#         eosio <= eosio::newaccount            {"creator":"eosio","name":"bp.account.1","owner":{"threshold":1,"keys":[{"key":"EOS8mUftJXepGzdQ2TaC...
+#         eosio <= eosio::buyrambytes           {"payer":"eosio","receiver":"bp.account.1","bytes":8388608}
+#         eosio <= eosio::delegatebw            {"from":"eosio","receiver":"bp.account.1","stake_net_quantity":"100000000.0000 SYS","stake_cpu_quant...
 ```
 
 ### 새로운 계정을 BP 로 등록하기
 
-새로운 계정을 BP로 등록하려면 다음과 같이 합니다다.
+새로운 계정을 BP로 등록하려면 다음과 같이 합니다.
 
 ```
-cleos system regproducer accountnum11 EOS8mUftJXepGzdQ2TaCduNuSPAfXJHf22uex4u41ab1EVv9EAhWt <https://accountnum11.com> 401
+cleos system regproducer bp.account.1 EOS8mUftJXepGzdQ2TaCduNuSPAfXJHf22uex4u41ab1EVv9EAhWt https://www.nodeone.io 401
 
-1487984ms thread-0   main.cpp:419                  create_action        ] result: {"binargs":"1082d4334f4d11320003fedd01e019c7e91cb07c724c614bbf644a36eff83a861b36723f29ec81dc9bdb4e68747470733a2f2f6163636f756e746e756d31312e636f6d2f454f53386d5566744a586570477a64513254614364754e7553504166584a48663232756578347534316162314556763945416857740000"} arg: {"code":"eosio","action":"regproducer","args":{"producer":"accountnum11","producer_key":"EOS8mUftJXepGzdQ2TaCduNuSPAfXJHf22uex4u41ab1EVv9EAhWt","url":"<https://accountnum11.com/EOS8mUftJXepGzdQ2TaCduNuSPAfXJHf22uex4u41ab1EVv9EAhWt","location>":0}}
-executed transaction: 4ebe9258bdf1d9ac8ad3821f6fcdc730823810a345c18509ac41f7ef9b278e0c  216 bytes  896 us
-#         eosio <= eosio::regproducer           {"producer":"accountnum11","producer_key":"EOS8mUftJXepGzdQ2TaCduNuSPAfXJHf22uex4u41ab1EVv9EAhWt","u...
+executed transaction: 43bebaf6a4302b08d639c1413faef7d30de130dac857d2f91e28c0b9153364cd  160 bytes  625 us
+#         eosio <= eosio::regproducer           {"producer":"bp.account.1","producer_key":"EOS8mUftJXepGzdQ2TaCduNuSPAfXJHf22uex4u41ab1EVv9EAhWt","u...
 ```
 
 위 명령은 계정을 BP 후보로 만듭니다. 하지만 투표를 받아 선출되지 않는 이상 아직 블록을 생성하지는 않습니다.
 
 ### BP 목록 보기
 
-투표 프로세스를 수월하게 하기 위해 다음 명령으로 BP 목록을 볼 수 있습니다. 현 시점에서는 BP로 등록된 계정만이 나타날 것입니다.
+다음 명령으로 BP 목록을 볼 수 있습니다. 현 시점에서는 BP로 등록된 계정만이 나타날 것입니다.
 
 ```
 cleos system listproducers
@@ -707,11 +700,14 @@ accountnum11  EOS8mUftJXepGzdQ2TaCduNuSPAfXJHf22uex4u41ab1EVv9EAhWt  <https://ac
 추가 BP를 설정하고 이전에 만든 accountnum11 계정을 사용해 보겠습니다. 추가 BP를 설정하려면 다음과 같이 수행합니다.
 
 ```
-cd ~/biosboot/
-mkdir accountnum11
-cd accountnum11
-copy ~/biosboot/genesis/stop.sh
-copy ~/biosboot/genesis/clean.sh
+cd /home/nodeos
+mkdir bp.account.1
+cd bp.account.1
+copy /home/nodeos/genesis/genesis.json .
+copy /home/nodeos/genesis/start.sh .
+copy /home/nodeos/genesis/stop.sh .
+copy /home/nodeos/genesis/clean.sh .
+copy /home/nodeos/genesis/config.ini .
 ```
 
 다음과 같은 3개의 쉘 스크립트를 만들고 실행 권한을 줍니다.
