@@ -43,7 +43,7 @@ nodeos 플러그인 전용 옵션은 nodeos 플러그인의 동작을 제어합�
 
 어떤 플러그인 전용 옵션을 설정할 때는 반드시 `--plugin` 옵션을 사용하여, 이 옵션이 적용될 플러그인도 함께 사용하도록 설정되어 있는지 확인해야 합니다. 그렇지 않으면 이 플러그인 전용 옵션은 무시됩니다.
 
-각 플러그인별 전용 옵션에 대한 자세한 내용은 [Nodeos Plugin 상세](../antelope-leap-advanced/nodeos-plugin-details/) 단원에서 찾아볼 수 있습니다.
+각 플러그인별 전용 옵션에 대한 자세한 내용은 [Nodeos Plugin 상세](install-leap-software/nodeos-plugin-details/) 단원에서 찾아볼 수 있습니다.
 
 대부분의 `config.ini` 옵션에는 그에 대응하는 CLI 옵션이 존재합니다. 예를 들어 CLI 옵션 `--plugin eosio::chain_api_plugin` 은 `config.ini` 의 `plugin = eosio::chain_api_plugin` 에 대응됩니다.
 
@@ -68,7 +68,7 @@ config.ini 는 노드의 동작과 역할을 제어하는 환경 설정 파일�
 
 ## nodeos 실행 예제
 
-앞서 [Leap 소프트웨어 설치 단원](../smart-contracts-dev-environment/install-leap-software.md)에서 Leap 를 설치하였다면 nodeos 를 실행할 수 있습니다. 한번 nodeos 를 실행해 봅시다. 다음은 로컬 환경에서 단독으로 실행되는 블록 생산자(BP)의 노드를 시작할 때의 nodeos 실행 예제입니다.
+앞서 [Leap 소프트웨어 설치 단원](install-leap-software/)에서 Leap 를 설치하였다면 nodeos 를 실행할 수 있습니다. 한번 nodeos 를 실행해 봅시다. 다음은 로컬 환경에서 단독으로 실행되는 블록 생산자(BP)의 노드를 시작할 때의 nodeos 실행 예제입니다.
 
 ```bash
 $ nodeos \\

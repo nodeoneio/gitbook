@@ -58,3 +58,15 @@ Save password to use in the future to unlock this wallet.
 Without password imported keys will not be retrievable.
 "PW5JbF34UdA193Eps1bjrWVJRaNMt1VKddLn4Dx6SPVTfMDRnMBWN"
 ```
+
+## 도메인 소켓(IPC) vs HTTP RPC
+
+`cleos` 와 `keosd` 에 접근할 수 있는 방법은 HTTP RPC 외에도 도메인 소켓을 이용하는 방법이 있습니다. 도메인 소켓을 사용하면 여러 이점이 있습니다. HTTP RPC 는 외부 인터넷이나 LAN/WAN 으로 접근 할 수 있어 자칫 치명적인 기능의 접근 경로가 유출될 수도 있고, CORS 와 같은 여러가지 공격 경로에도 노출될 수도 있지만, 도메인 소켓은 내부 프로세스간의 통신 용도로만 사용하도록 의도된 방식이기 때문에 상대적으로 안전합니다.
+
+## 트랜잭션 제출 후 나타나는 "transaction executed locally, but may not be confirmed by the network yet" 메시지의 의미
+
+`cleos` 가 제출한 트랜잭션이 이 트랜잭션을 전달 받은 로컬 `nodeos` 인스턴스에 의해 성공적으로 수락되고 실행되었음을 의미합니다.&#x20;
+
+다만, 이 `nodeos` 인스턴스가 제출받은 트랜잭션을 P2P 프로토콜을 통해 다른 노드로 릴레이 하더라도, 이러한 노드들도 이 트랜잭션을 수락하거나 실행할 거라는 보장은 없습니다. 또한 이 시점에서 트랜잭션이 BP에 의해 수락되고 실행된 뒤 블록체인의 유효한 블록에 포함될 것이라는 보장도 할 수 없습니다.&#x20;
+
+따라서 트랜잭션이 비가역성 블록에 포함되었는지 더 확실하게 확인해야 하는 경우, 추가적인 작업을 수행하여 트랜잭션이 블록체인의 비가역성 블록에 있는지 모니터링 해야 합니다.&#x20;

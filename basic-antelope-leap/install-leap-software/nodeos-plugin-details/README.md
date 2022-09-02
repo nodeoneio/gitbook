@@ -1,4 +1,4 @@
-# nodeos Plugin 상세
+# Nodeos Plugin 옵션 상세
 
 ## 개요
 
