@@ -2,11 +2,11 @@
 
 ## 체인베이스란?
 
-체인베이스는 블록원의 전 CTO 댄 라리머가 탈중앙화 암호화폐인 비트쉐어 프로젝트에서 근무할 당시의 경험에 기반하여 개발된, 블록체인에 최적화된 데이터베이스 입니다. 체인베이스는 버전컨트롤이 가능하며 transactional 한 고성능 데이터베이스입니다.
+체인베이스는 블록원의 전 CTO 댄 라리머가 탈중앙화 암호화폐인 비트쉐어 프로젝트에서 근무할 당시의 경험에 기반하여 개발된, 블록체인에 최적화된 데이터베이스 입니다. 체인베이스는 버전컨트롤이 가능하며 트랜잭션을 지원하는 고성능 데이터베이스입니다.
 
-체인베이스는 탈중앙화 소셜 미디어 플랫폼인 Steemit 과 같은 프로젝트에서 메모리 매핑된 파일을 지원하기 위해 업데이트 될 때 채택된 바가 있습니다. 또한 EOSIO의 기본 데이터베이스 이기도 하며 비트셰어와도 통합되어 있습니다.
+체인베이스는 탈중앙화 소셜 미디어 플랫폼인 Steemit 과 같은 프로젝트에서 메모리 매핑된 파일을 지원하기 위해 업데이트 될 때 채택된 바가 있습니다. 또한 Antelope 의 기본 데이터베이스 이기도 하며 비트셰어와도 통합되어 있습니다.
 
-체인베이스는 `Boost.MultiIIndex` 개념을 바탕으로 만들어진 경량의 인 메모리(In Memory) 데이터베이스입니다. `Boost.MultiIndex` 는 서로 다른 정렬 및 접근 의미(access semantics) 를 가진 하나 이상의 인덱스를 가질 수 있는 컨테이너 타입입니다. 이는 탐색과 정렬을 위한 많은 인덱스를 가질 수 있는 체인베이스 오브젝트 테이블(Chainbase object tables) 을 정의할 수 있는 능력을 체인베이스에 부여합니다.
+체인베이스는 `Boost.MultiIIndex` 를 바탕으로 만들어진 경량 인 메모리(In Memory) 데이터베이스입니다. `Boost.MultiIndex` 는 서로 다른 정렬 및 접근 의미(access semantics) 를 가진 하나 이상의 인덱스를 가질 수 있는 컨테이너 타입입니다. 이는 탐색과 정렬을 위한 많은 인덱스를 가질 수 있는 체인베이스 오브젝트 테이블(Chainbase object tables) 을 정의할 수 있는 능력을 체인베이스에 부여합니다.
 
 체인베이스는 성능을 위해 메모리 맵 파일을 사용합니다. 때문에 엄격하게 메모리 위에 올라간 데이터베이스의 크기를 제한한다는 문제점이 있습니다. 일단 데이터베이스 파일의 크기가 시스템 메모리의 크기를 넘어가 버리게 된다면 OS 가 메모리 맵 파일의 데이터를 페이징 하게 되므로 성능 저하가 나타나게 됩니다.
 
@@ -122,36 +122,6 @@ Guard-size 가 필요한 이유
 체인베이스 데이터베이스 파일이 허용된 크기를 넘어버리면 비록 순간적 일지라도 데이터가 망가져 버릴 수 있습니다. 따라서 guard-size 는 이러한 시나리오에 대비한 대책으로서 만들어졌습니다. 블록/트랜잭션/연산이 얼마나 많은 데이터를 데이터베이스에 추가하게 될 지 예측할 수 없기 때문에 이 크기는 체인 데이터베이스가 늘어남에 따라 가장 큰 싱글 오퍼레이션보다 큰 사이즈로 지정해야 합니다. 새로운 블록을 추가하는 작업이 주로 발생하는데, 이는 디폴트 크기의 체인 위에 "bulk loading data" 를 허용하기 위한 디폴트 데이터베이스의 1/8 번째로서 선택되었습니다. 블록의 디폴트 제한이 1MB인 경우 이는 원본 데이터를 데이터베이스 데이터로 128배 증폭합니다.
 {% endhint %}
 
-### reversible-blocks-db-size-mb
-
-* 가역성 블록을 저장하는 체인베이스 데이터베이스의 최대 크기(MB)를 지정합니다.
-* 디폴트 값은 340MB 입니다.
-* 값이 클 수록 체인베이스 데이터베이스가 더 많은 데이터를 가질 수 있으며 작으면 적은 데이터가 저장됩니다.
-
-```bash
-#config.ini
-plugin = eosio::chain_plugin
-reversible-blocks-db-size-mb=500
-
-#command-line
-nodeos ... --plugin eosio::chain_plugin --reversible-blocks-db-size-mb=500
-```
-
-### reversible-blocks-db-guard-size-mb
-
-* 가역성 블록이 저장된 체인베이스 데이터베이스 파일의 남은 공간을 얼마만큼 허용할지 상한선을 설정합니다.
-* 이 상한선을 넘기게 되면 nodeos 가 안전하게 종료됩니된다.
-* 디폴트 값은 2MB 입니다
-
-```bash
-#config.ini
-plugin = eosio::chain_plugin
-reversible-blocks-db-guard-size-mb=50
-
-#command-line
-nodeos ... --plugin eosio::chain_plugin --reversible-blocks-db-guard-size-mb=50
-```
-
 ### database-map-mode
 
 * mapped, heap, locked 의 3가지 옵션을 제공합니다.
@@ -206,7 +176,3 @@ nodeos ... --plugin eosio::chain_plugin [options] --plugin eosio::http_plugin [o
 이 플러그인을 활용하면, nodeos 가 생성한 체인베이스 데이터베이스상의 guard size 를 지정함과 동시에, nodeos 를 모니터링하고 필요에 따라 정상 종료 시킨 다음 설정을 수정하고 다시 기동시킬 수 있도록 nodeos 를 모니터링하는 스크립트를 작성할 수도 있습니다.
 
 체인베이스와 관련된 모든 문제들은 nodeos 인스턴스를 실행하는데 치명적일 수 있지만 사용자 측에서 대응할 수 있는 문제는 메모리 고갈 뿐입니다. 따라서 지속적으로 db size api 플러그인에서 제공하는 지표들을 모니터링 할 필요가 있습니다. 메모리 고갈이 임박하면 nodeos 를 정상 종료시키고 설정을 변경한 뒤 다시 nodeos를 시작하는것이 좋습니다.
-
-## Reference
-
-based on eosio Training & Certification Course

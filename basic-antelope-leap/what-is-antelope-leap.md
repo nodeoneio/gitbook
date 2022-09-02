@@ -4,7 +4,7 @@
 
 Antelope Leap(이하 Leap) 은 EOS, Telos, WAX 와 같은 블록체인 네트워크를 구축할 수 있는 오픈소스 소프트웨어 입니다.&#x20;
 
-서두에서 이야기 한 바와 같이 원래 이 소프트웨어는 EOSIO 라는 이름으로 블록체인 기업인 블록원(Block.one) 에서 개발하고 관리 하였으나, 블록원이 개발을 중단한 이후 EOS 재단인 ENF(EOS Network Foundation) 가 EOSIO 를 포킹(Forking)하여 Mandel 이라는 이름으로 변경하고 개발 및 유지보수를 하였습니다. 그리고 이 소프트웨어를 EOS 네트워크에 적용하기 전, Leap 이라는 이름으로 다시 한 번 리브랜딩 하였습니다.
+서두에서 이야기 한 바와 같이 원래 이 소프트웨어는 EOSIO 라는 이름으로 블록체인 기업인 블록원(Block.one) 에서 개발하고 관리 하였습니다. 그러나 2021년 중반, 블록원이 개발을 중단한 이후 EOS 재단인 ENF(EOS Network Foundation) 가 EOSIO 를 포킹(Forking)하여 Mandel 이라는 이름으로 변경하고 개발 및 유지보수를 하였습니다. 그리고 이 소프트웨어를 EOS 네트워크에 적용하기 전, Leap 이라는 이름으로 다시 한 번 리브랜딩 하였습니다.
 
 ENF 는 공식적으로 다음과 같이 Antelope 와 Leap 의 관계를 설명하고 있습니다.
 
@@ -46,23 +46,23 @@ nodeos 는 Leap 코어 데몬이며 각종 설정을 플러그인 방식으로 �
 
 cleos 는 nodeos 가 제공하는 REST API 와 통신하기 위한 커맨드라인 인터페이스 도구입니다. cleos 를 사용하면 nodeos 에 명령을 전달하거나 스마트 컨트랙트를 배포하는 등의 작업을 할 수 있습니다. 또한 cleos 는 nodeos 뿐만 아니라 keosd 와도 통신 하는데 사용할 수 있습니다.
 
-위 3개 컴포넌트는 Antelope 기반 블록체인을 운영하려면 반드시 알아야 할 내용입니다.
+위 3개 컴포넌트는 Antelope 기반 블록체인을 운영하려면 반드시 알아야 할 요소입니다.
 
-추가로 다음과 같이 개발에 필요한 주요 컴포넌트들이 있습니다.
+스마트 컨트랙트 개발에 필요한 주요 컴포넌트들은 다음과 같습니다.
 
-### CDT
+## CDT
 
-CDT는 WASM(Web Assembly)용 개발 툴킷이자, Antelope 체인 상에서 동작하는 스마트 컨트랙트를 쉽게 작성할 수 있도록 도와주는 도구들을 모은 것입니다. CDT 는 범용 Web Assembly 개발 도구이기도 하지만, Antelope 스마트 컨트랙트를 개발 할 때 Antelope 에 최적화 된 기능도 사용할 수 있습니다. CDT 는 Clang 9을 기반으로 만들어졌으며, 최신의 LLVM 최적화 도구 및 분석 도구를 다수 포함하고 있습니다.
+CDT는 WASM(Web Assembly)용 개발 툴킷이자, Antelope 체인 상에서 동작하는 스마트 컨트랙트를 쉽게 작성할 수 있도록 도와주는 도구들을 모은 것입니다. CDT 는 범용 Web Assembly 개발 도구이기도 하지만, Antelope 스마트 컨트랙트를 개발 할 때 Antelope 에 최적화 된 기능도 사용할 수 있습니다. CDT 는 Clang9 을 기반으로 만들어졌으며, 다수의 LLVM 최적화 도구 및 분석 도구를 포함하고 있습니다.
 
-### EOSJS
+## EOSJS
 
 Leap 에서 제공하는 RPC API를 사용하여 블록체인 네트워크와 통신할 수 있는 프론트엔드 Javascript API SDK입니다.
 
-### D.U.N.E
+## D.U.N.E
 
-DUNE (Docker Utilities for Node Execution) 은 Leap 의 프로그램과 CDT 를 비롯한 여러 서비스와 도구들을 추상화하여 노드 관리, 스마트 컨트랙트 컴파일, 테스트, 그밖에 Antelope 스마트 컨트랙트에서 필요한 여러가지 일반적인 작업들을 쉽게 실행할 수 있는 도구입니다.
+D.U.N.E (Docker Utilities for Node Execution) 은 Leap 의 프로그램과 CDT 를 비롯한 여러 서비스와 도구들을 추상화해 주는 유틸리티 입니다. D.U.N.E 를 사용하면 노드 관리, 스마트 컨트랙트 컴파일, 테스트, 그밖에 Antelope 스마트 컨트랙트에서 필요한 여러가지 일반적인 작업들을 쉽게 실행할 수 있습니다.
 
-### Leap 개발 생명주기
+## Leap 개발 생명주기
 
 지금까지 알아본 컴포넌트들의 관계를 그림으로 나타내면 다음과 같습니다.
 

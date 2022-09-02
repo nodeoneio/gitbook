@@ -1,6 +1,8 @@
-# 스마트 컨트랙트 개발 워크플로우
+# 스마트 컨트랙트 개발의 기본 흐름
 
 ## 토큰 배포, 발행 및 전송: eosio.token 스마트 컨트랙트 사용법
+
+Leap 소프트웨어를 설치하였습니다. 이제는&#x20;
 
 이 단원에서는 스마트 컨트랙트를 다루는 가장 기본적인 내용으로, 토큰의 개념과 `eosio.token` 스마트 컨트랙트, 그리고 cleos 를 사용하여 `eosio.token` 의 액션을 호출하는 방법을 배울 것입니다.
 
@@ -16,7 +18,7 @@ cd CONTRACTS_DIR
 github 저장소에서 eosio.contracts 소스를 다운로드 받습니다.
 
 ```jsx
-git clone <https://github.com/EOSIO/eosio.contracts> --branch v1.8.0 --single-branch
+https://github.com/eosnetworkfoundation/eos-system-contracts.git
 ```
 
 이 저장소에는 여러가지 스마트 컨트랙트 소스가 저장되어 있는데, 그 중 eosio.token 컨트랙트가 본 섹션에서 다룰 내용입니다.
@@ -66,7 +68,7 @@ warning: transaction executed locally, but may not be confirmed by the network y
 * asset 타입:  이 정보는 두 가지 데이터로 구성됩니다. 첫 번째 인자인 부동소수점 숫자는 토큰의 최대 공급량(maximum supply)이며, 두 번째 인자는 토큰의 심볼을 나타내는 대문자 알파벳(티커)입니다. \
   예) "1.0000 SYS"
 
-아래는 위치 인수(positional argument) 를 이용한 호출 방법의 예제 입니다.
+아래는 위치 인자(positional argument) 를 이용한 호출 방법의 예제 입니다.
 
 ```jsx
 cleos push action eosio.token create '[ "alice", "1000000000.0000 SYS"]' -p eosio.token@active
