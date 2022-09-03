@@ -5,6 +5,7 @@
 ## Antelope Leap 개요 <a href="#basic-antelope-leap" id="basic-antelope-leap"></a>
 
 * [Antelop Leap 란?](basic-antelope-leap/what-is-antelope-leap.md)
+* [Leap 소프트웨어 설치](basic-antelope-leap/install-leap-software.md)
 * [Nodeos 기초](basic-antelope-leap/basic-nodeos.md)
 * [Cleos 기초](basic-antelope-leap/basic-cleos.md)
 * [Keosd 기초](basic-antelope-leap/basic-keosd.md)
@@ -12,9 +13,7 @@
 ## 스마트 컨트랙트 개발 환경 구성 <a href="#smart-contracts-dev-environment" id="smart-contracts-dev-environment"></a>
 
 * [개발 환경 설정](smart-contracts/setup-dev-env.md)
-* [Leap 소프트웨어 설치](basic-antelope-leap/install-leap-software/README.md)
 * [컨테이너 기반 Antelope Leap 노드 실행 도구 D.U.N.E](smart-contracts/antelope-leap-dune.md)
-* [테스트넷에 연결된 노드 만들기(작업중)](basic-antelope-leap/local-node-connected-to-testnet.md)
 * [스마트 컨트랙트 개발의 기본 흐름](smart-contracts/contract-dev-workflow.md)
 * [Hello World Contract!](smart-contracts/hello-world-contract.md)
 * [데이터 지속성(Data Persistence)](smart-contracts/data-persistence.md)
@@ -40,9 +39,11 @@
 ## Antelope Leap Advanced
 
 * [Leap Advanced](antelope-leap-advanced/leap-advanced.md)
+* [스냅샷이나 블록로그를 사용하여 블록체인을 재생하는 방법](antelope-leap-advanced/how-to-replay-blockchain-using-shapshot-or-blocklog.md)
 * [스마트 컨트랙트의 뒤에서 일어나는 일](smart-contracts/what-happens-behind-smart-contract.md)
 * [Leap 소스코드를 컴파일 후 인스톨](basic-antelope-leap/install-leap-software/leap-1.md)
 * [Nodeos Storage 와 Read mode 에 대하여](basic-antelope-leap/nodeos-storage-read-mode.md)
+* [테스트넷에 연결된 노드 만들기(작업중)](antelope-leap-advanced/local-node-connected-to-testnet.md)
 * [Nodeos Plugin 옵션 상세](basic-antelope-leap/install-leap-software/nodeos-plugin-details/README.md)
   * [Chain Plugin](basic-antelope-leap/install-leap-software/nodeos-plugin-details/chain-plugin.md)
   * [Net Plugin](basic-antelope-leap/install-leap-software/nodeos-plugin-details/net-plugin.md)

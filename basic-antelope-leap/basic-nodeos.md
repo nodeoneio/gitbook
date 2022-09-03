@@ -68,7 +68,7 @@ config.ini 는 노드의 동작과 역할을 제어하는 환경 설정 파일�
 
 ## nodeos 실행 예제
 
-앞서 [Leap 소프트웨어 설치 단원](install-leap-software/)에서 Leap 를 설치하였다면 nodeos 를 실행할 수 있습니다. 한번 nodeos 를 실행해 봅시다. 다음은 로컬 환경에서 단독으로 실행되는 블록 생산자(BP)의 노드를 시작할 때의 nodeos 실행 예제입니다.
+[Leap 소프트웨어 설치 단원](install-leap-software.md)에서 Leap 를 설치하였다면 nodeos 를 실행해 볼 수 있습니다. 다음은 로컬 환경에서 단독으로 실행되는 블록 생산자(BP)의 노드를 시작할 때의 nodeos 실행 예제입니다.
 
 ```bash
 $ nodeos \\
@@ -166,9 +166,9 @@ info  2022-08-22T14:34:21.906 nodeos    producer_plugin.cpp:2434      produce_bl
 
 ### nodeos 중지하기
 
-nodeos 를 중지하려면 먼저 nodeos 의 PID 를 찾은 다음, 인터럽트 시그널인 `SIGINT` 를 전달하면 됩니다. `SIGINT` 는 디폴트 시그널이기 때문에 단순히 `kill <PID>`  명령으로 데몬을 제거할 수 있습니다.
+`nodeos` 를 중지하려면 먼저 nodeos 의 PID 를 찾은 다음, 인터럽트 시그널인 `SIGINT` 를 전달하면 됩니다. `SIGINT` 는 디폴트 시그널이기 때문에 단순히 `kill <PID>`  명령으로 데몬을 제거할 수 있습니다.
 
-다음은 nodeos 데몬을 제거하는 예제입니다.
+다음은 `nodeos` 데몬을 제거하는 예제입니다.
 
 ```
 $ ps
