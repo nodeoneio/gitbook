@@ -9,6 +9,7 @@
 * [Nodeos 기초](basic-antelope-leap/basic-nodeos.md)
 * [Cleos 기초](basic-antelope-leap/basic-cleos.md)
 * [Keosd 기초](basic-antelope-leap/basic-keosd.md)
+* [계정과 권한 기초](basic-antelope-leap/basic-accounts-and-permissions.md)
 
 ## 스마트 컨트랙트 개발 환경 구성 <a href="#smart-contracts-dev-environment" id="smart-contracts-dev-environment"></a>
 

@@ -44,9 +44,10 @@ Antelope WASM은 다양한 언어로 만들 수 있지만 성능과 편의성을
 
 ### hello.cpp 파일 만들기
 
-먼저 **hello** 라는 이름을 가진 디렉토리를 하나 만들고 들어갑니다. 여기에 스마트 컨트랙트 파일을 저장할 것입니다.
+먼저 작업할 워킹 디렉토리를 하나 지정합니다. 본 예제에서는 `~/workspace` 를 사용할 것입니다. 그 아래에 **hello** 라는 이름을 가진 디렉토리를 하나 만들고 들어갑니다. 여기에 스마트 컨트랙트 파일을 저장하겠습니다.
 
 ```shell
+cd ~/workspace
 mkdir hello
 cd hello
 ```
@@ -71,7 +72,7 @@ b. 코드를 간결하게 작성하기 위해 using 으로 eosio 네임스페이
 using namespace eosio;
 ```
 
-b. hello 라는 이름을 가지는 `eosio::contract` 를 상속하는 표준 C++ 11 클래스를 만듭니다. 그리고 클래스에`[[eosio::contract]]` 속성을 지정하면 CDT 컴파일러가 이것이 스마트 컨트랙트라는 것을 알게 됩니다.
+b. `eosio::contract` 를 상속하는 표준 C++ 11 클래스 hello 를 만듭니다. 그리고 클래스에`[[eosio::contract]]` 속성을 지정하면 CDT 컴파일러가 이것이 스마트 컨트랙트라는 것을 알게 됩니다.
 
 ```cpp
 class [[eosio::contract]] hello : public eosio::contract {};
@@ -85,7 +86,7 @@ CONTRACT hello : public contract {
 
 이 쪽이 보다 간결하기 때문에 매크로를 이용하는것도 좋은 방법입니다.
 
-`EOSIO.CDT` 컴파일러는 자동으로 메인 디스패처(main dispatcher) 와 `ABI 파일`을 만듭니다.  [디스패처](https://developers.eos.io/manuals/eosio.cdt/latest/group\_\_dispatcher/?query=dispatcher\&page=1#dispatcher)는 액션 호출을 루팅(route)하여 올바른 스마트 컨트랙트 액션이 호출되도록 합니다. 컴파일러는  `eosio::contract` 속성을 사용할 때 하나의 디스패처를 생성합니다. 숙련된 개발자라면 스스로 정의한 디스패처를 사용하여 이러한 동작을 커스터마이징 할 수 있습니다.
+`EOSIO.CDT` 컴파일러는 자동으로 메인 디스패처(main dispatcher) 와 `ABI 파일`을 만듭니다.  [디스패처](https://developers.eos.io/manuals/eosio.cdt/latest/group\_\_dispatcher/?query=dispatcher\&page=1#dispatcher)는 액션 호출을 루팅(route)하여 올바른 스마트 컨트랙트 액션이 호출되도록 합니다. 컴파일러는  `eosio::contract` 속성을 사용할 때 하나의 디스패처를 생성합니다. 숙련된 개발자는 스스로 정의한 디스패처를 사용하여 이러한 동작을 커스터마이징 할 수 있습니다.
 
 c. Public 접근지정자와 함께 using 선언문을 추가하여 `eosio::contract`로 부터 베이스 클래스 멤버들을를 가져옵니다. 이제 디폴트 베이스 클래스 생성자를 사용할 수 있습니다.
 
@@ -146,7 +147,7 @@ eosio-cpp -abigen -o hello.wasm hello.cpp
 
 위 명령을 실행하면 `hello.wasm` 과 `hello.abi` 라는 두 개의 파일이 만들어집니다.
 
-이제 `hello.wasm` 과 `hello.abi` 파일을 블록체인상의 hello 라는 계정으로 배포하겠습니다. 아직 hellom 계정이 없다면 [계정과 권한](https://developers.eos.io/welcome/latest/smart-contract-guides/before-you-begin/accounts-and-permissions) 단원을 참조하시기 바랍니다. Run the command outside the folder containing the `hello.wasm` 과 `hello.abi` 가 들어있는 디렉토리 외부에서 명령을 실행하는 경우 `contract-dir` 옵션을 추가하여 `.wasm` 과 `.abi` 파일이 들어있는 위치를 지정할 수 있습니다.
+이제 `hello.wasm` 과 `hello.abi` 파일을 블록체인상의 hello 라는 계정으로 배포하겠습니다. 아직 hello 계정이 없다면 [계정과 권한](https://developers.eos.io/welcome/latest/smart-contract-guides/before-you-begin/accounts-and-permissions) 단원을 참조하시기 바랍니다. Run the command outside the folder containing the `hello.wasm` 과 `hello.abi` 가 들어있는 디렉토리 외부에서 명령을 실행하는 경우 `contract-dir` 옵션을 추가하여 `.wasm` 과 `.abi` 파일이 들어있는 위치를 지정할 수 있습니다.
 
 ```shell
 cleos set contract hello ./hello -p hello@active
