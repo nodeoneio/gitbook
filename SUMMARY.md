@@ -12,10 +12,9 @@
 
 ## 스마트 컨트랙트 개발 환경 구성 <a href="#smart-contracts-dev-environment" id="smart-contracts-dev-environment"></a>
 
-* [개발 환경 설정](smart-contracts/setup-dev-env.md)
-* [컨테이너 기반 Antelope Leap 노드 실행 도구 D.U.N.E](smart-contracts/antelope-leap-dune.md)
-* [스마트 컨트랙트 개발의 기본 흐름](smart-contracts/contract-dev-workflow.md)
+* [개발 환경 개요](smart-contracts/setup-dev-env.md)
 * [Hello World Contract!](smart-contracts/hello-world-contract.md)
+* [스마트 컨트랙트 개발의 기본 흐름](smart-contracts/contract-dev-workflow.md)
 * [데이터 지속성(Data Persistence)](smart-contracts/data-persistence.md)
 * [다른 스마트 컨트랙트의 인라인 액션 을 호출하는 방법](smart-contracts/how-to-call-inline-action.md)
 * [ABI 파일의 이해](smart-contracts/abi-explained.md)
@@ -23,6 +22,7 @@
 * [보조 인덱스(Secondary Indices)](smart-contracts/secondary-indices.md)
 * [지불 가능한 액션(Payable Action)](smart-contracts/payable-action.md)
 * [인라인 액션을 추가하는 법](smart-contracts/how-to-add-inline-actions.md)
+* [컨테이너 기반 Antelope 노드 실행 도구 D.U.N.E](smart-contracts/antelope-leap-dune.md)
 * [스마트 컨트랙트 개발자 핸드북](smart-contracts/smart-contract-dev-handbook.md)
 
 ## CDT

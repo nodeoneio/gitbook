@@ -1,40 +1,46 @@
 # Hello World Contract!
 
-개발 환경 준비가 끝났습니다. 이제 블록체인에 스마트 컨트랙트를 배포하고 실행해 보겠습니다. 블록체인에 저장된 각 트랜잭션 레코드는 수정하거나 삭제할 수 없으며 스마트 컨트랙트는 블록체인에 상태를 저장하고 업데이트 합니다. 블록체인 애플리케이션은 스마트 컨트랙트 액션을 호출하는 클라이언트 코드로 구성됩니다. 스마트 컨트랙트 액션은 블록체인 위에서 실행됩니다.
+Leap 소프트웨어를 인스톨하여 개발 환경을 마련하였습니다. 이제 스마트 컨트랙트를 만들어 블록체인에 배포하고 실행해 보겠습니다.&#x20;
 
-먼저 전통적인 Hello World 를 출력하는 간단한 스마트 컨트랙트부터 시작하겠습니다.
+블록체인에 저장된 각 트랜잭션 레코드는 수정하거나 삭제할 수 없으며 스마트 컨트랙트는 블록체인에 상태를 저장하고 업데이트 합니다. 블록체인 애플리케이션은 스마트 컨트랙트 액션을 호출하는 클라이언트 코드로 구성되며, 스마트 컨트랙트 액션은 블록체인 위에서 실행됩니다.
 
-본 자습서에서는 다음과 같은 주요 개념을 소개합니다.
+먼저 역사와 전통을 자랑하는 "Hello World" 를 출력하는 간단한 스마트 컨트랙트부터 시작해 보겠습니다.
+
+본 단원에서는 다음과 같은 주요 개념을 소개합니다.
 
 * CDT: 스마트 컨트랙트를 빌드하는데 사용되는 툴체인 및 라이브러리
 * 웹어셈블리(Web Assembly, WASM): nodeos 에서 호스트 되는 가상 머신(eos-vm)이 사용하는 실행가능한 바이너리 코드 형식
-* Application Binary Interface(ABI): 웹 어셈블리와 가상머신 간에 데이터를 어떻게 직렬화 할지 정의하는 인터페이스.
+* ABI(Application Binary Interface): 웹 어셈블리와 가상머신 간에 데이터를 어떻게 직렬화 할지 정의하는 인터페이스.
 * 스마트 컨트랙트(Smart Contract): 블록체인상에서 실행되는 액션과 트랜잭션을 정의하는 코드.&#x20;
 
 ## 이 단원에서 다루는 내용
 
 * `hi` 액션을 가지고 있는 간단한 스마트 컨트랙트.
-* 스마트 컨트랙트를 컴파일하고 Mandel 기반 블록체인에 배포.
+* 스마트 컨트랙트를 컴파일하고 Antelope 기반 블록체인에 배포.
 *  스마트 컨트랙트의 `hi` 액션을 호출하는 명령어 사용법.
 
 ## 시작하기 전에
 
-* 기본적인 C++ 프로그래밍 언어를 다룰 수 있음.
-* 스마트 컨트랙트를 작성한 에디터(IDE).
-* Mandel 기반 로컬 블록체인 개발 환경.
+* 기초적인 C++ 프로그래밍 언어를 이해할 수 있음.
+* 스마트 컨트랙트를 작성할 에디터나 IDE 를 준비.
+* Antelope 기반 로컬 블록체인 개발 환경 준비.
 
 ## 컨트랙트 개발 툴킷(CDT)
 
-Mandel 스마트 컨트랙트는 C++ 프로그래밍 언어를 사용하여 만듭니다. 스마트 컨트랙트를 구축하는 데 필요한 라이브러리와 도구는 컨트랙트 개발 툴킷(Contract Development Toolkit) 줄여서 CDT 라 부르는 툴킷에서 제공하고 있습니다. 자세한 내용은 [CDT 설명서](../cdt/cdt-contract-development-toolkit.md)를 참조하시기 바랍니다.
+Antelope 기반 블록 체인은 WebAssembly(WASM)를 사용하여 사용자가 생성한 애플리케이션과 코드를 실행합니다.&#x20;
 
-스마트 컨트랙트를 블록체인에 배포하려면 먼저 [eosio-cpp](https://developers.eos.io/manuals/eosio.cdt/latest/command-reference/eosio-cpp) 를 사용하여 스마트 컨트랙트를 컴파일 해야 합니다. 스마트 컨트랙트 소스 파일을 컴파일하면 웹 어셈블리 파일과 응용 프로그램 바이너리 인터페이스(ABI, Application Binary Interface) 파일을 빌드합니다.
+스마트 컨트랙트를 구축하는 데 필요한 라이브러리와 도구는 컨트랙트 개발 툴킷(Contract Development Toolkit), 줄여서 CDT 라 부르는 툴킷에서 제공하고 있습니다. 이 툴 체인은 clang/llvm C/C++ 컴파일러를 기반으로 하는데, 이는 WASM 애플리케이션을 컴파일 하는데 있어 가장 발전된 도구 중 하나입니다. 이를 사용하여 스마트 계약의 WASM 을 만들 것입니다. 자세한 내용은 [CDT 설명서](broken-reference)를 참조하시기 바랍니다.
 
-* 웹 어셈블리 파일(.wasm)은 Mandel 블록체인의 웹 어셈블리 엔진이 실행하는 바이너리 코드입니다. 웹 어셈블리(wasm) 엔진은 nodeos 데몬에서 호스팅되고 있으며 스마트 컨트랙트 코드를 실행합니다.&#x20;
-* 응용 프로그램 바이너리 인터페이스 파일(.abi 파일)은 데이터가 wasm 엔진을 오갈 때 어떻게 직렬화/역직렬화 할 것인가를 정의합니다.
+Antelope WASM은 다양한 언어로 만들 수 있지만 성능과 편의성을 고려할 때 보편적으로 사용하는 언어는 C++ 입니다. 따라서, 너무 깊게 학습할 필요까지는 없지만, 모던 C++(C++11 이상) 의 기본적인 개념과 사용법은 학습하여 두실 필요가 있습니다.
+
+스마트 컨트랙트를 블록체인에 배포하려면 먼저 `eosio-cpp` 를 사용하여 스마트 컨트랙트를 컴파일 해야 합니다. 스마트 컨트랙트 소스 파일을 컴파일하면 웹 어셈블리 파일과 응용 프로그램 바이너리 인터페이스(ABI, Application Binary Interface) 파일이 만들어집니다.
+
+* 웹 어셈블리 파일(.wasm)은 Antelope 블록체인의 웹 어셈블리 엔진이 실행하는 바이너리 코드입니다. 웹 어셈블리(wasm) 엔진은 `nodeos` 데몬에서 호스팅되고 있으며 스마트 컨트랙트 코드를 실행합니다.&#x20;
+* 응용 프로그램 바이너리 인터페이스 파일(.abi 파일)은 wasm 엔진으로 데이터가 오고 나갈갈 때 어떻게 직렬화/역직렬화 할 것인가를 정의합니다.
 
 ## 컨트랙트 만들기
 
-다음 절차에 따라 Hello World 스마트 컨트랙트를 만들 수 있습니다. 일반적으로 스마트 컨트랙트 클래스 선언이 들어 있는 헤더 파일(.hpp)과 스마트 컨트랙트 액션이 구현되어 있는 C++ 소스 파일(.cpp) 두 가지 파일을 만들게 됩니다. 본 예제는 간단하기 때문에 .cpp 파일만 사용할 것입니다.
+다음 절차에 따라 Hello World 스마트 컨트랙트를 만들 수 있습니다. 일반적으로 스마트 컨트랙트를 만들 때는 클래스 선언이 들어 있는 헤더 파일(.hpp)과 스마트 컨트랙트 액션이 구현되어 있는 C++ 소스 파일(.cpp) 두 가지 파일을 만들게 됩니다. 본 예제는 간단하기 때문에 .cpp 파일만 사용하겠습니다..
 
 ### hello.cpp 파일 만들기
 
@@ -53,17 +59,31 @@ touch hello.cpp
 
 이제 스마트 컨트랙트 코드를 작성하겠습니다. 다음과 같은 네 단계를 따라 `hello.cpp` 파일에  코드를 작성합니다.
 
-a. 다음과 같이 eosio 베이스 라이브러리를 include 합니다.
+a. 다음과 같이 `eosio` 베이스 라이브러리를 include 합니다. `eosio.hpp` 에는 `eosio::contract` 와 같이 스마트 컨트랙트를 작성할 때 필요한 클래스들이 포함되어 있습니다.
 
 ```cpp
 #include <eosio/eosio.hpp>
 ```
 
-b. `eosio.hpp` 에는 `eosio::contract` 와 같이 스마트 컨트랙트를 작성할 때 필요한 클래스들이 포함되어 있습니다. hello 라는 이름을 가지는 `eosio::contract` 를 상속하는 표준 C++ 11 클래스를 만듭니다. 그리고 클래스에`[[eosio::contract]]` 속성을 지정하면 CDT 컴파일러가 이것이 스마트 컨트랙트라는 것을 알게 됩니다.
+b. 코드를 간결하게 작성하기 위해 using 으로 eosio 네임스페이스를 선언합니다. 예를 들어 네임스페이스를 사용하면 `eosio::print("roy")`대신 `print("roy")`와 같이 작성할 수 있습니다.
+
+```cpp
+using namespace eosio;
+```
+
+b. hello 라는 이름을 가지는 `eosio::contract` 를 상속하는 표준 C++ 11 클래스를 만듭니다. 그리고 클래스에`[[eosio::contract]]` 속성을 지정하면 CDT 컴파일러가 이것이 스마트 컨트랙트라는 것을 알게 됩니다.
 
 ```cpp
 class [[eosio::contract]] hello : public eosio::contract {};
 ```
+
+다른 방법으로 다음과 같이 `class [[eosio::contract]]` 부분을 `CONTRACT` 매크로로 치환하여 표기하는 방법도 있습니다.
+
+```cpp
+CONTRACT hello : public contract { 
+```
+
+이 쪽이 보다 간결하기 때문에 매크로를 이용하는것도 좋은 방법입니다.
 
 `EOSIO.CDT` 컴파일러는 자동으로 메인 디스패처(main dispatcher) 와 `ABI 파일`을 만듭니다.  [디스패처](https://developers.eos.io/manuals/eosio.cdt/latest/group\_\_dispatcher/?query=dispatcher\&page=1#dispatcher)는 액션 호출을 루팅(route)하여 올바른 스마트 컨트랙트 액션이 호출되도록 합니다. 컴파일러는  `eosio::contract` 속성을 사용할 때 하나의 디스패처를 생성합니다. 숙련된 개발자라면 스스로 정의한 디스패처를 사용하여 이러한 동작을 커스터마이징 할 수 있습니다.
 
@@ -71,34 +91,44 @@ c. Public 접근지정자와 함께 using 선언문을 추가하여 `eosio::cont
 
 ```cpp
 public:
-	using eosio::contract::contract;
+	using contract::contract;
 ```
 
-d. 이제 퍼블릭 액션 `hi` 를 추가해 봅시다. 이 액션은 `eosio::name` 타입의 매개변수를 받으며, "**Hello"** 문자열과 `eosio::name` 타입의 매개변수로 받은 user 를 더하여 출력합니다.
+d. 이제 퍼블릭 액션 `hi` 를 추가해 봅시다. Antelope 는 여러가지 독자적인 타입 정의를 가지고 있는데, name 은 가장 많이 사용되는 타입 중 하나입니다. 이 액션은 `eosio::name` 타입의 매개변수를 받으며, `eosio::print()` 함수를 사용하여 "**Hello"** 문자열과 `eosio::name` 타입의 매개변수로 받은 user 를 연결한 뒤 출력합니다.
 
 ```cpp
-	[[eosio::action]] void hi( eosio::name user ) {
+	[[eosio::action]] 
+	void hi( name user ) {
 		print( "Hello, ", user);
 	}
 ```
 
-`[[eosio::action]]` 은 이것이 액션임을 컴파일러에게 알려주는 속성입니다.
+`[[eosio::action]]` 은 이것이 액션임을 컴파일러에게 알려주는 속성입니다. 이 또한 다음과 같이 `ACTION` 매크로를 사용하여 간결하게 표시할 수 있습니다.
+
+```cpp
+ACTION hi(name user) {
+   print("Hello!, ", user);
+}
+```
 
 \
 지금까지 작성한 hello.cpp 파일은 다음과 같습니다.
 
 ```cpp
 #include <eosio/eosio.hpp>
-class [[eosio::contract]] hello : public eosio::contract {
+
+using namespace eosio;
+
+CONTRACT hello : public contract {
   public:
-      using eosio::contract::contract;
-      [[eosio::action]] void hi( eosio::name user ) {
+      using contract::contract;
+      ACTION void hi( name user ) {
          print( "Hello, ", user);
       }
 };
 ```
 
-`eosio::print` 함수는 eosio/eosio.hpp 에 선언되어 있습니다. 스마트 컨트랙트는 이 함수를 사용하여 Hello 문자열과 매개변수 받은 `eosio::name` 타입의 user 를 연결하여 출력합니다.
+`eosio::print` 함수는 `eosio/eosio.hpp` 에 선언되어 있습니다. 스마트 컨트랙트는 이 함수를 사용하여 Hello 문자열과 매개변수로 받은 `eosio::name` 타입의 user 를 연결하여 출력합니다.
 
 이제 파일을 저장합니다.
 
