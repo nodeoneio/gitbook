@@ -18,7 +18,7 @@ Leap 소프트웨어를 설치하려면 다음과 같은 방법을 이용할 수
 
 미리 만들어진 바이너리 파일을 인스톨하여 빠르게 노드를 만들 수 있습니다. Leap 의 바이너리는 Antelope 의 공식 Github 에서 데비안 소프트웨어 패키지(.deb) 형태로 제공됩니다.
 
-Leap 의 바이너리는 다음의 공식 깃허브 릴리스 페이지에서 찾아볼 수 있습니다. 설치하려는 환경에 맞는 데비안 패키지를 다운로드 받아 설치합니다.
+Antelope 학습 초기부터 어느 정도 익숙해질 때 까지는 네이티브 또는 VM 환경에 바이너리를 설치하여 사용하는것을 추천합니다. Leap 의 바이너리는 다음의 공식 깃허브 릴리스 페이지에서 찾아볼 수 있습니다. 설치하려는 환경에 맞는 데비안 패키지를 다운로드 받아 설치합니다.
 
 {% embed url="https://github.com/AntelopeIO/leap/releases" %}
 
@@ -42,10 +42,10 @@ v3.1.0
 
 {% embed url="https://app.gitbook.com/s/YZT0OiBQKuAU7OjJoCgQ/~/changes/GyFj0wmAOGq0NW7Uht4a/antelope-leap-advanced/leap" %}
 
-
-
 ## 로컬 환경에 D.U.N.E 설정
 
-D.U.N.E 은 로컬 머신 환경에서 간편하게 컨테이너 기반 개발용 블록체인 노드 환경을 설정 할 수 있게 도와주는 도구입니다. D.U.N.E 의 설정 방법은 다음의 스마트 컨트랙트 개발 단원에서 다루고 있습니다.
+D.U.N.E 은 로컬 머신 환경에서 간편하게 컨테이너 기반 개발용 블록체인 노드 환경을 설정 할 수 있게 도와주는 도구입니다. Antelope Leap 의 사용법에 어느 정도 익숙해진 후에 편리하게 사용할 수 있습니다.&#x20;
+
+D.U.N.E 의 설정 방법은 다음의 스마트 컨트랙트 개발 단원에서 다루고 있습니다.
 
 {% embed url="https://app.gitbook.com/s/YZT0OiBQKuAU7OjJoCgQ/~/changes/GyFj0wmAOGq0NW7Uht4a/smart-contracts-dev-environment/antelope-leap-dune" %}

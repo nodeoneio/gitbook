@@ -76,7 +76,7 @@ private key: imported private key for: EOS6Pxs3oiKT7y6eP58qr6KzYSPA5hbe7XtDciNNF
 {% hint style="info" %}
 지갑은 15분동안 사용하지 않으면 잠금 상태가 됩니다. 만약 지갑의 잠금 해제 시간을 늘리고 싶다면 keosd 의 환경 설정 파일(디폴트로 `~/eosio-wallet/config.ini`) 에서 `unlock-timeout` 값(초 단위)을 원하는 만큼 늘려주면 됩니다.&#x20;
 
-변경하고 나서는 keosd 데몬의 PID 를 찾아서 `kill PID` 명령으로 데몬을 내린뒤 적당한 지갑 관련 명령(ex: `cleos wallet list`) 을 실행하면 설정이 적용된 keosd 가 실행됩니다.
+변경하고 나서는 keosd 데몬의 PID 를 찾아서 `kill PID` 명령으로 데몬을 제거한 뒤, 적당한 지갑 관련 명령(ex: `cleos wallet list`) 을 실행하면 설정이 적용된 keosd 가 실행됩니다.
 {% endhint %}
 
 #### Leap 데이터 디렉토리 작성
@@ -151,7 +151,7 @@ http-server-address = 0.0.0.0:8888
 p2p-listen-endpoint = 0.0.0.0:9876
 state-history-endpoint = 0.0.0.0:8080
 verbose-http-errors = true
-agent-name = "Nodeone Local"
+agent-name = "Nodeos Local"
 net-threads = 2
 max-transaction-time = 100
 enable-stale-production = true
@@ -173,18 +173,28 @@ plugin = eosio::producer_plugin
 plugin = eosio::producer_api_plugin
 ```
 
-`signature-provider` 옵션의 `EOS_PUB_DEV_KEY` 와 `EOS_PRIV_DEV_KEY` 를 각각의 키로 변경한 다음 저장하고 빠져나옵니다.
+`signature-provider` 옵션의 `EOS_PUB_DEV_KEY` 와 `EOS_PRIV_DEV_KEY` 를 각각의 키로 변경합니다.
+
+그리고 `chain-state-db-size-mb` 에 로컬 머신의 메모리 용량을 입력합니다. 메모리는 다음과 같이 계산할 수 있습니다,
+
+```
+awk '/MemTotal/ {printf( "%.2f\n", $2 / 1024 )}' /proc/meminfo |  awk '{print int($0)}'
+```
+
+로컬 테스트넷이라면 16GB(16384) 이하로도 충분합니다. 다만 입력할 메모리 용량이 전체 물리 메모리양을 넘어가지 않도록 합니다.&#x20;
 
 {% hint style="info" %}
-위 제네시스 노드 설정 내용을 간략히 정리하면은 다음과 같습니다.
+위 제네시스 노드 설정 내용을 간략히 정리하면 다음과 같습니다.
 
 * 블록을 생성합니다.
-* 127.0.0.1:8888 에서 HTTP 요청을 받습니다.
+* 0.0.0.0:8888 에서 HTTP 요청을 받습니다.
 * 0.0.0.0:9876 에서 p2p 연결 요청을 받습니다.
-* 127.0.0.1:8080 에서 블록 이력과 관련된 요청을 받습니다.
-* 아직은 단독 노드이기 때문에 p2p 연결은 하지 않습니다. 나중에 BP 노드를 추가하게 되면 그 때 p2p 노드 정보를 추가할 것입니다.
-* 스마트 컨트랙트의 출력을 콘솔에 표시하는 --contracts-console 매개 변수가 있는데, 여기서 표시하는 정보는 문제가 발생했을 때 해결의 실마리가 될 수 있습니다.
+* 0.0.0.0:8080 에서 블록 이력과 관련된 요청을 받습니다.
+* 아직은 단독 노드이기 때문에 `p2p-peer-address` 에서 p2p 연결은 하지 않습니다. 나중에 BP 노드를 추가하게 되면 그 때 p2p 노드 정보를 추가할 것입니다.
+* 스마트 컨트랙트의 출력을 콘솔에 표시하는 `--contracts-console` 매개 변수가 있는데, 여기서 표시하는 정보는 문제가 발생했을 때 해결의 실마리가 될 수 있습니다.
 {% endhint %}
+
+이제 작성한 내용을 저장하고 빠져나옵니다.
 
 #### 노드를 시작/중지하는 스크립트 작성
 

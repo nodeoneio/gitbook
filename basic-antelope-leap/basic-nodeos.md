@@ -66,50 +66,47 @@ config.ini 는 노드의 동작과 역할을 제어하는 환경 설정 파일�
 
 직접 작성한 `config.ini` 파일을 사용하려면, `nodeos` 실행 시 명령줄에서 `-config <path>/config.ini` 옵션을 설정하면 됩니다.
 
-## nodeos 실행 예제
+## nodeos 실행 <a href="#nodeos_run_example" id="nodeos_run_example"></a>
 
-[Leap 소프트웨어 설치 단원](install-leap-software.md)에서 Leap 를 설치하였다면 nodeos 를 실행해 볼 수 있습니다. 다음은 로컬 환경에서 단독으로 실행되는 블록 생산자(BP)의 노드를 시작할 때의 nodeos 실행 예제입니다.
+[Leap 소프트웨어 설치 단원](install-leap-software.md)에서 Leap 를 설치하였다면 `nodeos` 를 실행해 볼 수 있습니다. 다음은 로컬 환경에서 단독으로 실행되는 블록 생산자(BP)의 노드를 명령줄 옵션을 사용하여 시작하는 예제입니다.
 
 ```bash
-$ nodeos \\
-  -e -p leap \\
-  --data-dir /users/blockchain/antelope/data     \\
-  --config-dir /users/blockchain/antelope/config \\
-  --plugin eosio::producer_plugin      \\
-  --plugin eosio::chain_plugin         \\
-  --plugin eosio::http_plugin          \\
-  --plugin eosio::state_history_plugin \\
-  --contracts-console   \\
-  --disable-replay-opts \\
-  --access-control-allow-origin='*' \\
-  --http-validate-host=false        \\
-  --verbose-http-errors             \\
-  --state-history-dir /shpdata \\
-  --trace-history              \\
-  --chain-state-history        \\
-  >> nodeos.log 2>&1 &
+$ nodeos \
+-e -p eosio \
+--data-dir /home/nodeos \
+--config-dir /home/nodeos/ \
+--plugin eosio::producer_plugin \
+--plugin eosio::chain_plugin \
+--plugin eosio::http_plugin \
+--plugin eosio::chain_api_plugin \
+--http-server-address 0.0.0.0:8888 \
+--p2p-listen-endpoint 0.0.0.0:9876 \
+--contracts-console \
+--disable-replay-opts \
+--access-control-allow-origin='*' \
+--http-validate-host=false \
+--verbose-http-errors \
+>> nodeos.log 2>&1 &
 ```
 
-위 예제에서 `nodeos` 명령에 주어진 옵션은 다음과 같습니다.
+위 예제에서 `nodeos` 명령과 함께 사용된 옵션은 다음과 같습니다.
 
 * 블록 생성자로 지정하여 블록을 생성하도록 합니다. (`e`)
-* 블록 생성자 이름을 "leap" 로 지정합니다. (`p`)
+* 블록 생성자 이름을 "eosio" 로 지정합니다. (`p`)
 * data 디렉토리를 지정합니다. (`-data-dir`) data 디렉토리는 블록체인의 블록 데이터를 저장할 루트 디렉토리입니다.
 * `config.ini` 가 위치한 디렉토리를 지정합니다. (`-config-dir`)
 * `-plugin` 으로 다음 플러그인들을 로딩합니다. \
-  `producer_plugin`, `chain_plugin`, `http_plugin`, `state_history_plugin`
+  `producer_plugin`, `chain_plugin`, `http_plugin`, `chain_api_plugin`
 * 다음과 같은 `chain_plugin` 의 전용 옵션들을 설정합니다.\
   `-contracts-console`, `-disable-replay-opts`
 * 다음과 같은 `http-plugin`의 전용 옵션들을 설정합니다.\
   `-access-control-allow-origin`, `-http-validate-host`, `-verbose-http-errors`
-* 다음과 같은 `state_history_plugin`의 전용 옵션들을 설정합니다.\
-  `-state-history-dir`, `-trace-history`, `-chain-state-history`
 * `stdout` 와 `stderr` 로 출력되는 로그를 `nodeos.log` 파일로 전달합니다. (`nodeos.log 2>&1`)
 * 프로세스를 백그라운드로 돌리고 쉘 프롬프트로 돌아옵니다. (`&`)
 
 ## nodeos 동작 확인
 
-이제 정상적으로 nodeos 가 동작하고 있는지 확인해 봅시다. 노드의 정상 동작 여부는 다음 두 가지 방법으로 확인할 수 있습니다.
+이제 정상적으로 `nodeos` 가 동작하고 있는지 확인해 봅시다. 노드의 정상 동작 여부는 다음 두 가지 방법으로 확인할 수 있습니다.
 
 * `cleos` 명령 실행
 * 출력되는 로그 확인
@@ -146,25 +143,25 @@ $ cleos get info
 
 ### 출력되는 로그 확인
 
-위 예제에서 nodeos 가 출력하는 stdout, stderr 로그를 nodeos.log 에 기록하도록 설정하였습니다. 따라서 다음 명령으로 노드의 동작 상황을 확인할 수 있습니다.
+위 예제에서 `nodeos` 가 출력하는 `stdout`, `stderr` 로그를 `nodeos.log` 에 기록하도록 설정하였습니다. 다음 명령으로 노드가 출력하는 로그를 실시간으로 확인할 수 있습니다.
 
 ```
 $ tail -f nodeos.log
 ...
-info  2022-08-22T14:34:18.403 nodeos    producer_plugin.cpp:2434      produce_block        ] Produced block f27f135f555c20aa... #7 @ 2022-08-22T14:34:18.500 signed by leap [trxs: 0, lib: 6, confirmed: 0]
-info  2022-08-22T14:34:18.906 nodeos    producer_plugin.cpp:2434      produce_block        ] Produced block 76c79aac6ddd6f3b... #8 @ 2022-08-22T14:34:19.000 signed by leap [trxs: 0, lib: 7, confirmed: 0]
-info  2022-08-22T14:34:19.401 nodeos    producer_plugin.cpp:2434      produce_block        ] Produced block a8ddf261459fc702... #9 @ 2022-08-22T14:34:19.500 signed by leap [trxs: 0, lib: 8, confirmed: 0]
-info  2022-08-22T14:34:19.906 nodeos    producer_plugin.cpp:2434      produce_block        ] Produced block 55c20a35f5553d4f... #10 @ 2022-08-22T14:34:20.000 signed by leap [trxs: 0, lib: 9, confirmed: 0]
-info  2022-08-22T14:34:20.401 nodeos    producer_plugin.cpp:2434      produce_block        ] Produced block f261faahjf7tjfi8... #11 @ 2022-08-22T14:34:20.500 signed by leap [trxs: 0, lib: 10, confirmed: 0]
-info  2022-08-22T14:34:21.906 nodeos    producer_plugin.cpp:2434      produce_block        ] Produced block ndj573hyd7oedjdj... #12 @ 2022-08-22T14:34:21.000 signed by leap [trxs: 0, lib: 11, confirmed: 0]
+info  2022-08-22T14:34:18.403 nodeos    producer_plugin.cpp:2434      produce_block        ] Produced block f27f135f555c20aa... #7 @ 2022-08-22T14:34:18.500 signed by eosio [trxs: 0, lib: 6, confirmed: 0]
+info  2022-08-22T14:34:18.906 nodeos    producer_plugin.cpp:2434      produce_block        ] Produced block 76c79aac6ddd6f3b... #8 @ 2022-08-22T14:34:19.000 signed by eosio [trxs: 0, lib: 7, confirmed: 0]
+info  2022-08-22T14:34:19.401 nodeos    producer_plugin.cpp:2434      produce_block        ] Produced block a8ddf261459fc702... #9 @ 2022-08-22T14:34:19.500 signed by eosio [trxs: 0, lib: 8, confirmed: 0]
+info  2022-08-22T14:34:19.906 nodeos    producer_plugin.cpp:2434      produce_block        ] Produced block 55c20a35f5553d4f... #10 @ 2022-08-22T14:34:20.000 signed by eosio [trxs: 0, lib: 9, confirmed: 0]
+info  2022-08-22T14:34:20.401 nodeos    producer_plugin.cpp:2434      produce_block        ] Produced block f261faahjf7tjfi8... #11 @ 2022-08-22T14:34:20.500 signed by eosio [trxs: 0, lib: 10, confirmed: 0]
+info  2022-08-22T14:34:21.906 nodeos    producer_plugin.cpp:2434      produce_block        ] Produced block ndj573hyd7oedjdj... #12 @ 2022-08-22T14:34:21.000 signed by eosio [trxs: 0, lib: 11, confirmed: 0]
 ...
 ```
 
-정상적으로 nodeos 가 동작 중이라면 위와 같이 로그에서 블록이 생성되고 있는 과정을 확인할 수 있습니다.
+정상적으로 `nodeos` 가 동작 중이라면 위와 같이 로그에서 블록이 생성되고 있는 과정을 확인할 수 있습니다.
 
-이제 로컬에서 단독으로 실행되는 Antelope 노드 만들어 보았습니다. 일단 여기까지 진행되었으면 개발용 노드가 완성된 것입니다. 만약 nodeos 에서 사용하는 플러그인과 옵션에 대한 상세한 내용이 필요하면 [nodeos Plugin 상세](https://app.gitbook.com/s/YZT0OiBQKuAU7OjJoCgQ/\~/changes/mhCOoiYoXaVjjMMGXHdI/basic-antelope-leap/nodeos-plugin-details) 단원을 참조합니다.
+로컬에서 단독으로 실행되는 Antelope 블록체인 노드 만들어 보았습니다. 일단 여기까지 진행되었으면 실습용으로 사용할 최소한의 조건을 가진 노드가 만들어 진 것입니다. `nodeos` 에서 사용하는 플러그인과 옵션에 대한 상세한 내용이 필요하면 [nodeos Plugin 상세](https://app.gitbook.com/s/YZT0OiBQKuAU7OjJoCgQ/\~/changes/mhCOoiYoXaVjjMMGXHdI/basic-antelope-leap/nodeos-plugin-details) 단원을 참조합니다.
 
-### nodeos 중지하기
+## nodeos 중지하기
 
 `nodeos` 를 중지하려면 먼저 nodeos 의 PID 를 찾은 다음, 인터럽트 시그널인 `SIGINT` 를 전달하면 됩니다. `SIGINT` 는 디폴트 시그널이기 때문에 단순히 `kill <PID>`  명령으로 데몬을 제거할 수 있습니다.
 
@@ -179,3 +176,18 @@ $ kill 500
 ```
 
 만약 `kill -SIGKILL <PID>` 명령으로 데몬을 강제 종료하면 블록체인 상태 데이터베이스가 망가져, 블록체인 데이터를 지우고 다시 처음부터 시작하거나 리플레이를 해야 합니다. 따라서 블록체인을 나중에 다시 계속 이어서 사용하려면 강제 종료는 사용하지 않는 것이 좋습니다.&#x20;
+
+중지했던 노드를 다시 시작하려면 앞서 입력했던 `nodeos` 실행 명령을 다시 실행하면 됩니다.
+
+만약 `nodeos` 를 강제 종료하여 노드 데이터베이스가 깨져 `nodeos` 가 재기동 할 수 없는 상황이라면 다음 명령으로 블록 로그와 상태 데이터베이스 파일을 지운 뒤 `nodeos` 를 실행하면 처음부터 다시 블록을 만들 수 있습니다.
+
+```
+rm -rf /home/nodeos/blocks/*
+rm -rf /home/nodeos/state/*
+```
+
+## 환경설정 파일을 이용하여 노드 시작하기
+
+실행한 Antelope 노드를 장기적으로 사용할 계획이라면 환경설정 파일과 시작/중지 스크립트를 작성하여 보다 쉽게 노드를 운영할 수 있습니다. 이 내용은 [바이오스 부트 시퀀스 문서](bios-boot-sequence.md)의 제네시스 노드 구성 단원에서 상세히 다루고 있습니다.
+
+처음으로 Antelope 을 학습하는 단계라면 우선은 명령줄에서 `nodeos` 를 실행하는 방법을 사용하면서 학습해 나가도록 합시다.
