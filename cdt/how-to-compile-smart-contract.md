@@ -10,7 +10,7 @@
 
 ### 시작하기 전에
 
-* 로컬 폴더(예를 들어 ./examples/hello/) 에 스마트 컨트랙트 소스가 들어 있어야 합니다. [Hello World Contract 가이드](https://developers.eos.io/welcome/latest/smart-contract-guides/hello-world)를 보면 처음 컨트랙트를 만드는 방법에 대한 자세한 내용이 소개되어 있습니다.
+* 로컬 폴더(예를 들어 ./examples/hello/) 에 스마트 컨트랙트 소스가 들어 있어야 합니다. [Hello World Contract](../smart-contracts-dev-environment/contract-dev-workflow/hello-world-contract.md) 단원에서 처음으로 컨트랙트를 만드는 방법에 대한 자세한 내용이 소개되어 있습니다.
 
 ### 순서
 

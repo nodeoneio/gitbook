@@ -29,7 +29,12 @@ cleos create account eosio bob EOS87TQktA5RVse2EguhztfQVEh6XXxBmgkU8b4Y5YnGvtYAo
 * EOS87TQ....: 새 계정의 공개키 입니다. [키 쌍 만들기 단원](https://app.gitbook.com/s/YZT0OiBQKuAU7OjJoCgQ/\~/changes/9SOrppvOOBlShstEZa2F/basic-antelope-leap/how-to-create-key-pair)을 참조하여 만든 키를 입력합니다.
 
 {% hint style="info" %}
-Antelope 블록체인에서 새 계정을 생성하려면 새 계정을 만들 때 인증해 줄 기존 계정이 존재해야 합니다. 새로 만들어진 블록체인의 경우 디폴트 시스템 계정인 `eosio` 를 이용하여 새 계정을 만들 수 있습니다.
+Antelope 블록체인에서 새 계정을 생성하려면 새 계정을 만들 때 인증해 줄 기존 계정이 존재해야 합니다. 새로 만들어진 블록체인의 경우 디폴트 시스템 계정인 `eosio` 를 이용하여 새 계정을 만들 수 있습니다. &#x20;
+
+디폴트 eosio 계정 active 권한의 키 쌍은 다음과 같습니다. eosio 계정으로 트랜잭션을 승인하려면 개인 키를 지갑에 미리 가져다 놓아야 합니다.
+
+Public: EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV\
+Private: 5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3
 {% endhint %}
 
 다음은 실행 결과의 예시입니다.

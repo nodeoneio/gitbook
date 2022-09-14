@@ -11,16 +11,17 @@
 * [Keosd 기초](basic-antelope-leap/basic-keosd.md)
 * [계정과 권한 기초](basic-antelope-leap/basic-accounts-and-permissions.md)
 * [키 쌍 만들기](basic-antelope-leap/how-to-create-key-pair.md)
-* [계정 만들기](basic-antelope-leap/how-to-create-account.md)
-* [키를 지갑으로 가져오기](basic-antelope-leap/how-to-import-a-key-to-a-wallet.md)
 * [지갑 만들기](basic-antelope-leap/how-to-create-a-wallet.md)
+* [키를 지갑으로 가져오기](basic-antelope-leap/how-to-import-a-key-to-a-wallet.md)
+* [계정 만들기](basic-antelope-leap/how-to-create-account.md)
 * [계정 정보 확인하기](basic-antelope-leap/how-to-get-account-information.md)
 
-## 스마트 컨트랙트 개발 환경 구성 <a href="#smart-contracts-dev-environment" id="smart-contracts-dev-environment"></a>
+## 스마트 컨트랙트 개발과 환경 구성 <a href="#smart-contracts-dev-environment" id="smart-contracts-dev-environment"></a>
 
 * [개발 환경 개요](smart-contracts/setup-dev-env.md)
-* [Hello World Contract!](smart-contracts/hello-world-contract.md)
-* [스마트 컨트랙트 개발의 기본 흐름](smart-contracts/contract-dev-workflow.md)
+* [스마트 컨트랙트 개발의 기본 흐름](smart-contracts-dev-environment/contract-dev-workflow/README.md)
+  * [Hello World Contract!](smart-contracts-dev-environment/contract-dev-workflow/hello-world-contract.md)
+  * [eosio.token: 토큰 배포, 발행 및 전송](smart-contracts-dev-environment/contract-dev-workflow/token-deploy-issue-transfer.md)
 * [데이터 지속성(Data Persistence)](smart-contracts/data-persistence.md)
 * [다른 스마트 컨트랙트의 인라인 액션 을 호출하는 방법](smart-contracts/how-to-call-inline-action.md)
 * [ABI 파일의 이해](smart-contracts/abi-explained.md)
@@ -33,8 +34,7 @@
 
 ## CDT
 
-* [CDT(Contract Development Toolkit) 이란](cdt/cdt-contract-development-toolkit.md)
-* [CDT 설치](cdt/install-cdt.md)
+* [CDT(Contract Development Toolkit) 개요와 설치 방법](cdt/cdt-contract-development-toolkit.md)
 * [스마트 컨트랙트 컴파일](cdt/how-to-compile-smart-contract.md)
 * [모범 사례](cdt/best-practices.md)
 * [기능(Features)](cdt/features.md)
