@@ -288,7 +288,7 @@ std::vector<my_struct> get() {
 * `inline actions`을 호출할 수 없습니다.
 * 읽기 전용 질의가 반환하는 데이터 크기는 액션이 반환하는 값의 크기로 제한됩니다. 기본적으로 디폴트값(`default_max_action_return_value_size`,256 바이트)으로 설정됩니다.
 
-읽기 전용으로 태깅된 액션이 insert/update/write 함수를 호출하거나 `deferred transactions` 나 `inline actions` 을 시도하면 `eosio-cpp` 와 `eosio-cc` 도구는 에러를 생성하고 컴파일을 종료시킵니다. 하지만 명령줄에서 오버라이드 옵션인 `--warn-action-read-only` 가 사용되면, `eosio-cpp` 와 `eosio-cc` 툴은 경고만 내보내고 컴파일을 계속합니다.
+읽기 전용으로 태깅된 액션이 insert/update/write 함수를 호출하거나 `deferred transactions` 나 `inline actions` 을 시도하면 `cdt-cpp` 와 `eosio-cc` 도구는 에러를 생성하고 컴파일을 종료시킵니다. 하지만 명령줄에서 오버라이드 옵션인 `--warn-action-read-only` 가 사용되면, `cdt-cpp` 와 `eosio-cc` 툴은 경고만 내보내고 컴파일을 계속합니다.
 
 ## 직접 ABI 파일 작성 및 수정하기
 
@@ -301,7 +301,7 @@ std::vector<my_struct> get() {
 * Ricardian 컨트랙트는은 \<contract name>.[contracts.md](http://name.contracts.md) 라는 이름의 파일에 저장되어야 하며, Ricardian 구절은 \<contract name>.clauses.md라는 파일에 저장되어야 합니다.
 * 각 Ricardian 컨트랙트 파일에는 헤더 \<h1 class="contract"> ActionName \</h1> 가 있어야 합니다. ABI 생성기는 이 Ricardian 컨트랙트를을 지정된 액션에 가져다 붙이는 식으로 동작합니다.
 * 각 Ricardian 구절에 대해 헤더 \<h1 class="clause"> ClauseID \</h1> 가 있어야 한다. 이렇게 하면 ABI 생성기가 구절 ID를 본문과 연결시킵니다.
-* \-R 옵션을 eosio-cpp 및 eosio-abigen 에 추가하면 검색할 "리소스" 경로를 추가할 수 있습니다. 이렇게 하여 원하는 디렉토리에 파일을 배치하고 경로를 포함시키는 -I 옵션과와 같은 맥락으로 -R\<path to file>을 사용할 수 있습니다.
+* \-R 옵션을 cdt-cpp 및 eosio-abigen 에 추가하면 검색할 "리소스" 경로를 추가할 수 있습니다. 이렇게 하여 원하는 디렉토리에 파일을 배치하고 경로를 포함시키는 -I 옵션과와 같은 맥락으로 -R\<path to file>을 사용할 수 있습니다.
 * hello.contracts.md 를 예제로 참조할 수 있습니다. [https://github.com/EOSIO/eosio.cdt/blob/master/examples/hello/ricardian/hello.contracts.md](https://github.com/EOSIO/eosio.cdt/blob/master/examples/hello/ricardian/hello.contracts.md)
 
 ## 스마트 컨트랙트 디버깅
@@ -418,7 +418,7 @@ extern "C" {
 이 컨트랙트를 배포하고 액션을 push 해 보겠습니다. debug 계정은 이미 만들어져 있으며 키도 지갑에 있다고 가정하겠습니다.
 
 ```cpp
-$ eosio-cpp -abigen debug.cpp -o debug.wasm
+$ cdt-cpp -abigen debug.cpp -o debug.wasm
 $ cleos set contract debug CONTRACT_DIR/debug -p youraccount@active
 $ cleos push action debug foo '{"from":"inita", "to":"initb", "amount":10}' --scope debug
 ```

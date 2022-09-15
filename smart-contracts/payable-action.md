@@ -304,7 +304,7 @@ class [[eosio::contract("hodl")]] hodl : public eosio::contract {
 
 ```cpp
 cleos create account eosio hodl EOS7kG7snRRzY9oRBXmYVVitWx1mtp7sUBeZzoXYU9TQWFLRk6As6
-eosio-cpp hodl.cpp -o hodl.wasm
+cdt-cpp hodl.cpp -o hodl.wasm
 cleos set contract hodl ./ -p hodl@active
 ```
 

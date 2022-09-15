@@ -389,7 +389,7 @@ ABI 파일 구조는 다음과 같습니다.
 이제 블록체인 네트워크를 시작하고 컴파일 및 테스트합니다.
 
 ```cpp
-$ ~/binary_extension_contract $ eosio-cpp binary_extension_contract.cpp -o binary_extension_contract.wasm
+$ ~/binary_extension_contract $ cdt-cpp binary_extension_contract.cpp -o binary_extension_contract.wasm
 
 $ ~/binary_extension_contract $ cleos set contract eosio ./
 
@@ -520,7 +520,7 @@ struct [[eosio::table]] structure {
 이제 컨트랙트를 업그레이드 하고 원래 방식대로 테이블에서 읽고 쓰기를 해 보겠습니다.
 
 ```cpp
-$ ~/binary_extension_contract $ eosio-cpp binary_extension_contract.cpp -o binary_extension_contract.wasm
+$ ~/binary_extension_contract $ cdt-cpp binary_extension_contract.cpp -o binary_extension_contract.wasm
 
 $ ~/binary_extension_contract $ cleos set contract eosio ./
 
@@ -697,7 +697,7 @@ warning: transaction executed locally, but may not be confirmed by the network y
 
 ## 네이티브 테스터와 컴파일
 
-v1.5.0 이후로 네이티브 컴파일을 실행할 수 있으며, 이를 위하여 네이티브 테스팅 및 네이티브 "스크래치 패드(Scratch Pad)" 컴파일을 지원하는 새로운 라이브러리 세트가 준비되어 있습니다. 이제 eosio-cc, eosio-cpp 및 eosio-ld는 더 편하고 빠른 개발을 위한 네이티브 유닛 테스트와 "스마트 컨트랙트" 구축을 기본적으로 지원합니다.(현재 eosio 내장함수(intrinsics) 의 기본 구현은 사용할 수 없는 상태이며 사용자가 정의할 수 있는 상태임을 참고).(note the default implementations of eosio intrinsics are currently asserts that state they are unavailable, these are user definable.)
+v1.5.0 이후로 네이티브 컴파일을 실행할 수 있으며, 이를 위하여 네이티브 테스팅 및 네이티브 "스크래치 패드(Scratch Pad)" 컴파일을 지원하는 새로운 라이브러리 세트가 준비되어 있습니다. 이제 eosio-cc, cdt-cpp 및 eosio-ld는 더 편하고 빠른 개발을 위한 네이티브 유닛 테스트와 "스마트 컨트랙트" 구축을 기본적으로 지원합니다.(현재 eosio 내장함수(intrinsics) 의 기본 구현은 사용할 수 없는 상태이며 사용자가 정의할 수 있는 상태임을 참고).(note the default implementations of eosio intrinsics are currently asserts that state they are unavailable, these are user definable.)
 
 ## 시작
 
@@ -798,7 +798,7 @@ eosio 에 정의된 모든 내장함수(prints, require\_auth 등) 들은  `intr
 
 ## 네이티브 코드 컴파일
 
-* 테스트 또는 프로그램을 만들기 위해 `eosio-cpp` 로 파일을 컴파일 할 때, 추가적으로 명령줄에`-fnative` 플래그를 추가합니다. 이렇게 하면 wasm 코드 대신 네이티브 코드가 생성됩니다.
+* 테스트 또는 프로그램을 만들기 위해 `cdt-cpp` 로 파일을 컴파일 할 때, 추가적으로 명령줄에`-fnative` 플래그를 추가합니다. 이렇게 하면 wasm 코드 대신 네이티브 코드가 생성됩니다.
 * CMake 를 사용
   * `add_native_library` 와 `add_native_executable` CMake 매크로가 추가되어 있습니다. 이것들은 add\_library 와 add\_executable 을 대체합니다.
 

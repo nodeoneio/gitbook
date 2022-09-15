@@ -6,7 +6,7 @@
 
 본 단원에서는 명령줄 인터페이스에서 스마트 컨트랙트를 컴파일하는 방법에 대하여 설명할 것입니다. 컴파일 도구인 cdt-cpp 의 사용법은 다음 문서를 참조하시기 바랍니다.
 
-* [cdt-cpp](https://developers.eos.io/manuals/eosio.cdt/v1.8/command-reference/eosio-cpp) 도구
+* [cdt-cpp](https://developers.eos.io/manuals/eosio.cdt/v1.8/command-reference/cdt-cpp) 도구
 
 ### 시작하기 전에
 
@@ -28,8 +28,8 @@
     * `cdt-cpp`: cdt-cpp 도구.
     * `-abigen`: ABI 파일을 생성하기 위한 옵션.
     * `../src/hello.cpp`: 컴파일 될 cpp 소스 파일.
-    * `-o hello.wasm`: eosio-cpp 가 만들어 낼 wasm 파일 이름.
-    * `-I ../include/`: eosio-cpp 가 컴파일 시 포함해야 할 디렉토리 경로.
+    * `-o hello.wasm`: cdt-cpp 가 만들어 낼 wasm 파일 이름.
+    * `-I ../include/`: cdt-cpp 가 컴파일 시 포함해야 할 디렉토리 경로.
 3. 다음 두개의 파일이 생성되었는지 확인합니다.
    * hello.wasm: 컴파일 된 wasm 바이너리.
    * hello.abi: 생성된 ABI 파일.

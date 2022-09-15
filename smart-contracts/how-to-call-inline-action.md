@@ -93,7 +93,7 @@ cleos create account eosio abcounter EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGY
 마지막으로 abcounter 컨트랙트를 컴파일하고 배포합니다.
 
 ```cpp
-eosio-cpp abcounter.cpp -o abcounter.wasm
+cdt-cpp abcounter.cpp -o abcounter.wasm
 ```
 
 ```cpp
@@ -252,7 +252,7 @@ addressbook.cpp 컨트랙트를 다시 컴파일하고 이번엔 ABI 를 다시 
 여기서 -l 옵션으로 abcounter 컨트랙트 폴더를 포함시킬 것입니다.
 
 ```cpp
-eosio-cpp -o addressbook.wasm addressbook.cpp -I ../abcounter/
+cdt-cpp -o addressbook.wasm addressbook.cpp -I ../abcounter/
 ```
 
 이제 컨트랙트를 온체인에 다시 배포합니다.

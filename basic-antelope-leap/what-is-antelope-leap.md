@@ -4,7 +4,7 @@
 
 Antelope Leap(이하 Leap) 은 EOS, Telos, WAX 와 같은 블록체인 네트워크를 구축할 수 있는 오픈소스 소프트웨어 입니다.&#x20;
 
-서두에서 이야기 한 바와 같이 원래 이 소프트웨어는 EOSIO 라는 이름으로 블록체인 기업인 블록원(Block.one) 에서 개발하고 관리 하였습니다. 그러나 2021년 중반, 블록원이 개발을 중단한 이후 EOS 재단인 ENF(EOS Network Foundation) 가 EOSIO 를 포킹(Forking)하여 Mandel 이라는 이름으로 변경하고 개발 및 유지보수를 하였습니다. 그리고 이 소프트웨어를 EOS 네트워크에 적용하기 전, Leap 이라는 이름으로 다시 한 번 리브랜딩 하였습니다.
+서두에서 이야기 한 바와 같이 원래 이 소프트웨어는 EOSIO 라는 이름으로 블록체인 기업인 블록원(Block.one) 에서 개발하고 관리 하였습니다. 그러나 2021년 중반, 블록원이 개발을 중단한 이후 EOS 재단인 ENF(EOS Network Foundation) 가 EOSIO 를 포킹(Forking)하여 Antelope 이라는 이름으로 변경하고 개발 및 유지보수를 하였습니다. 그리고 이 소프트웨어를 EOS 네트워크에 적용하기 전, Leap 이라는 이름으로 다시 한 번 리브랜딩 하였습니다.
 
 ENF 는 공식적으로 다음과 같이 Antelope 와 Leap 의 관계를 설명하고 있습니다.
 

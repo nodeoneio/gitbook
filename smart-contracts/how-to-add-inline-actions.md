@@ -289,7 +289,7 @@ cd CONTRACTS_DIR/addressbook
 본문에서 변경한 코드가 ABI 에 영향을 주기 때문에 --abigen 플래그를 넣어서 컨트랙트를 다시 컴파일 합니다.
 
 ```cpp
-$ eosio-cpp -o addressbook.wasm addressbook.cpp --abigen
+$ cdt-cpp -o addressbook.wasm addressbook.cpp --abigen
 ```
 
 변경된 컨트랙트를 다시 배포하면 온체인에 올라간 스마트 컨트랙트가 업그레이드 됩니다.

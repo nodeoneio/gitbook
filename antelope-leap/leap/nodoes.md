@@ -2,7 +2,7 @@
 
 Nodeos 는 CLI(명령줄 인터페이스)에서 실행할 수 있는 응용 프로그램입니다. 따라서 명령줄에서 직접 실행하거나 자동화된 스크립트를 이용하여 실행할 수 있습니다.&#x20;
 
-Mandel 노드가 어떤 동작을 하는가는 설정한 nodeos 플러그인과 그 플러그인의 옵션에 따라 결정됩니다. nodeos 프로그램 에서 사용 가능한의 옵션은 크게 nodeos 전용 옵션과, 플러그인 전용 옵션의 두 가지 카테고리로 나눌 수 있습니다.
+Antelope 노드가 어떤 동작을 하는가는 설정한 nodeos 플러그인과 그 플러그인의 옵션에 따라 결정됩니다. nodeos 프로그램 에서 사용 가능한의 옵션은 크게 nodeos 전용 옵션과, 플러그인 전용 옵션의 두 가지 카테고리로 나눌 수 있습니다.
 
 Nodeos 전용 옵션은 nodoes 프로그램 데몬 자체의 동작에 대한 옵션이며 명령줄 에서만 입력할 수 있습니다.
 
@@ -64,7 +64,7 @@ Command Line Options for eosio::chain_plugin:
 
 ```bash
 $ nodeos \\
-  -e -p mandel \\
+  -e -p Antelope \\
   --data-dir /users/mydir/eosio/data     \\
   --config-dir /users/mydir/eosio/config \\
   --plugin eosio::producer_plugin      \\
@@ -85,7 +85,7 @@ $ nodeos \\
 위 예제에서 `nodeos` 명령에 주어진 옵션은 다음과 같습니다.
 
 * 블록 생성자로 설정하여 블록을 생성하도록 합니다. (`e`)
-* 블록 생성자 이름을 "mandel" 로 지정한다. (`p`)
+* 블록 생성자 이름을 "Antelope" 로 지정한다. (`p`)
 * 블록체인 data 디렉토리를 설정한다. (`-data-dir`)
 * `config.ini` 가 위치한 디렉토리를 설정합니다. (`-config-dir`)
 * 다음 플러그인들을 로딩합니다. `producer_plugin`, `chain_plugin`, `http_plugin`, `state_history_plugin` (`-plugin`)

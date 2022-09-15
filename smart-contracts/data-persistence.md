@@ -536,7 +536,7 @@ icon:
 터미널에서 다음 명령을 입력합니다.
 
 ```cpp
-eosio-cpp addressbook.cpp -o addressbook.wasm
+cdt-cpp addressbook.cpp -o addressbook.wasm
 ```
 
 리카르디안 컨트랙트와 구절을 만들었다면, 그 내용이 .abi 파일에 나타날 것입니다. 위에서 작성한 예제 addressbook.cpp 파일의 내용과 그에 해당하는 리카르디안 컨트랙트와 구절을 적용한 ABI 파일은 다음과 같습니다.

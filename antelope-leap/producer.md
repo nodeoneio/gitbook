@@ -2,7 +2,7 @@
 
 ### 개요
 
-이 단원에서는 Mandel/EOSIO 네트워크에서 블록 생산자(BP) 노드를 설정하는 방법에 대해 설명할 것입니다. 생산자 노드라는 이름에서 알 수 있듯이 Mandel/EOSIO 기반 블록체인에서 블록을 생성하도록 설정되는 노드입니다. `producer_plugin` 뿐만 아니라 [다른 Nodeos 플러그인](leap/nodeos-plugin/)도 설정하여 이 기능을 사용할 수 있습니다.
+이 단원에서는 Antelope/EOSIO 네트워크에서 블록 생산자(BP) 노드를 설정하는 방법에 대해 설명할 것입니다. 생산자 노드라는 이름에서 알 수 있듯이 Antelope/EOSIO 기반 블록체인에서 블록을 생성하도록 설정되는 노드입니다. `producer_plugin` 뿐만 아니라 [다른 Nodeos 플러그인](leap/nodeos-plugin/)도 설정하여 이 기능을 사용할 수 있습니다.
 
 {% hint style="info" %}
 BP 노드를 시작하려면 **System Contract 가 네트워크에 로드**되어 있어야 합니다. 기본 기능만을 사용하는 노드나, System Contract 를 로드하지 않은 기본 개발 노드에서는 이 단원에서 다루는 내용을 적용할 수 없습니다.
@@ -10,8 +10,8 @@ BP 노드를 시작하려면 **System Contract 가 네트워크에 로드**되�
 
 ### 시작하기 전에
 
-1. Mandel 소프트웨어를 설치합니다.
-2. nodeos, cleos, keosd 가 어디서든 접근가능하도록 설정한다. 쉘 스크립트로 Mandel 을 빌드한다면 [Install Script](https://developers.eos.io/manuals/eos/latest/install/build-from-source/shell-scripts/install-eosio-binaries)를 사용합니다.
+1. Antelope 소프트웨어를 설치합니다.
+2. nodeos, cleos, keosd 가 어디서든 접근가능하도록 설정한다. 쉘 스크립트로 Antelope 을 빌드한다면 [Install Script](https://developers.eos.io/manuals/eos/latest/install/build-from-source/shell-scripts/install-eosio-binaries)를 사용합니다.
 3. 필요한 기능을 사용하기 위하여 [Nodeos 옵션](https://developers.eos.io/manuals/eos/latest/nodeos/usage/nodeos-options)을 설정합니다.
 
 ### 단계
@@ -46,7 +46,7 @@ BP의 공개 키/개인 키 정보를 설정합니다. 이 키 쌍은 위에서 
 
 `signature-provider` 는 다음과 같이 3개의 필드를 정의해야 합니다.
 
-* `public-key` - `regproducer` 시에 사용했던 Mandel 공개키
+* `public-key` - `regproducer` 시에 사용했던 Antelope 공개키
 * `provider-spec` - ":" 와 같은 형태의 문자열
 * `provider-type` - KEY 또는 KEOSD를 설정. 일반적으로 KEY 를 사용합니다.
 

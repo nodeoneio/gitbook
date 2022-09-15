@@ -94,7 +94,7 @@ void upsert(name user, std::string first_name, std::string last_name, uint64_t a
 코드가 완성 되었으니 다음과 같이 컴파일 하고 배포 합니다.
 
 ```cpp
-eosio-cpp --abigen addressbook.cpp -o addressbook.wasm
+cdt-cpp --abigen addressbook.cpp -o addressbook.wasm
 ```
 
 ```cpp

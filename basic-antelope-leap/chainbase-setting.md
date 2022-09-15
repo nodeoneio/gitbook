@@ -56,7 +56,7 @@ nodeos ... --data-dir=~/nodeos/data
 ### backing-store
 
 * backing-store 옵션은 nodeos 에게 저장소로 사용할 백엔드 데이터 스토어를 전달할 때 쓰입니다.
-* 현재 chainbase 와 rocksdb 를 지원합니다.(\*rocksdb 는 eosio 2.1에서만 지원하며 성능 문제로 Mandel 에서는 지원하지 않습니다.)&#x20;
+* 현재 chainbase 와 rocksdb 를 지원합니다.(\*rocksdb 는 eosio 2.1에서만 지원하며 성능 문제로 Antelope 에서는 지원하지 않습니다.)&#x20;
 *   체인베이스가 디폴트이기 때문에 옵션을 생략해도 되고 아래와 같이 직접 지정해도 됩니다.
 
     ```bash
