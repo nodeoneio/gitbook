@@ -16,12 +16,14 @@
 * [계정 만들기](basic-antelope-leap/how-to-create-account.md)
 * [계정 정보 확인하기](basic-antelope-leap/how-to-get-account-information.md)
 
-## 스마트 컨트랙트 개발과 환경 구성 <a href="#smart-contracts-dev-environment" id="smart-contracts-dev-environment"></a>
+## 스마트 컨트랙트 개발을 위한 환경 구성 <a href="#smart-contracts-dev-environment" id="smart-contracts-dev-environment"></a>
 
 * [개발 환경 개요](smart-contracts/setup-dev-env.md)
 * [스마트 컨트랙트 개발의 기본 흐름](smart-contracts-dev-environment/contract-dev-workflow/README.md)
   * [Hello World Contract!](smart-contracts-dev-environment/contract-dev-workflow/hello-world-contract.md)
   * [eosio.token: 토큰 배포, 발행 및 전송](smart-contracts-dev-environment/contract-dev-workflow/token-deploy-issue-transfer.md)
+* [CDT(Contract Development Toolkit) 개요와 설치 방법](smart-contracts-dev-environment/cdt-contract-development-toolkit/README.md)
+  * [스마트 컨트랙트 컴파일](smart-contracts-dev-environment/cdt-contract-development-toolkit/how-to-compile-smart-contract.md)
 * [데이터 지속성(Data Persistence)](smart-contracts/data-persistence.md)
 * [다른 스마트 컨트랙트의 인라인 액션 을 호출하는 방법](smart-contracts/how-to-call-inline-action.md)
 * [ABI 파일의 이해](smart-contracts/abi-explained.md)
@@ -34,8 +36,6 @@
 
 ## CDT
 
-* [CDT(Contract Development Toolkit) 개요와 설치 방법](cdt/cdt-contract-development-toolkit.md)
-* [스마트 컨트랙트 컴파일](cdt/how-to-compile-smart-contract.md)
 * [모범 사례](cdt/best-practices.md)
 * [기능(Features)](cdt/features.md)
 * [액션 래퍼 사용법](cdt/how-to-use-action-wrapper.md)

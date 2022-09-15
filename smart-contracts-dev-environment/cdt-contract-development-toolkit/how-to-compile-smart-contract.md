@@ -4,13 +4,13 @@
 
 ### 개요
 
-본 단원에서는 명령줄 인터페이스에서 스마트 컨트랙트를 컴파일하는 방법에 대하여 설명할 것입니다. 컴파일 도구인 eosio-cpp 의 사용법은 다음 문서를 참조하시기 바랍니다.
+본 단원에서는 명령줄 인터페이스에서 스마트 컨트랙트를 컴파일하는 방법에 대하여 설명할 것입니다. 컴파일 도구인 cdt-cpp 의 사용법은 다음 문서를 참조하시기 바랍니다.
 
-* [eosio-cpp](https://developers.eos.io/manuals/eosio.cdt/v1.8/command-reference/eosio-cpp) 도구
+* [cdt-cpp](https://developers.eos.io/manuals/eosio.cdt/v1.8/command-reference/eosio-cpp) 도구
 
 ### 시작하기 전에
 
-* 로컬 폴더(예를 들어 ./examples/hello/) 에 스마트 컨트랙트 소스가 들어 있어야 합니다. [Hello World Contract](../smart-contracts-dev-environment/contract-dev-workflow/hello-world-contract.md) 단원에서 처음으로 컨트랙트를 만드는 방법에 대한 자세한 내용이 소개되어 있습니다.
+* 로컬 폴더(예를 들어 ./examples/hello/) 에 스마트 컨트랙트 소스가 들어 있어야 합니다. [Hello World Contract](../contract-dev-workflow/hello-world-contract.md) 단원에서 처음으로 컨트랙트를 만드는 방법에 대한 자세한 내용이 소개되어 있습니다.
 
 ### 순서
 
@@ -22,10 +22,10 @@
     ```cpp
     mkdir build
     cd build
-    eosio-cpp -abigen ../src/hello.cpp -o hello.wasm -I ../include/
+    cdt-cpp -abigen ../src/hello.cpp -o hello.wasm -I ../include/
     ```
 
-    * `eosio-cpp`: eosio-cpp 도구.
+    * `cdt-cpp`: cdt-cpp 도구.
     * `-abigen`: ABI 파일을 생성하기 위한 옵션.
     * `../src/hello.cpp`: 컴파일 될 cpp 소스 파일.
     * `-o hello.wasm`: eosio-cpp 가 만들어 낼 wasm 파일 이름.
