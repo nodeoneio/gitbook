@@ -15,3 +15,9 @@ CFD의 목표는 블록체인을 사용하는 응용 프로그램이 꼭 필요�
 * 블록체인에 저장된 온라인 기사에 대한 사용자 의견.
 
 일반적으로 블록체인의 동작과 무결성에 영향을 주지 않는 데이터는 CFD로 저장될 수 있습니다. 또한 이러한 일시적 특성을 활용하여 데이터 사용 및 개인 정보에 관한 지역 법률 및 규정을 준수하는 데도 사용할 수 있습니다.
+
+
+
+* 업데이트 필요
+
+[https://developers.eos.io/manuals/eos/latest/nodeos/concepts/context-free-data/index](https://developers.eos.io/manuals/eos/latest/nodeos/concepts/context-free-data/index)

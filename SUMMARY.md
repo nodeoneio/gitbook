@@ -27,18 +27,18 @@
 
 ## Smart Contract Advanced
 
-* [스마트 컨트랙트에서 사용자 인증 방법](smart-contract-advanced/smart-contract-authorization.md)
-* [ABI 파일의 이해](smart-contract-advanced/abi-explained.md)
-* [컨테이너 기반 Antelope 노드 실행 도구 D.U.N.E](smart-contract-advanced/antelope-leap-dune/README.md)
-  * [데이터 지속성(Data Persistence)](smart-contract-advanced/antelope-leap-dune/data-persistence.md)
 * [스마트 컨트랙트 개발자 핸드북](smart-contract-advanced/smart-contract-dev-handbook.md)
-* [다른 스마트 컨트랙트의 인라인 액션 을 호출하는 방법](smart-contract-advanced/how-to-call-inline-action.md)
+* [ABI 파일의 이해](smart-contract-advanced/abi-explained.md)
+* [데이터 지속성(Data Persistence)](smart-contract-advanced/data-persistence.md)
+* [보조 인덱스(Secondary Indices)](smart-contract-advanced/secondary-indices.md)
+* [스마트 컨트랙트에서 사용자 인증 방법](smart-contract-advanced/smart-contract-authorization.md)
+* [인라인 액션을 추가하는 법](smart-contract-advanced/how-to-add-inline-actions.md)
+* [다른 스마트 컨트랙트의 인라인 액션을 호출하는 방법](smart-contract-advanced/how-to-call-inline-action.md)
+* [컨테이너 기반 Antelope 노드 실행 도구 D.U.N.E](smart-contract-advanced/antelope-leap-dune.md)
 * [사용자 지정 권한(Custom permission) 연결: 스마트 컨트랙트에서 사용자 지정 권한 설정](smart-contract-advanced/connect-to-customer-permission.md)
 * [모범 사례](smart-contract-advanced/best-practices.md)
 * [기능(Features)](smart-contract-advanced/features.md)
-* [보조 인덱스(Secondary Indices)](smart-contract-advanced/secondary-indices.md)
 * [액션 래퍼 사용법](smart-contract-advanced/how-to-use-action-wrapper.md)
-* [인라인 액션을 추가하는 법](smart-contract-advanced/how-to-add-inline-actions.md)
 * [액션으로부터 값을 반환하는 방법](smart-contract-advanced/how-to-return-from-action.md)
 * [지불 가능한 액션(Payable Action)](smart-contract-advanced/payable-action.md)
 
@@ -46,7 +46,7 @@
 
 * [Leap Advanced](antelope-leap-advanced/leap-advanced.md)
 * [스냅샷이나 블록로그를 사용하여 블록체인을 재생하는 방법](antelope-leap-advanced/how-to-replay-blockchain-using-shapshot-or-blocklog.md)
-* [스마트 컨트랙트의 뒤에서 일어나는 일](smart-contracts/what-happens-behind-smart-contract.md)
+* [스마트 컨트랙트의 보이지 않는 곳에서 일어나는 일](smart-contracts/what-happens-behind-smart-contract.md)
 * [Leap 소스코드를 컴파일 후 인스톨](basic-antelope-leap/install-leap-software/leap-1.md)
 * [Nodeos Storage 와 Read mode 에 대하여](basic-antelope-leap/nodeos-storage-read-mode.md)
 * [테스트넷에 연결된 노드 만들기(작업중)](antelope-leap-advanced/local-node-connected-to-testnet.md)

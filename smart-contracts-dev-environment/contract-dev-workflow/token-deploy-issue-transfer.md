@@ -19,7 +19,7 @@ wget https://github.com/eosnetworkfoundation/eos-system-contracts/archive/refs/t
 tar -zxvf v3.1.0.tar.gz
 ```
 
-이 파일은 여러가지 스마트 컨트랙트 소스를 포함하고 있는데, 그 중 `eosio.token` 컨트랙트가 본 섹션에서 다룰 내용입니다.&#x20;
+이 파일은 여러가지 스마트 컨트랙트 소스를 포함하고 있는데, 그 중 `eosio.token` 컨트랙트가 이 단원에서 다룰 내용입니다.&#x20;
 
 이제 `eos-system-contracts-3.1.0/contracts/eosio.token/` 으로 이동합니다.
 
@@ -29,7 +29,7 @@ tar -zxvf v3.1.0.tar.gz
 
 ### 단계2: 스마트 컨트랙트를 위한 계정 생성
 
-토큰 계약을 배포하기 전에 이를 배포하기 위한 계정을 생성합니다. 이 계정은 일반에 공개되어 있는 개발용 키를 사용할 것입니다. 이 키는 절대로 프로덕션 용으로 써서는 안 됩니다.
+토큰 컨트랙트를 배포하기 전에 이를 배포하기 위한 계정을 생성하겠습니다. 이 계정은 일반에 공개되어 있는 개발용 키를 사용할 것입니다. 이 키는 절대로 프로덕션 용으로 써서는 안 됩니다.
 
 ```
 Public: EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
@@ -44,7 +44,7 @@ cleos create account eosio eosio.token EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHu
 
 ### 단계3: 스마트 컨트랙트 컴파일
 
-다음 명령으로 스마트 컨트랙트를 컴파일 합니다. 성공적으로 컴파일하면 eosio.token.wasm 파일이 생성됩니다.
+다음 명령으로 스마트 컨트랙트를 컴파일 합니다. 성공적으로 컴파일하면 `eosio.token.wasm` 파일이 생성됩니다.
 
 ```shell
 cdt-cpp -I include -o eosio.token.wasm src/eosio.token.cpp --abigen
@@ -69,11 +69,11 @@ warning: transaction executed locally, but may not be confirmed by the network y
 
 ### 단계5: 토큰 만들기
 
-배포가 성공했으면 토큰을 만들어 봅시다. `eosio.token` 의 `create` 액션에 몇 가지 정보를 넘겨 호출하면 새로운 토큰을 만들 수 있습니다. 이 액션은 하나의 다음과 같은 내용을 가지는 하나의 매개변수를 필요로 합니다.
+배포가 성공했으면 토큰을 만들어 봅시다. `eosio.token` 의 `create` 액션에 몇 가지 정보를 넘겨 호출하면 새로운 토큰을 만들 수 있습니다. 이 액션에는 다음과 같은 내용을 가지는 매개변수 하나가 필요합니다.
 
-* 발행자(issuer) 계정: 여기서 alice 계정을 사용하겠습니다. 발행자는 issue 액션을 호출할 수 있는 권한을 가지며 또한 closing account 나 retiring token과 같은 액션을 수행할 수도 있습니다.
+* 발행자(issuer) 계정: 여기서 alice 계정을 사용하겠습니다. 발행자는 issue 액션을 호출할 수 있는 권한을 가지며 또한 `closing account` 나 `retiring token` 과 같은 액션을 수행할 수도 있습니다.
 * asset 타입:  이 정보는 두 가지 데이터로 구성됩니다. 첫 번째 인자인 부동소수점 숫자는 토큰의 최대 공급량(maximum supply)이며, 두 번째 인자는 토큰의 심볼을 나타내는 대문자 알파벳(티커)입니다. \
-  예를 들면) "1.0000 SYS" 와 같이 표현할 수 있습니다.
+  예를 들면, "1.0000 SYS" 와 같이 표현할 수 있습니다.
 
 아래는 토큰을 만드는 액션을 호출하는 명령의 예제 입니다.
 
@@ -81,7 +81,7 @@ warning: transaction executed locally, but may not be confirmed by the network y
 cleos push action eosio.token create '[ "alice", "1000000000.0000 SYS"]' -p eosio.token@active
 ```
 
-위 명령으로 최대 공급량이 100000000.0000 이고 소수점 4자리의 정밀도를 가지는 새 토큰 "SYS"를 만들었습니다. 그리고 alice 도 발행인으로 지정했습니다. 또한 스마트 컨트랙트가 이 토큰을 만들기 위해 `eosio.token` 의 권한을 필요로 하기 때문에 `-p eosio.token@active` 옵션으로 권한을 전달하였습니다.
+위 명령으로 최대 공급량이 `100000000.0000` 이고 소수점 4자리의 정밀도를 가지는 새 토큰 "SYS"를 만들었습니다. 그리고 alice 도 발행인으로 지정했습니다. 또한 스마트 컨트랙트가 이 토큰을 만들기 위해 `eosio.token` 의 권한을 필요로 하기 때문에 `-p eosio.token@active` 옵션으로 권한을 지정하였습니다.
 
 액션 호출시에 다음과 같이 각 인수에 명확한 이름을 지정하는 형식으로 사용 할 수도 있습니다.
 
@@ -132,7 +132,7 @@ executed transaction: 800835f28659d405748f4ac0ec9e327335eae579a0d8e8ef6330e78c9e
 warning: transaction executed locally, but may not be confirmed by the network yet         ]
 ```
 
-이번에는 3개의 transfer 액션이 출력된 것을 볼 수 있습니다. 액션의 실행 결과로 표시되는 내용은 호출된 액션의 핸들러들과, 액션이 호출된 순서, 그리고 액션이 출력한 내용입니다.
+이번에는 3개의 `transfer`액션이 출력된 것을 볼 수 있습니다. 액션의 실행 결과로 표시되는 내용은 호출된 액션의 핸들러 들과, 액션이 호출된 순서, 그리고 액션이 출력한 내용입니다.
 
 이제 bob이 토큰을 받았는지 확인해 보겠습니다.
 

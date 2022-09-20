@@ -4,13 +4,14 @@
 
 ### 개요
 
-본 단원에서는 명령줄 인터페이스에서 스마트 컨트랙트를 컴파일하는 방법에 대하여 설명할 것입니다. 컴파일 도구인 cdt-cpp 의 사용법은 다음 문서를 참조하시기 바랍니다.
+본 단원에서는 명령줄 인터페이스에서 스마트 컨트랙트를 컴파일하는 방법에 대하여 설명할 것입니다. 컴파일 도구인 `cdt-cpp` 의 사용법은 다음과 같이 확인할 수 있습니다.
 
-* [cdt-cpp](https://developers.eos.io/manuals/eosio.cdt/v1.8/command-reference/cdt-cpp) 도구
+* 구 EOSIO 개발자 포털의 [cdt-cpp](https://developers.eos.io/manuals/eosio.cdt/v1.8/command-reference/eosio-cpp) 문서 확인.
+* 명령줄에서 `cdt-cpp --help` 명령 실행.
 
 ### 시작하기 전에
 
-* 로컬 폴더(예를 들어 ./examples/hello/) 에 스마트 컨트랙트 소스가 들어 있어야 합니다. [Hello World Contract](../contract-dev-workflow/hello-world-contract.md) 단원에서 처음으로 컨트랙트를 만드는 방법에 대한 자세한 내용이 소개되어 있습니다.
+* 로컬 폴더(예를 들어 `./examples/hello/`) 에 스마트 컨트랙트 소스가 들어 있어야 합니다. [Hello World Contract](../contract-dev-workflow/hello-world-contract.md) 단원에서 처음으로 스마트 컨트랙트를 만드는 방법에 대한 자세한 내용이 소개되어 있습니다.
 
 ### 순서
 
@@ -25,14 +26,14 @@
     cdt-cpp -abigen ../src/hello.cpp -o hello.wasm -I ../include/
     ```
 
-    * `cdt-cpp`: cdt-cpp 도구.
+    * `cdt-cpp`: `cdt-cpp` 도구.
     * `-abigen`: ABI 파일을 생성하기 위한 옵션.
-    * `../src/hello.cpp`: 컴파일 될 cpp 소스 파일.
-    * `-o hello.wasm`: cdt-cpp 가 만들어 낼 wasm 파일 이름.
-    * `-I ../include/`: cdt-cpp 가 컴파일 시 포함해야 할 디렉토리 경로.
+    * `../src/hello.cpp`: 컴파일 할 cpp 소스 파일.
+    * `-o hello.wasm`: `cdt-cpp` 가 만들어 낼 wasm 파일 이름.
+    * `-I ../include/`: `cdt-cpp` 가 컴파일 시 포함해야 할 디렉토리 경로.
 3. 다음 두개의 파일이 생성되었는지 확인합니다.
-   * hello.wasm: 컴파일 된 wasm 바이너리.
-   * hello.abi: 생성된 ABI 파일.
+   * `hello.wasm`: 컴파일 된 wasm 바이너리.
+   * `hello.abi`: 생성된 ABI 파일.
 
 ## Cmake 로 스마트 컨트랙트 컴파일하기
 
@@ -46,7 +47,7 @@
 
 #### 자동으로 CMake 구성을 생성
 
-CMake 로 EOSIO 스마트 컨트랙트를 컴파일 하려면 먼저 CMake 파일이 필요합니다. 다음과 같이 실해행하여 `eosio-init` 툴로 `directory stub .hpp/.cpp` 와 CMake 구성 파일을 만듭니다.
+CMake 로 Antelope 스마트 컨트랙트를 컴파일 하려면 먼저 CMake 파일이 필요합니다. 다음과 같이 실행하여 `eosio-init` 툴로 `directory stub .hpp/.cpp` 와 CMake 구성 파일을 만듭니다.
 
 ```cpp
 cd ~
@@ -105,7 +106,7 @@ ls -al test_contract
 
 스마트 컨트랙트를을 컴파일 하려면 다음 순서대로 진행합니다.
 
-1. 위에서 예로 들었던 `./examples/hello` 폴더로 이동하여. ./src/hello.cpp 파일이 있는 것을 확인합니다.
+1. 위에서 예로 들었던 `./examples/hello` 폴더로 이동하여 `./src/hello.cpp` 파일이 있는 것을 확인합니다.
 2.  다음 명령을 수행합니다.
 
     ```cpp
@@ -115,5 +116,5 @@ ls -al test_contract
     make
     ```
 3. 다음 두 개의 파일이 생성되었는지 확인합니다.
-   * hello.wasm : 컴파일 된 wasm 바이너리
-   * hello.abi: 생성된  ABI 파일
+   * `hello.wasm` : 컴파일 된 wasm 바이너리
+   * `hello.abi`: 생성된 ABI 파일
