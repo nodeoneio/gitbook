@@ -29,7 +29,7 @@ EOSIO 버전 2.1을 사용하면 모든 액션에서 반환값을 받을 수 있
 
 * Hello 스마트 컨트랙트 예제, 액션 hello::checkwithrv 을 참조.\
   [https://github.com/EOSIO/eosio.cdt/blob/develop/examples/hello/src/hello.cpp#L14](https://github.com/EOSIO/eosio.cdt/blob/develop/examples/hello/src/hello.cpp#L14)
-* 액션으로부터 값을 반환하는 방법. \
+* 액션으로부터 값을 반환하는 방법.\
   [https://developers.eos.io/manuals/eosio.cdt/latest/how-to-guides/how-to-return-values-from-actions](https://developers.eos.io/manuals/eosio.cdt/latest/how-to-guides/how-to-return-values-from-actions)
 
 ## eosio::binary\_extension 타입
@@ -125,9 +125,13 @@ using eosio::name;
    
    if (iter != _table.get_index<"index1"_n>().end()) {
       eosio::print_f("`_primary_key`: % found; printing.\\n", primary_key.to_string());
-      eosio::print_f("{% raw %}
+      eosio::print_f("
+{% raw %}
 {%, %}
-{% endraw %}\\n", iter->_primary_key, iter->_secondary_key);
+{% endraw %}
+
+
+\\n", iter->_primary_key, iter->_secondary_key);
    }
    else {
       eosio::print_f("`_primary_key`: % not found; not printing.\\n", primary_key.to_string());
@@ -788,7 +792,7 @@ int main(int argc, char** argv) {
 }
 ```
 
-eosio 에 정의된 모든 내장함수(prints, require\_auth 등) 들은  `intrinsics::set_intrinsics<intrinsics::the_intrinsic_name>()` 함수로 재정의 할 수 있습니다. 이러한 함수들은 람다 함수를 가지는데 이 람다 함수들은 인수와 리턴 타입이 재정의하고자 하는 내장 함수와 일치해야 합니다. 이러한 특성덕분에 컨트랙트 작성자는 작성중인 유닛 테스트를 유연하게 수정하여 원하는대로 작동하게 할 수 있습니다.
+eosio 에 정의된 모든 내장함수(prints, require\_auth 등) 들은 `intrinsics::set_intrinsics<intrinsics::the_intrinsic_name>()` 함수로 재정의 할 수 있습니다. 이러한 함수들은 람다 함수를 가지는데 이 람다 함수들은 인수와 리턴 타입이 재정의하고자 하는 내장 함수와 일치해야 합니다. 이러한 특성덕분에 컨트랙트 작성자는 작성중인 유닛 테스트를 유연하게 수정하여 원하는대로 작동하게 할 수 있습니다.
 
 다른 함수인 `intrinsics::get_intrinsics<intrinsics::the_intrinsic_name>()` 은 현재 내장함수의 행동을 정의하는 함수 개체를 반환합니다. 이 패턴은 mock 함수에 사용될 수 있으며 스마트 컨트랙트를 쉽게 테스트 할 수 있게 합니다. 다음 링크에서 더 많은 정보를 확인할 수 있습니다.
 
@@ -833,4 +837,3 @@ Resource Payer 는 EOSIO 2.2의 기능이므로 만델에서 적용되는지 여
 
 [https://developers.eos.io/manuals/eosio.cdt/latest/features/resource\_payer](https://developers.eos.io/manuals/eosio.cdt/latest/features/resource\_payer)
 {% endhint %}
-

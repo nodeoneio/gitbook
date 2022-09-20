@@ -2,20 +2,24 @@
 
 ## 개요
 
-Antelope 노드의 핵심 데몬(daemon)인 `nodeos` 는 CLI(명령줄 인터페이스) 환경에서 실행할 수 있는 응용 프로그램입니다. `nodeos` 는 명령줄에서 직접 실행하거나 별도로 자동화된 스크립트를 만들어 실행 할 수 있습니다.&#x20;
+Leap  소프트웨어를 설치하였습니다. 본격적으로 뭔가 시작해보기 전에 Leap 의 핵심 컴포넌트들에 대한 기초적인 내용을 먼저 짚어보겠습니다.
 
-Antelope 노드가 어떠한 기능을 하는가는 설정한 `nodeos` 플러그인 옵션에 따라 결정됩니다. `nodeos` 프로그램에서 사용 가능한 옵션은 다음과 같이 두 가지 종류로 나눌 수 있습니다.&#x20;
+Antelope 노드의 핵심 데몬(daemon)인 `nodeos` 는 CLI(명령줄 인터페이스) 환경에서 실행하는 응용 프로그램입니다. `nodeos` 는 명령줄에서 직접 실행하거나 별도로 자동화된 스크립트를 만들어 실행 할 수 있습니다.&#x20;
 
-* **nodeos 전용 옵션** \
-  nodoes 프로그램 데몬 자체의 동작을 제어하는 옵션이며 명령줄에서만 입력할 수 있습니다.
-* **nodeos 플러그인 전용 옵션**\
-  nodeos 플러그인 전용 옵션은 `nodeos` 플러그인의 동작을 제어하며, `nodeos` 실행 시 명령줄 옵션으로 입력하거나 `config.ini` 파일 안에 설정할 수 있습니다.&#x20;
+`nodeos` 는 일반적으로 여러가지 옵션과 함께 실행합니다. 옵션은 명령줄에 직접 입력하거나 환경설정 파일에 미리 구성해 놓을 수 있습니다. `nodeos` 프로그램에서 사용 가능한 옵션은 다음과 같이 두 가지 종류로 나눌 수 있습니다.&#x20;
+
+* [nodeos 전용 옵션](basic-nodeos.md#nodeos)\
+  `nodoes` 프로그램 데몬 자체의 동작을 제어하는 옵션이며 명령줄에서만 입력할 수 있습니다.
+* [nodeos 플러그인 전용 옵션](basic-nodeos.md#nodeos-1)\
+  `nodeos` 플러그인 전용 옵션은 `nodeos` 플러그인의 동작을 제어하며, `nodeos` 실행 시 명령줄 옵션으로 입력하거나 `config.ini` 파일 안에 설정할 수 있습니다. 어떤 옵션들을 설정하는가에 따라 Antelope 노드의 기능이 달라집니다.
 
 `nodeos` 옵션에 대한 자세한 정보는 `nodeos --help` 를 실행하면 확인할 수 있습니다.
 
 ## nodeos 전용 옵션
 
-`nodeos` 전용 옵션은 블록체인 데이터가 있는 디렉토리 설정, `nodeos` 설정 파일 이름 지정, 로깅 설정 파일의 이름과 경로 설정 등, 주로 `nodeos` 프로그램 자체 설정을 위한 용도로 사용됩니다. `nodeos --help` 를 입력하면 도움말이 출력되는데, 출력된 내용의 하단에서 다음과 같이 `nodeos` 전용 옵션들을 확인 할 수 있습니다.
+`nodeos` 전용 옵션은 블록체인 데이터가 있는 디렉토리 설정, `nodeos` 설정 파일 이름 지정, 로깅 설정 파일의 이름과 경로 설정 등과 같이, 주로 `nodeos` 프로그램 자체 설정을 위한 용도로 사용됩니다.
+
+`nodeos --help` 를 입력하면 도움말이 출력되는데, 출력된 내용의 하단에서 다음과 같이 `nodeos` 전용 옵션들을 확인 할 수 있습니다.
 
 ```
 $ nodeos --help
@@ -39,9 +43,9 @@ Application Command Line Options:
 
 ## nodeos 플러그인 전용 옵션
 
-nodeos 플러그인 전용 옵션은 nodeos 플러그인의 동작을 제어합니다. 플러그인 전용 옵션마다 이름이 다르기 때문에 순서에 상관없이 명령줄이나 `config.ini` 파일 안에 원하는 방식대로 기입할 수 있습니다. 일반적으로 어떤 플러그인과 그 플러그인의 옵션들을 한 데 묶어 기입하는 것이 관리하기 편리합니다.&#x20;
+`nodeos` 플러그인 전용 옵션은 `nodeos` 플러그인의 동작을 제어합니다. 플러그인 전용 옵션마다 이름이 다르기 때문에 순서에 상관없이 명령줄이나 `config.ini` 파일 안에 원하는 방식대로 기입할 수 있습니다. 일반적으로 어떤 플러그인과 그 플러그인의 옵션들을 한 데 묶어 기입하는 것이 관리하기 편리합니다.&#x20;
 
-어떤 플러그인 전용 옵션을 설정할 때는 반드시 `--plugin` 옵션을 사용하여, 이 옵션이 적용될 플러그인도 함께 사용하도록 설정되어 있는지 확인해야 합니다. 그렇지 않으면 이 플러그인 전용 옵션은 무시됩니다.
+어떤 플러그인 전용 옵션을 설정할 때는 반드시 `--plugin` 옵션으로 이 옵션이 적용될 플러그인도 함께 사용하도록 설정되어 있는지 확인해야 합니다. 그렇지 않으면 플러그인 전용 옵션은 무시됩니다.
 
 각 플러그인별 전용 옵션에 대한 자세한 내용은 [Nodeos Plugin 상세](install-leap-software/nodeos-plugin-details/) 단원에서 찾아볼 수 있습니다.
 
@@ -62,13 +66,15 @@ Command Line Options for eosio::chain_plugin:
 
 ## **config.ini 설정 파일 위치**
 
-config.ini 는 노드의 동작과 역할을 제어하는 환경 설정 파일입니다. 디폴트로 `config.ini` 는  `~/.local/share/eosio/nodeos/config` 디렉토리에 위치합니다.
+`config.ini` 는 노드의 동작과 역할을 제어하는 환경 설정 파일입니다. 디폴트로 `config.ini` 는  `~/.local/share/eosio/nodeos/config` 디렉토리에 위치합니다.
 
-직접 작성한 `config.ini` 파일을 사용하려면, `nodeos` 실행 시 명령줄에서 `-config <path>/config.ini` 옵션을 설정하면 됩니다.
+직접 작성한 `config.ini` 파일을 사용하려면, `nodeos` 실행 시 명령줄에서 `-config <path>/config.ini` 옵션을 설정하면 됩니다. 환경 설정 파일은 `nodeos` 데이터 디렉토리와 같이등 쉽게 접근할 수 있는 곳에 저장하는 것이 사용하기 편리합니다.
 
 ## nodeos 실행 <a href="#nodeos_run_example" id="nodeos_run_example"></a>
 
-[Leap 소프트웨어 설치 단원](install-leap-software.md)에서 Leap 를 설치하였다면 `nodeos` 를 실행해 볼 수 있습니다. 다음은 로컬 환경에서 단독으로 실행되는 블록 생산자(BP)의 노드를 명령줄 옵션을 사용하여 시작하는 예제입니다.
+이제 `nodeos` 를 실행해 볼 수 있습니다.아직 Leap 를 설치하지 않았다면 [Leap 소프트웨어 설치 단원](install-leap-software.md) 참조하여 Leap 를 설치합니다.&#x20;
+
+다음은 로컬 환경에서 단독으로 실행되는 블록 생산자(BP)의 노드를 시작하는 명령입니다. 명령줄에서 실행합니다.&#x20;
 
 ```bash
 $ nodeos \
@@ -92,7 +98,7 @@ $ nodeos \
 위 예제에서 `nodeos` 명령과 함께 사용된 옵션은 다음과 같습니다.
 
 * 블록 생성자로 지정하여 블록을 생성하도록 합니다. (`e`)
-* 블록 생성자 이름을 "eosio" 로 지정합니다. (`p`)
+* 블록 생성자 이름을 "eosio"  로 지정합니다. (`p`)
 * data 디렉토리를 지정합니다. (`-data-dir`) data 디렉토리는 블록체인의 블록 데이터를 저장할 루트 디렉토리입니다.
 * `config.ini` 가 위치한 디렉토리를 지정합니다. (`-config-dir`)
 * `-plugin` 으로 다음 플러그인들을 로딩합니다. \
@@ -108,12 +114,12 @@ $ nodeos \
 
 이제 정상적으로 `nodeos` 가 동작하고 있는지 확인해 봅시다. 노드의 정상 동작 여부는 다음 두 가지 방법으로 확인할 수 있습니다.
 
-* `cleos` 명령 실행
-* 출력되는 로그 확인
+* [cleos 명령 실행](basic-nodeos.md#cleos)
+* [출력되는 로그 확인](basic-nodeos.md#undefined-2)
 
 ### cleos 명령 실행
 
-로컬 노드의 정보를 확인할 수 있는 `cleos get info` 명령을 실행하면 다음과 같이 명령을 실행한 순간의 정보가 콘솔에 출력됩니다. 이 정보로 노드의 상태가 정상인지 확인할 수 있습니다.
+`cleos get info` 명령을 실행하면 다음과 같이 명령을 실행한 순간의 로컬 노드 정보가 콘솔에 출력됩니다. 이 정보로 노드의 상태가 정상인지 확인할 수 있습니다.
 
 ```
 $ cleos get info
@@ -143,7 +149,7 @@ $ cleos get info
 
 ### 출력되는 로그 확인
 
-위 예제에서 `nodeos` 가 출력하는 `stdout`, `stderr` 로그를 `nodeos.log` 에 기록하도록 설정하였습니다. 다음 명령으로 노드가 출력하는 로그를 실시간으로 확인할 수 있습니다.
+위 명령에서 `nodeos` 가 출력하는 `stdout`, `stderr` 로그를 `nodeos.log` 에 기록하도록 하였습니다. 다음 명령으로 노드가 출력하는 로그를 실시간으로 확인할 수 있습니다.
 
 ```
 $ tail -f nodeos.log
@@ -159,7 +165,7 @@ info  2022-08-22T14:34:21.906 nodeos    producer_plugin.cpp:2434      produce_bl
 
 정상적으로 `nodeos` 가 동작 중이라면 위와 같이 로그에서 블록이 생성되고 있는 과정을 확인할 수 있습니다.
 
-로컬에서 단독으로 실행되는 Antelope 블록체인 노드 만들어 보았습니다. 일단 여기까지 진행되었으면 실습용으로 사용할 최소한의 조건을 가진 노드가 만들어 진 것입니다. `nodeos` 에서 사용하는 플러그인과 옵션에 대한 상세한 내용이 필요하면 [nodeos Plugin 상세](https://app.gitbook.com/s/YZT0OiBQKuAU7OjJoCgQ/\~/changes/mhCOoiYoXaVjjMMGXHdI/basic-antelope-leap/nodeos-plugin-details) 단원을 참조합니다.
+여기까지 로컬에서 단독으로 실행되는 Antelope 블록체인 노드 만들어 보았습니다. 일단 이 단계까지 진행되었으면 실습용으로 사용할 최소한의 조건을 가진 노드가 만들어 진 것입니다. `nodeos` 에서 사용하는 플러그인과 옵션에 대한 상세한 내용이 필요하면 [nodeos Plugin 상세](https://app.gitbook.com/s/YZT0OiBQKuAU7OjJoCgQ/\~/changes/mhCOoiYoXaVjjMMGXHdI/basic-antelope-leap/nodeos-plugin-details) 단원을 참조합니다.
 
 ## nodeos 중지하기
 

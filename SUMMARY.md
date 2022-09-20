@@ -24,23 +24,23 @@
   * [eosio.token: 토큰 배포, 발행 및 전송](smart-contracts-dev-environment/contract-dev-workflow/token-deploy-issue-transfer.md)
 * [CDT(Contract Development Toolkit) 개요와 설치 방법](smart-contracts-dev-environment/cdt-contract-development-toolkit/README.md)
   * [스마트 컨트랙트 컴파일](smart-contracts-dev-environment/cdt-contract-development-toolkit/how-to-compile-smart-contract.md)
-* [데이터 지속성(Data Persistence)](smart-contracts/data-persistence.md)
-* [다른 스마트 컨트랙트의 인라인 액션 을 호출하는 방법](smart-contracts/how-to-call-inline-action.md)
-* [ABI 파일의 이해](smart-contracts/abi-explained.md)
-* [사용자 지정 권한(Custom permission) 연결: 스마트 계약에서 사용자 지정 권한 설정](smart-contracts/connect-to-customer-permission.md)
-* [보조 인덱스(Secondary Indices)](smart-contracts/secondary-indices.md)
-* [지불 가능한 액션(Payable Action)](smart-contracts/payable-action.md)
-* [인라인 액션을 추가하는 법](smart-contracts/how-to-add-inline-actions.md)
-* [컨테이너 기반 Antelope 노드 실행 도구 D.U.N.E](smart-contracts/antelope-leap-dune.md)
-* [스마트 컨트랙트 개발자 핸드북](smart-contracts/smart-contract-dev-handbook.md)
 
-## CDT
+## Smart Contract Advanced
 
-* [모범 사례](cdt/best-practices.md)
-* [기능(Features)](cdt/features.md)
-* [액션 래퍼 사용법](cdt/how-to-use-action-wrapper.md)
-* [액션으로부터 값을 반환하는 방법](cdt/how-to-return-from-action.md)
-* [스마트 컨트랙트에서 사용자 인증 방법](cdt/smart-contract-authorization.md)
+* [스마트 컨트랙트에서 사용자 인증 방법](smart-contract-advanced/smart-contract-authorization.md)
+* [ABI 파일의 이해](smart-contract-advanced/abi-explained.md)
+* [컨테이너 기반 Antelope 노드 실행 도구 D.U.N.E](smart-contract-advanced/antelope-leap-dune/README.md)
+  * [데이터 지속성(Data Persistence)](smart-contract-advanced/antelope-leap-dune/data-persistence.md)
+* [스마트 컨트랙트 개발자 핸드북](smart-contract-advanced/smart-contract-dev-handbook.md)
+* [다른 스마트 컨트랙트의 인라인 액션 을 호출하는 방법](smart-contract-advanced/how-to-call-inline-action.md)
+* [사용자 지정 권한(Custom permission) 연결: 스마트 컨트랙트에서 사용자 지정 권한 설정](smart-contract-advanced/connect-to-customer-permission.md)
+* [모범 사례](smart-contract-advanced/best-practices.md)
+* [기능(Features)](smart-contract-advanced/features.md)
+* [보조 인덱스(Secondary Indices)](smart-contract-advanced/secondary-indices.md)
+* [액션 래퍼 사용법](smart-contract-advanced/how-to-use-action-wrapper.md)
+* [인라인 액션을 추가하는 법](smart-contract-advanced/how-to-add-inline-actions.md)
+* [액션으로부터 값을 반환하는 방법](smart-contract-advanced/how-to-return-from-action.md)
+* [지불 가능한 액션(Payable Action)](smart-contract-advanced/payable-action.md)
 
 ## Antelope Leap Advanced
 
@@ -77,8 +77,8 @@
 * [스마트 컨트랙트 보안](smart-contracts/smart-contract-security.md)
 * [EOS 지갑의 가져오기 형식](antelope-leap-advanced/eos-wallet-import-format.md)
 
-## Group 1
+## Advanced Smart Contract Tutorial
 
-* [Reference](group-1/reference.md)
-* [License](group-1/license.md)
-* [Change Log](cdt/change-log.md)
+* [Reference](advanced-smart-contract-tutorial/reference.md)
+* [License](advanced-smart-contract-tutorial/license.md)
+* [Change Log](advanced-smart-contract-tutorial/change-log.md)
