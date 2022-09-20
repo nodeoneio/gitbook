@@ -4,19 +4,17 @@ cover: >-
 coverY: -1387.1617113850618
 ---
 
-# 🦌 Antelope Leap 의 모든 것
-
-## Antelope Leap 의 모든 것
+# 📝 For Leap Developers.
 
 ## 시작하기에 앞서...
 
-최근 몇 년간 블록체인 기술은 엄청난 속도로 발전해 왔고 여러 블록체인들이 경쟁적으로 변화에 발맞춰 나아가고 있습니다. 하지만, EOS 의 기반을 이루는 블록체인 소프트웨어인 EOSIO 는 개발사인 블록원(Block.one)이 개발에서 손을 뗀 후 오랜 기간 기술적으로 정체되어 있었습니다.
+최근 몇 년간 블록체인 기술은 엄청난 속도로 발전해 왔습니다. 그에 맞춰 여러 블록체인들이 경쟁적으로 나아가고 있지만, EOS 의 기반을 이루는 블록체인 소프트웨어인 EOSIO 는 개발사인 블록원(Block.one)이 개발에서 손을 뗀 후 오랜 기간 기술적으로 정체되어 있었습니다.
 
 한 때 빛나던 최고의 기술력이라는 수식어가 점차 퇴색되어가던 중, 2021년 말 부터 EOS 는 이브 라 로즈(Yves La Rose)가 이끄는 ENF(EOS Network Foundation) 안에 새로운 둥지를 틀게 되었고 다시 비상 할 준비를 하고 있습니다.
 
 ENF 는 2021년 8월 이후로 개발이 중지되었던 EOSIO 의 코드를 포킹(forking) 하여 Antelope 이라는 코드네임으로 개명한 뒤 커뮤니티, BPs, 개발자들과 합심하여 그동안 멈춰 있던 소프트웨어 개발과 유지보수 작업에 박차를 가하기 시작하였습니다.
 
-그리고 2022년 9월 21일의 컨센서스 업그레이드를 약 한 달여 남긴 8월 17일, ENF 는 코드네임 Antelope 로 불리던 블록체인 프로토콜의 이름을 정식으로 Antelope 이라는 이름으로, 그리고 특별히 이름이 없었던 프로토콜의 C++ 구현체 소프트웨어 이름을 Leap 으로 리브랜딩하여 공개하였습니다.
+그리고 컨센서스 업그레이드를 약 한 달여 남긴 8월 17일, ENF 는 코드네임 Antelope 로 불리던 블록체인 프로토콜의 이름을 정식으로 Antelope 이라는 이름으로, 그리고 특별히 이름이 없었던 프로토콜의 C++ 구현체 소프트웨어 이름을 Leap 으로 리브랜딩하여 공개하였습니다.
 
 ## 한글화된 기술 문서
 
@@ -54,4 +52,5 @@ ENF 는 2021년 8월 이후로 개발이 중지되었던 EOSIO 의 코드를 포
 
 본 문서는 다음 문서들을 기반으로 작성하였으며 각 문서에 명시된 라이선스를 따르고 있습니다.
 
-[https://github.com/EOSIO/eos/blob/master/LICENSE](https://github.com/EOSIO/eos/blob/master/LICENSE)
+* [https://github.com/EOSIO/eos/blob/master/LICENSE](https://github.com/EOSIO/eos/blob/master/LICENSE)
+* [https://github.com/AntelopeIO/leap/blob/main/LICENSE](https://github.com/AntelopeIO/leap/blob/main/LICENSE)

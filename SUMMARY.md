@@ -1,6 +1,6 @@
 # Table of contents
 
-* [🦌 Antelope Leap 의 모든 것](README.md)
+* [📝 For Leap Developers.](README.md)
 
 ## Antelope Leap 개요 <a href="#basic-antelope-leap" id="basic-antelope-leap"></a>
 
