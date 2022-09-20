@@ -17,7 +17,7 @@
 cleos get account <계정 이름>
 ```
 
-다음 예제는은 시스템 계정인 eosio 의 정보를 얻어오는 명령과 명령의그 결과입니다.
+다음 예제는 시스템 계정인 `eosio` 의 정보를 얻어오는 명령과 그 결과입니다.
 
 ```
 cleos get account eosio

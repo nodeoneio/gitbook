@@ -2,13 +2,16 @@
 
 ## 개요
 
-`cleos` 는 로컬 노드의 nodeos, keosd 가 제공하는 REST API 와 통신할 수 있는 명령줄 인터페이스(CLI) 입니다. 스마트 컨트랙트를 개발할 때 `cleos` 를 사용하여 배포하고 테스트 할 수 있습니다.
+`cleos` 는 로컬 노드의 `nodeos`, `keosd` 가 제공하는 REST API 와 통신할 수 있는 명령줄 인터페이스(CLI) 입니다. 스마트 컨트랙트를 개발할 때 `cleos` 를 사용하여 배포하고 테스트 할 수 있습니다.
 
 `cleos` 는 Leap 소프트웨어의 일부분이기 때문에 Leap 를 설치할 때 같이 설치됩니다.
 
 ## Cleos 사용하기
 
-`cleos` 를 사용하려면 `nodeos` 를 설정할 때 IP 주소와 포트 번호로 구성된 엔드포인트를 작성해야 합니다. 또한  `nodeos` 를 시작할 때 `eosio::chain_api_plugin` 이 로딩되어 있어야 합니다. 이렇게 구성해야 `nodeos` 가 `cleos` 로 부터 수신되는 RPC 요청에 응답할 수 있습니다.
+`cleos` 를 사용하려면 다음과 같이 설정이 필요합니다.
+
+* IP 주소 + 포트 번호로 구성된 엔드포인트를 만들어야 합니다. 엔드포인트는`nodeos` 를 시작할 때 명령줄이나 환경설정 파일에 설정합니다. 예를 들어로 환경설정 파일에 `--http-server-address 0.0.0.0:8888`과 같이 작성할 수 있습니다.
+* `nodeos` 를 시작할 때 `eosio::chain_api_plugin` 이 로딩되어 있어야 합니다. 이렇게 구성해야 `nodeos` 가 `cleos` 로 부터 수신되는 RPC 요청에 응답할 수 있습니다.
 
 `cleos` 는 기본적으로 로컬 노드의 HTTP RPC API 엔드포인트와 통신하기 때문에 `curl` 명령어로 HTTP API 를 호출해도 동일한 결과를 얻을 수 있습니다. 예를 들어 로컬 노드의 HTTP 엔드포인트 포트 번호가 8888 로 설정된 경우 아래 두 명령은 같은 결과를 보여줍니다.
 
@@ -20,7 +23,7 @@ curl http://localhost:8888/v1/chain/get_info
 cleos get info
 ```
 
-만약 원격 노드의 엔드포인트와 통신하고자 하는 경우라면 다음과 같이 -u 옵션과 원격 엔드포인트 주소를 지정하고 실행하면 됩니다.
+만약 원격 노드의 엔드포인트와 통신하고자 하는 경우라면 다음과 같이 `-u` 옵션과 원격 엔드포인트 주소를 지정하고 실행하면 됩니다.
 
 ```
 cleos -u http://<remote_api_address:port> get info
@@ -42,7 +45,7 @@ cleos create --help
 
 이보다 하위 명령도 같은 방식으로 확인할 수 있습니다.
 
-help 옵션 외에도 EOSIO 개발자 포털에서 [Cleos 명령어 레퍼런스](https://developers.eos.io/manuals/eos/latest/cleos/command-reference/index)를 확인할 수 있습니다. 다만 현재 지원이 끊긴 EOSIO 의 레퍼런스 문서이기 때문에 Leap 에서 사용하는 명령어와 차이가 있을 수 있습니다.
+`help` 옵션 외에도 EOSIO 개발자 포털에서 [Cleos 명령어 레퍼런스](https://developers.eos.io/manuals/eos/latest/cleos/command-reference/index)를 확인할 수 있습니다. 다만 현재 지원이 끊긴 EOSIO 의 레퍼런스 문서이기 때문에 Leap 에서 사용하는 명령어와 차이가 있을 수 있습니다.
 
 ## Cleos 명령 예제
 
@@ -61,7 +64,7 @@ Without password imported keys will not be retrievable.
 
 ## 도메인 소켓(IPC) vs HTTP RPC
 
-`cleos` 와 `keosd` 에 접근할 수 있는 방법은 HTTP RPC 외에도 도메인 소켓을 이용하는 방법이 있습니다. 도메인 소켓을 사용하면 여러 이점이 있습니다. HTTP RPC 는 외부 인터넷이나 LAN/WAN 으로 접근 할 수 있어 자칫 치명적인 기능의 접근 경로가 유출될 수도 있고, CORS 와 같은 여러가지 공격 경로에도 노출될 수도 있지만, 도메인 소켓은 내부 프로세스간의 통신 용도로만 사용하도록 의도된 방식이기 때문에 상대적으로 안전합니다.
+`cleos` 와 `keosd` 에 접근할 수 있는 방법은 HTTP RPC 외에도 도메인 소켓을 이용하는 방법이 있습니다. 도메인 소켓을 사용하면 여러 이점이 있습니다. HTTP RPC 는 외부 인터넷이나 LAN/WAN 으로 접근 할 수 있어, 자칫 잘못 사용하면 치명적인 기능으로의 접근 경로가 유출될 수도 있고, CORS 와 같은 여러가지 공격 경로에도 노출될 수도 있지만, 도메인 소켓은 내부 프로세스간의 통신 용도로만 사용하도록 의도된 방식이기 때문에 상대적으로 안전합니다.
 
 ## 트랜잭션 제출 후 나타나는 "transaction executed locally, but may not be confirmed by the network yet" 메시지의 의미
 

@@ -16,7 +16,7 @@
 
 계정을 만들 때에는 `cleos create account` 명령을 사용합니다. 이 명령에 대한 자세한 내용은 `cleos create account --help` 명령으로 확인할 수 있습니다.&#x20;
 
-eosio 계정으로 bob 계정을 만드는 명령은 다음과 같습니다.
+`eosio` 계정으로 `bob` 계정을 만드는 명령은 다음과 같습니다.
 
 ```
 cleos create account eosio bob EOS87TQktA5RVse2EguhztfQVEh6XXxBmgkU8b4Y5YnGvtYAoLGNN
@@ -31,7 +31,7 @@ cleos create account eosio bob EOS87TQktA5RVse2EguhztfQVEh6XXxBmgkU8b4Y5YnGvtYAo
 {% hint style="info" %}
 Antelope 블록체인에서 새 계정을 생성하려면 새 계정을 만들 때 인증해 줄 기존 계정이 존재해야 합니다. 새로 만들어진 블록체인의 경우 디폴트 시스템 계정인 `eosio` 를 이용하여 새 계정을 만들 수 있습니다. &#x20;
 
-디폴트 eosio 계정 active 권한의 키 쌍은 다음과 같습니다. eosio 계정으로 트랜잭션을 승인하려면 개인 키를 지갑에 미리 가져다 놓아야 합니다.
+디폴트 `eosio` 계정 `active` 권한의 키 쌍은 다음과 같습니다. `eosio` 계정으로 트랜잭션을 승인하려면 개인 키를 지갑에 미리 가져다 놓아야 합니다. 예를 들면 다음과 같은 키를 사용할 수 있습니다.
 
 Public: EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV\
 Private: 5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3
