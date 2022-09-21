@@ -643,7 +643,7 @@ cleos push action eosio init '["0", "4,SYS"]' -p eosio@active
 * eosio.msig
 * eosio.system
 
-`eosio` 와 `eosio.msig` 는 특권을 가진 계정이며 다른 eosio.\* 계정들은 특권을 가진 계정이 아닙니다.
+`eosio` 와 `eosio.msig` 는 특권을 가진 계정이며 다른 `eosio.*` 계정들은 특권을 가진 계정이 아닙니다.
 
 이제 스테이크를 하고 BP 네트워크를 확장 할 준비가 되었습니다.
 
