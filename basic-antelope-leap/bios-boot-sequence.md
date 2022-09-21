@@ -91,7 +91,7 @@ cd /home/nodeos/genesis
 {% hint style="info" %}
 root 사용자가 아닌 경우 데이터 디렉토리 작성시 sudo 명령을 사용하여 데이터 디렉토리를 만든 뒤, 다음과 같이 현재 사용자의 소유로 변경해 줍니다.\
 \
-sudo chown -R \<username>:\<username> /home/nodeos/
+`sudo chown -R <username>:<username> /home/nodeos/`
 {% endhint %}
 
 #### **데이터 디렉토리에 제네시스 파일 작성**

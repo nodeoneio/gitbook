@@ -10,7 +10,9 @@
 
 먼저 다음 사항들이 준비 되었는지 확인합니다.
 
-* [Antelope 개발 환경](../basic-antelope-leap/install-leap-software.md) 준비.
+*   EOSIO 개발 환경 준비. 상세는 다음 내용 참조.
+
+    [https://developers.eos.io/welcome/latest/getting-started-guide/index](https://developers.eos.io/welcome/latest/getting-started-guide/index)
 * `multi_index_example.hpp` 파일에 정의된 `multi_index_example` 스마트 컨트랙트.
 * user 키를 가지고 정수값 n을 수정할 수 있는 mod 액션.
 

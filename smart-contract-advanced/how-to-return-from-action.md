@@ -8,7 +8,7 @@
 
 다음과 같이 준비 되었는지 확인합니다.
 
-* Antelope 개발 환경.&#x20;
+* EOSIO 개발 환경.&#x20;
 * 에러 없이 빌드되는 `smrtcontract` 라는 이름의 스마트 컨트랙트.
 * `checkwithrv` 라는 이름의 액션. 이 액션으로부터 `action_response` 라는 사용자 정의 타입을 반환합니다.
 
@@ -38,7 +38,7 @@ class [[eosio::contract]] smrtcontract : public contract {
 2. 액션의 비즈니스 로직에 맞추어 데이터 멤버들을 초기화 합니다.
 3. 초기화 및 인스턴스화 된 `action_response` 를 `return` 구문을 사용하여 넘깁니다.
 
-```cpp
+```
 [[eosio::action]]
 action_response smrtcontract::checkwithrv( name nm ) {
   print_f("Name : %\n", nm);
@@ -61,11 +61,11 @@ action_response smrtcontract::checkwithrv( name nm ) {
 ```
 
 반환값을 받는 액션을 만드는 다른 예제를 여기서 확인할 수 있습니다.\
-[https://github.com/AntelopeIO/cdt/blob/main/examples/hello/src/hello.cpp](https://github.com/AntelopeIO/cdt/blob/main/examples/hello/src/hello.cpp)
+[https://github.com/EOSIO/eosio.cdt/blob/develop/examples/hello/src/hello.cpp#L16](https://github.com/EOSIO/eosio.cdt/blob/develop/examples/hello/src/hello.cpp#L16)
 
 ## 다음 단계
 
-* 작성한 스마트 컨트랙트를 컴파일하고 Antelope 테스트넷 등의 블록체인 네트워크에 배포합니다.
+* 작성한 스마트 컨트랙트를 컴파일하고 EOSIO 테스트넷 등의 블록체인 네트워크에 배포합니다.
 * cleos 명령을 사용하여 `checkwithrv` 액션을 스마트 컨트랙트에 전달한 뒤 cleos 콘솔 출력에서 반환값을 확인합니다.
 * 다른 프로그래밍 수단을 사용하여 `checkwithrv` 액션을 스마트 컨트랙트에 전달한 뒤 액션 추적에서 반환값을 확인합니다.
 
