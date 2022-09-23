@@ -73,7 +73,7 @@
 * [트랜잭션 생애주기](basic-antelope-leap/transaction-lifecycle.md)
 * [데이터 설계](basic-antelope-leap/data-design.md)
 * [스마트 컨트랙트의 퍼포먼스와 스케일링](antelope-leap-advanced/performance-and-scaling.md)
-* [Context-Free Data(CFD)란?](antelope-leap-advanced/context-free-data-cfd/README.md)
+* [Context-Free Data(CFD)란?](basic-antelope-leap/context-free-data-cfd.md)
   * [CFD 정리하는 방법](antelope-leap-advanced/context-free-data-cfd/how-to-prune-cfd.md)
 * [바이오스 부트 시퀀스](basic-antelope-leap/bios-boot-sequence.md)
 * [스마트 컨트랙트 보안](smart-contracts/smart-contract-security.md)

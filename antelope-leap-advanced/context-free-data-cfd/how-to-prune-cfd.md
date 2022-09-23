@@ -13,7 +13,7 @@
 절차를 시작하기 전에 다음 항목을 미리 알고 있거나 완료해야 합니다.
 
 * 컨텍스트 프리 데이터를 가지고 있는 완료된(Finalized) 블록에 포함된, 만료된 트랜잭션 ID
-* [컨텍스트 프리 데이터](./) 의 개념을 알고 있어야 합니다.
+* [컨텍스트 프리 데이터](../../basic-antelope-leap/context-free-data-cfd.md) 의 개념을 알고 있어야 합니다.
 * ``[`eosio-blocklog`](https://developers.eos.io/manuals/eos/latest/utilities/eosio-blocklog) 명령줄 도구 사용법을 확인합니다.
 
 ## 순서
