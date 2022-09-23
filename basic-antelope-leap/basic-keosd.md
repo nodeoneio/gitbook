@@ -55,6 +55,7 @@ $ cleos wallet lock
 
 자동화된 스크립트에서 지갑을 열고 일련의 작업을 한 뒤, 작업이 끝나면 지갑을 잠그는 프로세스를 추가하는 것이 보안상 안전합니다. 다음은 지갑의 상태 플래그에 따라 지갑을 잠그거나 해제하는 파이썬 코드 예제입니다.
 
+{% code overflow="wrap" %}
 ```python
 def wallet_control(lock):
     if lock == True:
@@ -62,6 +63,7 @@ def wallet_control(lock):
         return
     subprocess.check_output([CLEOS_PATH, "wallet", "unlock", "-n", WALLET_NAME, "--password", WALLET_PW],universal_newlines=True)
 ```
+{% endcode %}
 
 `keosd` 는 지갑을 잠그거나, 잠금 해제 하여 개인 키 저장/검색 및 디지털 메시지 서명을 할 수 있지만, 사용자 인증이나 권한 허가를 위한 기능은 가지고 있지 않습니다.
 

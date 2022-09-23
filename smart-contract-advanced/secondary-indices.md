@@ -32,11 +32,13 @@ uint64_t get_secondary_1() const { return age;}
 
 보조 인덱스로 사용할 필드를 추가하였고, 다음으로 `address_index` 테이블을 수정해야 합니다.
 
+{% code overflow="wrap" %}
 ```cpp
 using address_index = eosio::multi_index<"people"_n, person,
 indexed_by<"byage"_n, const_mem_fun<person, uint64_t, &person::get_secondary_1>>
 >;
 ```
+{% endcode %}
 
 인덱스를 인스턴스화하는 데 사용할 `indexed_by` 구조체를 세 번째 매개 변수로서 전달합니다.
 
@@ -50,12 +52,15 @@ indexed_by<"byage"_n, const_mem_fun<person, uint64_t, &person::get_secondary_1>>
 
 이전 단계에서 수정한 내용을 가지고 이제 upsert 함수를 업데이트 하겠습니다. 아래와 같이 upsert 함수의 매개변수에 age 를 추가합니다.
 
+{% code overflow="wrap" %}
 ```cpp
 void upsert(name user, std::string first_name, std::string last_name, uint64_t age, std::string street, std::string city, std::string state)
 ```
+{% endcode %}
 
 upsert 함수의 age 필드를 업데이트 하기 위해 다음과 같이 추가 코드를 작성합니다.
 
+{% code overflow="wrap" %}
 ```cpp
 void upsert(name user, std::string first_name, std::string last_name, uint64_t age, std::string street, std::string city, std::string state) {
   require_auth( user );
@@ -88,6 +93,7 @@ void upsert(name user, std::string first_name, std::string last_name, uint64_t a
   }
 }
 ```
+{% endcode %}
 
 ## 단계5: 컴파일 및 배포
 
@@ -105,14 +111,17 @@ cleos set contract addressbook CONTRACTS_DIR/addressbook
 
 레코드를 삽입해 봅시다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ cleos push action addressbook upsert '["alice", "alice", "liddell", 9, "123 drink me way", "wonderland", "amsterdam"]' -p alice@active
 
 $ cleos push action addressbook upsert '["bob", "bob", "is a guy", 49, "doesnt exist", "somewhere", "someplace"]' -p bob@active
 ```
+{% endcode %}
 
 인덱스 age 를 가지고 alice 의 주소를 찾아보겠습니다. 다음 명령에서 볼 수 있는 "--index 2" 매개변수는 보조 인덱스를 사용한다는 것을 나타냅니다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ cleos get table addressbook addressbook people --upper 10 \\
 --key-type i64 \\
@@ -133,9 +142,11 @@ $ cleos get table addressbook addressbook people --upper 10 \\
   "next_key": ""
 }
 ```
+{% endcode %}
 
 다음과 같이 bob 의 나이 범위까지 찾아보겠습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ cleos get table addressbook addressbook people --upper 50 --key-type i64 --index 2
 
@@ -161,11 +172,13 @@ $ cleos get table addressbook addressbook people --upper 50 --key-type i64 --ind
   "more": false
 }
 ```
+{% endcode %}
 
 ### 요약정리
 
 지금까지의 작성한 전체 `addressbook` 컨트랙트 코드 내용은 다음과 같습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 #include <eosio/eosio.hpp>
 #include <eosio/print.hpp>
@@ -238,3 +251,4 @@ private:
 
 };
 ```
+{% endcode %}

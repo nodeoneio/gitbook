@@ -30,10 +30,12 @@ Antelope 학습 초기부터 어느 정도 익숙해질 때 까지는 네이티�
 
 다음은 Ubuntu 22.04 에 Leap v3.1.0 을 설치하는 예제입니다.
 
+{% code overflow="wrap" %}
 ```
 $ wget https://github.com/AntelopeIO/leap/releases/download/v3.1.0/leap-3.1.0-ubuntu22.04-x86_64.deb
 $ sudo apt install ./leap-3.1.0-ubuntu22.04-x86_64.deb
 ```
+{% endcode %}
 
 설치가 완료되면 다음과 같이 확인할 수 있습니다.
 

@@ -4,7 +4,7 @@ description: 스마트 컨트랙트를 호출할 때 비용을 지불하는 방�
 
 # 지불 가능한 액션(Payable Action)
 
-이 단원에서는 지불 가능한 액션을 가지는 스마트 계약을 만드는 방법을 알아보겠습니다.
+이 단원에서는 지불 가능한 액션을 가지는 스마트 컨트랙트를 만드는 방법을 알아보겠습니다.
 
 ## 개요
 
@@ -27,12 +27,12 @@ class [[eosio::contract("hodl")]] hodl : public eosio::contract{
 }
 ```
 
-이 컨트랙트에서는 다음과 같은 몇 가지 조건을 설정해야 합니다.
+이 컨트랙트에 다음과 같은 몇 가지 조건을 설정해야 합니다.
 
 * 이 컨트랙트에서 사용하는 기호/토큰은 무엇인가?
 * hodl 은 언제 끝낼 것인가.
 
-이제 이러한 조건을 상수로 정의한다.
+이제 이러한 조건을 상수로 정의하겠습니다.
 
 * hodl\_symbol: 이 컨트랙트에서 사용하는 토큰 기호. 본 예제에서는 "SYS" 기호를 사용하겠습니다.
 * the\_party: 2022년 2월 22일 화요일 오후 10:22:22에 해당하는 시간값으로, 이 때 Hodl을 종료하도록 설정하겠습니다.
@@ -71,11 +71,13 @@ asset 인스턴스의 symbol 멤버가 Primary Key 로 사용됩니다. 여기�
 
 생성자는 hodl\_symbol 을 "SYS"로 초기화 합니다. SYS 는 [토큰 배포, 발급 및 전송](../smart-contracts-dev-environment/contract-dev-workflow/) 단원에서 만들었던 토큰입니다.
 
+{% code overflow="wrap" %}
 ```cpp
 public:
   using contract::contract;
   hodl(name receiver, name code, datastream<const char *> ds):contract(receiver, code, ds), hodl_symbol("SYS", 4){}
 ```
+{% endcode %}
 
 ### 현재 시각 (UTC) 가져오기
 
@@ -91,8 +93,9 @@ uint32_t now() {
 
 ### 예금(Deposit)
 
-전송을 하려면 예금 액션이 있어야 합다.
+전송을 하려면 예금 액션이 있어야 합니다.
 
+{% code overflow="wrap" %}
 ```cpp
 [[eosio::on_notify("eosio.token::transfer")]]
 void deposit(name hodler, name to, eosio::asset quantity, std::string memo)
@@ -120,6 +123,7 @@ void deposit(name hodler, name to, eosio::asset quantity, std::string memo)
     });
 }
 ```
+{% endcode %}
 
 지금까지 잘 따라왔다면 이 액션의 코드를 이해하기 어렵지 않을 것입니다.
 
@@ -140,11 +144,13 @@ if (to != get_self() || hodler == get_self()) {
 * 유효한 수의 토큰이 전송되어 들어오고 있는가.
 * 전송되어 들어오는 토큰은 생성자에서 지정한 토큰과 일치하는가.
 
+{% code overflow="wrap" %}
 ```cpp
 check(now() < the_party, "You're way late");
 check(quantity.amount > 0, "When pigs fly");
 check(quantity.symbol == hodl_symbol, "These are not the droids you are looking for.");
 ```
+{% endcode %}
 
 만약 모든 조건을 통과한다면 액션은 알맞게 잔고를 업데이트 합니다.
 
@@ -162,7 +168,7 @@ else
   });
 ```
 
-여기서 중요한 포인트는 deposit 함수가 실제로는 eosio.token 컨트랙트에 의하여 실행된다는 것입니다. 이 동작을 이해하려면 on\_notify 속성을 이해해야 합니다.
+여기서 중요한 포인트는 deposit 함수가 실제로는 `eosio.token` 컨트랙트에 의하여 실행된다는 것입니다. 이 동작을 이해하려면 `on_notify` 속성을 이해해야 합니다.
 
 ### on\_notify 속성
 
@@ -186,6 +192,7 @@ Party 액션은 설정된 the\_party 시간이 경과한 후에만 출금을 허
 * 잠겨 있는 잔고를 찾음
 * hodl 컨트랙트로 부터 계좌로 토큰을 이체
 
+{% code overflow="wrap" %}
 ```cpp
 [[eosio::action]]
 void party(name hodler)
@@ -212,9 +219,11 @@ void party(name hodler)
   balance.erase(hodl_it);
 }
 ```
+{% endcode %}
 
 완성된 코드는 다음과 같습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 #include <eosio/eosio.hpp>
 #include <eosio/print.hpp>
@@ -295,6 +304,7 @@ class [[eosio::contract("hodl")]] hodl : public eosio::contract {
     }
 };
 ```
+{% endcode %}
 
 이제 위 코드를 배포할 수 있습니다.
 
@@ -302,13 +312,15 @@ class [[eosio::contract("hodl")]] hodl : public eosio::contract {
 
 먼저 계정을 만들고 배포해 보겠습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 cleos create account eosio hodl EOS7kG7snRRzY9oRBXmYVVitWx1mtp7sUBeZzoXYU9TQWFLRk6As6
 cdt-cpp hodl.cpp -o hodl.wasm
 cleos set contract hodl ./ -p hodl@active
 ```
+{% endcode %}
 
-앞서 언급한대로 한 대로 컨트랙트는 eosio.code 권한이 필요합니다.
+앞서 언급한대로 한 대로 컨트랙트는 `eosio.code` 권한이 필요합니다.
 
 ```cpp
 cleos set account permission hodl active --add-code
@@ -345,6 +357,7 @@ CONTRACT hodl : public eosio::contract {
 
 성공적으로 자금을 인출한 결과는 다음과 같습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 cleos push action hodl party '["han"]' -p han@active
 
@@ -354,3 +367,4 @@ executed transaction: 62b1e6848c8c5e6458b9a0f7600e65574eaf60445be114d224adccc5a9
 #          hodl <= eosio.token::transfer        {"from":"hodl","to":"han","quantity":"0.0001 SYS","memo":"Party! Your hodl is free."}
 #           han <= eosio.token::transfer        {"from":"hodl","to":"han","quantity":"0.0001 SYS","memo":"Party! Your hodl is free."}
 ```
+{% endcode %}

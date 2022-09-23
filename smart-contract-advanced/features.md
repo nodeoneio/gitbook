@@ -52,6 +52,7 @@ cdt 저장소에서 `eosio::binary_extension` 을 구현한 파일인 [binary\_e
 
 #### binary\_extension\_contract.hpp
 
+{% code overflow="wrap" %}
 ```cpp
 #include <eosio/contract.hpp>         // eosio::contract
 #include <eosio/binary_extension.hpp> // eosio::binary_extension
@@ -89,9 +90,11 @@ private:
    table _table;
 };
 ```
+{% endcode %}
 
 #### binary\_extension\_contract.app
 
+{% code overflow="wrap" %}
 ```cpp
 #include "binary_extension_contract.hpp"
 
@@ -195,9 +198,11 @@ using eosio::name;
    eosio::print_f("`modifys` finished executing.\\n");
 }
 ```
+{% endcode %}
 
 #### binary\_extension\_contract.abi
 
+{% code overflow="wrap" %}
 ```cpp
 {
     "____comment": "This file was generated with eosio-abigen. DO NOT EDIT ",
@@ -317,11 +322,13 @@ using eosio::name;
     "variants": []
 }
 ```
+{% endcode %}
 
 컨트랙트에서 업그레이드 해야 할 부분인 regpkey 액션과 structure 구조체를 아래 hpp 및 cpp 파일에 작성합니다.
 
 #### binary\_extension\_contract.hpp
 
+{% code overflow="wrap" %}
 ```cpp
 [[eosio::action]] void regpkey (eosio::name primary_key);
 
@@ -333,9 +340,11 @@ struct [[eosio::table]] structure {
     uint64_t secondary_key() const { return _secondary_key.value; }
 };
 ```
+{% endcode %}
 
 #### binary\_extension\_contract.cpp
 
+{% code overflow="wrap" %}
 ```cpp
 [[eosio::action]] void binary_extension_contract::regpkey(name primary_key) {
    eosio::print_f("`regpkey` executing.\\n");
@@ -357,6 +366,7 @@ struct [[eosio::table]] structure {
    eosio::print_f("`regpkey` finished executing.\\n");
 }
 ```
+{% endcode %}
 
 ABI 파일 구조는 다음과 같습니다.
 
@@ -392,6 +402,7 @@ ABI 파일 구조는 다음과 같습니다.
 
 이제 블록체인 네트워크를 시작하고 컴파일 및 테스트합니다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ ~/binary_extension_contract $ cdt-cpp binary_extension_contract.cpp -o binary_extension_contract.wasm
 
@@ -404,9 +415,11 @@ executed transaction: 6c5c7d869a5be67611869b5f300bc452bc57d258d11755f12ced99c7d7
 #         eosio <= eosio::setabi                "0000000000ea3055d1020e656f73696f3a3a6162692f312e310006076d6f646966797000020b7072696d6172795f6b65790...
 warning: transaction executed locally, but may not be confirmed by the network yet
 ```
+{% endcode %}
 
 이제 컨트랙트에 데이터를 푸시 해 보겠습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ ~/binary_extension_contract $ cleos push action eosio regpkey '{"primary_key":"eosio.name"}' -p eosio
 
@@ -419,9 +432,11 @@ executed transaction: 3c708f10dcbf4412801d901eb82687e82287c2249a29a2f4e746d0116d
 [(eosio,regpkey)->eosio]: CONSOLE OUTPUT END   =====================
 warning: transaction executed locally, but may not be confirmed by the network yet
 ```
+{% endcode %}
 
 마지막으로 작성한 데이터를 다시 읽어보겠습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ ~/binary_extension_contract $ cleos push action eosio printbyp '{"primary_key":"eosio.name"}' -p eosio
 
@@ -435,11 +450,13 @@ executed transaction: e9b77d3cfba322a7a3a93970c0c883cb8b67e2072a26d714d46eef9d79
 [(eosio,printbyp)->eosio]: CONSOLE OUTPUT END   =====================
 warning: transaction executed locally, but may not be confirmed by the network yet
 ```
+{% endcode %}
 
 이제 테이블에 새로운 필드를 더하고 액션에 새로운 매개변수를 더하여 스마트 컨트랙트를 업그레이드 해 보겠습니다. 이 때 `eosio::binary_extension` 로 새로운 필드와 매개변수를 래핑하지는 않을 것인데, 그러면 무슨 일이 일어나나 확인해 볼 것입니다.
 
 #### binary\_extension\_contract.hpp
 
+{% code overflow="wrap" %}
 ```cpp
 +[[eosio::action]] void regpkey (eosio::name primary_key, eosio::name secondary_key);
 -[[eosio::action]] void regpkey (eosio::name primary_key);
@@ -453,9 +470,11 @@ struct [[eosio::table]] structure {
     uint64_t secondary_key() const { return _secondary_key.value; }
 };
 ```
+{% endcode %}
 
 #### binary\_extension\_contract.cpp
 
+{% code overflow="wrap" %}
 ```cpp
 +[[eosio::action]] void binary_extension_contract::regpkey(name primary_key, name secondary_key) {
 -[[eosio::action]] void binary_extension_contract::regpkey(name primary_key) {
@@ -483,6 +502,7 @@ struct [[eosio::table]] structure {
    eosio::print_f("`regpkey` finished executing.\\n");
 }
 ```
+{% endcode %}
 
 #### binary\_extension\_contract.abi
 
@@ -523,6 +543,7 @@ struct [[eosio::table]] structure {
 
 이제 컨트랙트를 업그레이드 하고 원래 방식대로 테이블에서 읽고 쓰기를 해 보겠습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ ~/binary_extension_contract $ cdt-cpp binary_extension_contract.cpp -o binary_extension_contract.wasm
 
@@ -541,9 +562,11 @@ Error 3050003: eosio_assert_message assertion failure
 Error Details:
 assertion failure with message: read
 ```
+{% endcode %}
 
 앞서 테이블에 삽입한 데이터를 읽을 수 없는 것을 확인할 수 있습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ ~/binary_extension_contract $ cleos push action eosio regpkey '{"primary_key":"eosio.name2"}' -p eosio
 
@@ -551,6 +574,7 @@ Error 3015014: Pack data exception
 Error Details:
 Missing field 'secondary_key' in input object while processing struct 'regpkey'
 ```
+{% endcode %}
 
 마찬가지로 업그레이드 된 액션으로도 원래 방식대로는 테이블에 쓸 수 없습니다.
 
@@ -558,6 +582,7 @@ Missing field 'secondary_key' in input object while processing struct 'regpkey'
 
 #### binary\_extension\_contract.hpp
 
+{% code overflow="wrap" %}
 ```cpp
 +[[eosio::action]] void regpkey (eosio::name primary_key. eosio::binary_extension<eosio::name> secondary_key);
 -[[eosio::action]] void regpkey (eosio::name primary_key, eosio::name secondary_key);
@@ -572,9 +597,11 @@ struct [[eosio::table]] structure {
     uint64_t secondary_key() const { return _secondary_key.value; }
 };
 ```
+{% endcode %}
 
 #### binary\_extension\_contraact.cpp
 
+{% code overflow="wrap" %}
 ```cpp
 +[[eosio::action]] void binary_extension_contract::regpkey(name primary_key, binary_extension<name> secondary_key) {
 -[[eosio::action]] void binary_extension_contract::regpkey(name primary_key, name secondary_key) {
@@ -603,6 +630,7 @@ struct [[eosio::table]] structure {
    eosio::print_f("`regpkey` finished executing.\\n");
 }
 ```
+{% endcode %}
 
 #### binary\_extension\_contract.abi
 
@@ -661,6 +689,7 @@ struct [[eosio::table]] structure {
 
 이제 컨트랙트를 업그레이드 하고 테이블에 읽기/쓰기를 해 보겠습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ ~/binary_extension_contract $ cleos set contract eosio ./
 
@@ -694,6 +723,7 @@ executed transaction: 75a135d1279a9c967078b0ebe337dc0cd58e1ccd07e370a899d9769391
 [(eosio,regpkey)->eosio]: CONSOLE OUTPUT END   =====================
 warning: transaction executed locally, but may not be confirmed by the network yet
 ```
+{% endcode %}
 
 잘 실행됩니다. 이제 이 스마트 컨트랙트는 나중에 테이블/액션을 사용할 때를 위한 역방향(backward) 호환성을 가지게 되었습니다.
 
@@ -727,6 +757,7 @@ class [[eosio::contract]] hello : public eosio::contract {
 
 그리고 `hello_test.cpp` 테스트 코드를 작성합니다.
 
+{% code overflow="wrap" %}
 ```cpp
 #include <eosio/eosio.hpp>
 #include <eosio/tester.hpp>
@@ -791,8 +822,9 @@ int main(int argc, char** argv) {
    return has_failed();
 }
 ```
+{% endcode %}
 
-eosio 에 정의된 모든 내장함수(`prints`, `require_auth` 등) 들은 `intrinsics::set_intrinsics<intrinsics::the_intrinsic_name>()` 함수로 재정의 할 수 있습니다. 이러한 함수들은 람다 함수를 가지는데 이 람다 함수들은 인수와 리턴 타입이 재정의하고자 하는 내장 함수와 일치해야 합니다. 이러한 특성덕분에 컨트랙트 작성자는 작성중인 유닛 테스트를 유연하게 수정하여 원하는대로 작동하게 할 수 있습니다.
+`eosio` 에 정의된 모든 내장함수(`prints`, `require_auth` 등) 들은 `intrinsics::set_intrinsics<intrinsics::the_intrinsic_name>()` 함수로 재정의 할 수 있습니다. 이러한 함수들은 람다 함수를 가지는데 이 람다 함수들은 인수와 리턴 타입이 재정의하고자 하는 내장 함수와 일치해야 합니다. 이러한 특성덕분에 컨트랙트 작성자는 작성중인 유닛 테스트를 유연하게 수정하여 원하는대로 작동하게 할 수 있습니다.
 
 다른 함수인 `intrinsics::get_intrinsics<intrinsics::the_intrinsic_name>()` 은 현재 내장함수의 행동을 정의하는 함수 개체를 반환합니다. 이 패턴은 mock 함수에 사용될 수 있으며 스마트 컨트랙트를 쉽게 테스트 할 수 있게 합니다. 다음 링크에서 더 많은 정보를 확인할 수 있습니다.
 
@@ -806,7 +838,7 @@ eosio 에 정의된 모든 내장함수(`prints`, `require_auth` 등) 들은 `in
 * CMake 를 사용
   * `add_native_library` 와 `add_native_executable` CMake 매크로가 추가되어 있습니다. 이것들은 add\_library 와 add\_executable 을 대체합니다.
 
-### Eosio.CDT 네이티브 테스터 API
+### CDT 네이티브 테스터 API
 
 * CHECK\_ASSERT(...): 이 매크로는 특정 Assert 가 발생했는지 체크하고 테스트를 실패로 플래그 합니다. 그리고 나머지 테스트들을 계속 수행합니다.
   * 다음 두 가지 방식으로 호출 할 수 있습니다.

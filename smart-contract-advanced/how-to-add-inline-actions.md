@@ -193,6 +193,7 @@ void notify(name user, std::string msg) {}
 
 이제 준비가 다 되었습니다. 완성된 `addressbook` 컨트랙트는 다음과 같습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 #include <eosio/eosio.hpp>
 #include <eosio/print.hpp>
@@ -282,6 +283,7 @@ private:
   > address_index;
 };
 ```
+{% endcode %}
 
 터미널에서 `CONTRACTS_DIR/addressbook` 으로 이동합니다.
 
@@ -297,6 +299,7 @@ $ cdt-cpp -o addressbook.wasm addressbook.cpp --abigen
 
 변경된 컨트랙트를 다시 배포하면 온체인에 올라간 스마트 컨트랙트가 업그레이드 됩니다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ cleos set contract addressbook CONTRACTS_DIR/addressbook
 
@@ -305,11 +308,13 @@ executed transaction: 1898d22d994c97824228b24a1741ca3bd5c7bc2eba9fea8e83446d78bf
 #         eosio <= eosio::setcode               {"account":"addressbook","vmtype":0,"vmversion":0,"code":"0061736d0100000001a6011a60027f7e0060077f7e...
 #         eosio <= eosio::setabi                {"account":"addressbook","abi":"0e656f73696f3a3a6162692f312e30010c6163636f756e745f6e616d65046e616d65.
 ```
+{% endcode %}
 
 ## 단계8: 테스트
 
 이제 컨트랙트가 수정되고 배포되었으니 테스트 해보겠습니다. 이전 단원의 테스트 단계에서 alice 의 addressbook 레코드를 삭제했었습니다. 따라서 터미널에서 다음과 같이 "create" 케이스 내부에 작성된 upsert 인라인 액션을 호출합니다.
 
+{% code overflow="wrap" %}
 ```shell
 $ cleos push action addressbook upsert '["alice", "alice", "liddell", 21, "123 drink me way", "wonderland", "amsterdam"]' -p alice@active
 
@@ -318,9 +323,11 @@ executed transaction: e9e30524186bb6501cf490ceb744fe50654eb393ce0dd733f3bb6c68ff
 #   addressbook <= addressbook::notify          {"user":"alice","msg":"alicesuccessfully emplaced record to addressbook"}
 #         alice <= addressbook::notify          {"user":"alice","msg":"alicesuccessfully emplaced record to addressbook"}
 ```
+{% endcode %}
 
-위에 출력된 로그의 마지막 항목은 alice 로 보내진 `addressbook::notify` 액션을 나타냅니다. `cleos get actions` 명령으로 alice와 관련된 actions들을 표시해 봅시다.
+위에 출력된 로그의 마지막 항목은 alice 로 보내진 `addressbook::notify` 액션을 나타냅니다. `cleos get actions` 명령으로 alice와 관련된 액션들을 표시해 봅시다.
 
+{% code overflow="wrap" %}
 ```shell
 $ cleos get actions alice
 
@@ -328,3 +335,4 @@ $ cleos get actions alice
 ================================================================================================================
 #   62   2018-09-15T12:57:09.000       addressbook::notify => alice         685ecc09... {"user":"alice","msg":"alice successfully added record to ad...
 ```
+{% endcode %}

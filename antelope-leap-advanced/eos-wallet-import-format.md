@@ -4,4 +4,79 @@ description: EOS Wallet Import Format (WIF)
 
 # EOS 지갑의 가져오기 형식
 
-[https://github.com/AntelopeIO/leap/blob/main/docs/03\_keosd/35\_wallet-specification.md](https://github.com/AntelopeIO/leap/blob/main/docs/03\_keosd/35\_wallet-specification.md)
+지갑 가져오기 형식(Wallet Import Format, WIF) 는 개인 EDSA 키를 사용한 인코딩입니다. EOS는 Bitcoin WIF 주소와 동일한 버전, 체크섬 및 인코딩 체계를 사용하며 [기존 라이브러리](https://en.bitcoin.it/wiki/Wallet\_import\_format)와 호환되어야 합니다.
+
+다음은 WIF 개인 키의 예입니다.
+
+```
+5HpHagT65TZzG1PH3CSu63k8DbpvD8s5ip4nEB3kEsreAbuatmU
+```
+
+이 인코딩은 다음에 적합합니다.
+
+* 개인 키를 복사하여 붙여넣을 때. (전체 키가 복사되었는지 확인합니다)
+* 텍스트 또는 사용자 편집 가능한 파일 형식의 키를 포함할 때.&#x20;
+* 키 길이를 줄일 때.&#x20;
+
+이 인코딩은 다음 경우에 적합하지 않습니다.
+
+* 키를 손으로 적어야 할 때. 단 한번의 대소문자 실수라도 큰 문제를 일으킬 수 있습니다.
+* 키와 데이터를 처리하는 코드가 저장된 바이너리 또는 컴포터 저장소가 이미 체크되어 있을 때.
+
+고려 사항
+
+* 키를 기록하거나 다시 입력할 수 있는 경우 BIP39 Mnemonic 코드 표준을 사용하는 것이 좋습니다.&#x20;
+* 항상 "Private" 또는 "Private Key"라는 단어를 사용하여 WIF 키에 레이블을 지정하는 것이 좋습니다.&#x20;
+
+## 개인 키를 WIF 로 변환
+
+1. 여기서 길이가 32바이트이며 모든 문자가 0의 가짜 개인 키를 사용하겠습니다.\
+   키는 16진수로 표시됩니다.\
+   `0000000000000000000000000000000000000000000000000000000000000000`
+2. 앞에 `0x80` 바이트를 추가합니다. 이 바이트는 비트코인 메인넷을 나타내며, EOS도 동일한 버전 바이트를 사용합니다. 버전 바이트를 인코딩하면 이를 개인 키로 식별할 수 있습니다. 비트코인과 달리, EOS는 항상 압축된 공개 키(개인 키로부터 파생됨)를 사용하기 때문에 개인 키에 0x01 바이트를 붙이지 않습니다.\
+   `800000000000000000000000000000000000000000000000000000000000000000`
+3. 2의 버저닝 된 개인 키에 이진 SHA-256 해시를 수행합니다.\
+   `ce145d282834c009c24410812a60588c1085b63d65a7effc2e0a5e3a2e21b236`
+4. 3의 결과에 이진 SHA-256 해시를 다시 수행합니다.\
+   `0565fba7ebf8143516e0222d7950c28589a34c3ee144c3876ceb01bfb0e9bb70`
+5. 두 번째 SHA-2566 해시값의 첫 4바이트를 체크섬 값으로 가져옵니다.\
+   `0565fba7`
+6. 이 체크섬 값을 2단계에서 얻은 키 값 뒤에 추가합니다.\
+   `8000000000000000000000000000000000000000000000000000000000000000000565fba7`
+7. 이 값을 [Base58](http://npmjs.com/package/bs58) 인코딩 합니다.\
+   `5HpHagT65TZzG1PH3CSu63k8DbpvD8s5ip4nEB3kEsreAbuatmU`
+
+## WIF 를 개인 키로 전환(체크섬 확인)
+
+1. 지갑에서 개인키를 꺼내옵니다.\
+   `5HpHagT65TZzG1PH3CSu63k8DbpvD8s5ip4nEB3kEsreAbuatmU`
+2. [Base58](http://npmjs.com/package/bs58) 디코딩을 수행합니다.(16진수로 표시)\
+   `8000000000000000000000000000000000000000000000000000000000000000000565fba7`
+3. 디코딩 된 키를 체크섬(마지막 4바이트)과 분리 합니다.\
+   `800000000000000000000000000000000000000000000000000000000000000000 0565fba7`
+4. 버저닝 된 개인 키에 이진 SHA-256 해싱을 수행합니다.\
+   `ce145d282834c009c24410812a60588c1085b63d65a7effc2e0a5e3a2e21b236`
+5. 4의 결과에 한번더 이진 SHA-256 해싱을 수행합니다.\
+   `0565fba7ebf8143516e0222d7950c28589a34c3ee144c3876ceb01bfb0e9bb70`
+6. 5의 결과에서 처음 4바이트를 체크섬 값으로 추출합니다.\
+   `0565fba7`
+7. 3에서 추출한 체크섬과 6에서 추출한 체크섬 값이 같은지 확인합니다.
+8. 3의 버저닝 된 개인 키에서 버전 값과 개인 키를 분리합니다.\
+   `80`\
+   `0000000000000000000000000000000000000000000000000000000000000000`
+9. 버전 값이 `0x80` 이면 정상입니다.
+
+## Base58Check
+
+[Base58Check](https://www.npmjs.com/package/base58check) 는 이 알고리즘을 구현한 자바스크립트 모듈이며, EOS WIF 개인 키를 인코딩하거나 디코딩 할 때 사용할 수 있습니다.&#x20;
+
+{% code overflow="wrap" %}
+```javascript
+base58check = require('base58check')
+wif = base58check.encode(privateKey = '00'.repeat(32), version = '80', encoding = 'hex')
+assert.equal('5HpHagT65TZzG1PH3CSu63k8DbpvD8s5ip4nEB3kEsreAbuatmU', wif)
+let {prefix, data} = base58check.decode(wif)
+assert.equal(prefix.toString('hex'), '80')
+assert.equal(data.toString('hex'), '00'.repeat(32))
+```
+{% endcode %}

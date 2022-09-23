@@ -14,7 +14,7 @@
 
 다음과 같은 코드를 준비합니다.
 
-```
+```cpp
 struct action_response
 {
   uint16_t id;
@@ -38,6 +38,7 @@ class [[eosio::contract]] smrtcontract : public contract {
 2. 액션의 비즈니스 로직에 맞추어 데이터 멤버들을 초기화 합니다.
 3. 초기화 및 인스턴스화 된 `action_response` 를 `return` 구문을 사용하여 넘깁니다.
 
+{% code overflow="wrap" %}
 ```cpp
 [[eosio::action]]
 action_response smrtcontract::checkwithrv( name nm ) {
@@ -59,6 +60,7 @@ action_response smrtcontract::checkwithrv( name nm ) {
   return results; // the `set_action_return_value` intrinsic is invoked automatically here
 }
 ```
+{% endcode %}
 
 반환값을 받는 액션을 만드는 다른 예제를 여기서 확인할 수 있습니다.\
 [https://github.com/AntelopeIO/cdt/blob/main/examples/hello/src/hello.cpp](https://github.com/AntelopeIO/cdt/blob/main/examples/hello/src/hello.cpp)

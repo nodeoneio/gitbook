@@ -99,30 +99,36 @@ class [[eosio::contract]] hello : public eosio::contract {
 
 아래 `cleos set account permission` 명령을 사용하면 bob 의 계정에 `active` 를 상위 권한으로 가지는 사용자 지정 권한 customp1 을 만들 수 있습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ cleos set account permission bob customp1 EOS58wmANoBtT7RdPgMRCGDb37tcCQswfwVpj6NzC55D247tTMU9D active -p bob@active
 
 executed transaction: 97e2af6966b40ea0b523402110c6a5592862c5ad2abbaad20c9bbf2f68017c98  160 bytes  145 us
 #         eosio <= eosio::updateauth            {"account":"bob","permission":"customp1","parent":"active","auth":{"threshold":1,"keys":[{"key":"EOS...
 ```
+{% endcode %}
 
 이제 다시 bob 계정에 customp1 을 상위 권한으로 갖는 사용자 지정 권한 customp2 를 만듭니다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ cleos set account permission bob customp2 EOS58wmANoBtT7RdPgMRCGDb37tcCQswfwVpj6NzC55D247tTMU9D customp1 -p bob@active
 
 executed transaction: 8b5e88d0d1cea6dd31a4967912d575d62391348345c58b6071aba7fb93d709b3  160 bytes  129 us
 #         eosio <= eosio::updateauth            {"account":"bob","permission":"customp2","parent":"customp1","auth":{"threshold":1,"keys":[{"key":"E...
 ```
+{% endcode %}
 
 또한 상위 권한을 지정하지 않고 사용자 지정 권한을 만들 수도 있는데 이 경우 디폴트로 `active` 가 상위 권한이 됩니다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ cleos set account permission bob customp3 EOS58wmANoBtT7RdPgMRCGDb37tcCQswfwVpj6NzC55D247tTMU9D -p bob@active
 
 executed transaction: 42158f0a35bdce9e8374691285e12e5e517ab4d4831a68c8e3a2bb22e88fda7c  160 bytes  165 us
 #         eosio <= eosio::updateauth            {"account":"bob","permission":"customp3","parent":"active","auth":{"threshold":1,"keys":[{"key":"EOS...
 ```
+{% endcode %}
 
 이제 계정을 확인해 봅시다.
 
@@ -235,21 +241,25 @@ $ cleos get account bob --json
 
 `cleos set action permission` 명령을 사용하여 customp1 권한을 what 액션에 연결해 보겠습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ cleos set action permission bob scholder what customp1 -p bob@active
 
 executed transaction: 64198d1cc5f7dedf8809b86f22801eb004d50365ba72f8e2833ed191c6f6e30b  128 bytes  471 us
 #         eosio <= eosio::linkauth              {"account":"bob","code":"scholder","type":"what","requirement":"customp1"}
 ```
+{% endcode %}
 
 마찬가지로 cleos set action permission 명령으로 customp2 권한을 how 액션에 연결해 보겠습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ cleos set action permission bob scholder how customp2 -p bob@active
 
 executed transaction: 64198d1cc5f7dedf8809b86f22801eb004d50365ba72f8e2833ed191c6f6e30b  128 bytes  471 us
 #         eosio <= eosio::linkauth              {"account":"bob","code":"scholder","type":"how","requirement":"customp2"}
 ```
+{% endcode %}
 
 ### 테스트
 
@@ -265,6 +275,7 @@ executed transaction: 64198d1cc5f7dedf8809b86f22801eb004d50365ba72f8e2833ed191c6
 
 bob@active 로 why 를 호출 해 봅시다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ cleos push action scholder why '["name"]' -p bob@active
 
@@ -272,9 +283,11 @@ executed transaction: 43b6ad4ce7a52d7281ccd2800caa02d5278ee714de36fefe9624bff621
 #      scholder <= scholder::why               {"user":"name"}
 >> why not name
 ```
+{% endcode %}
 
 bob@active 로 what 를 호출 해 보겠습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ cleos push action scholder what '["name"]' -p bob@active
 
@@ -282,9 +295,11 @@ executed transaction: 43b6ad4ce7a52d7281ccd2800caa02d5278ee714de36fefe9624bff621
 #      scholder <= scholder::what               {"user":"name"}
 >> hi, what do you want name
 ```
+{% endcode %}
 
 bob@active 로 how 를 호출 해 보겠습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ cleos push action scholder how '["name"]' -p bob@active
 
@@ -292,6 +307,7 @@ executed transaction: 43b6ad4ce7a52d7281ccd2800caa02d5278ee714de36fefe9624bff621
 #      scholder <= scholder::how               {"user":"name"}
 >> how are you name
 ```
+{% endcode %}
 
 active 권한이 모든 액션을 호출할 수 있음을 확인하였습니다.
 
@@ -299,6 +315,7 @@ active 권한이 모든 액션을 호출할 수 있음을 확인하였습니다.
 
 bob@customp1 로 why 를 호출 해 보겠습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ cleos push action scholder why '["name"]' -p bob@customp1
 
@@ -307,9 +324,11 @@ Please remove the unnecessary authority from your action!
 Error Details:
 action declares irrelevant authority '{"actor":"bob","permission":"customp1"}'; minimum authority is {"actor":"bob","permission":"active"}
 ```
+{% endcode %}
 
 권한 오류가 발생하였습니다. 이번엔 bob@customp1 로 what 을 호출 해 보겠습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ cleos push action scholder what '["name"]' -p bob@customp1
 
@@ -317,9 +336,11 @@ executed transaction: 43b6ad4ce7a52d7281ccd2800caa02d5278ee714de36fefe9624bff621
 #      scholder <= scholder::what               {"user":"name"}
 >> hi, what do you want name
 ```
+{% endcode %}
 
 bob@customp1 로 how 를 호출 해 보겠습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ cleos push action scholder how '["name"]' -p bob@customp1
 
@@ -327,6 +348,7 @@ executed transaction: 43b6ad4ce7a52d7281ccd2800caa02d5278ee714de36fefe9624bff621
 #      scholder <= scholder::how               {"user":"name"}
 >> how are you name
 ```
+{% endcode %}
 
 customp1 권한은 what과 how 를 호출 할 수 있지만 why 는 호출할 수 없다는 것을 확인하였습니다.
 
@@ -334,6 +356,7 @@ customp1 권한은 what과 how 를 호출 할 수 있지만 why 는 호출할 �
 
 bob@customp2 로 why 를 호출 해 보겠습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ cleos push action scholder why '["name"]' -p bob@customp2
 
@@ -342,9 +365,11 @@ Please remove the unnecessary authority from your action!
 Error Details:
 action declares irrelevant authority '{"actor":"bob","permission":"customp1"}'; minimum authority is {"actor":"bob","permission":"active"}
 ```
+{% endcode %}
 
 권한 오류가 발생했습니다. bob@customp2 로 what 을 호출 해 보겠습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ cleos push action scholder what '["name"]' -p bob@customp2
 
@@ -353,9 +378,11 @@ Please remove the unnecessary authority from your action!
 Error Details:
 action declares irrelevant authority '{"actor":"bob","permission":"customp1"}'; minimum authority is {"actor":"bob","permission":"active"}
 ```
+{% endcode %}
 
 마찬가지로 권한 오류가 발생합니다. bob@customp2 로 how 를 호출 해 보겠습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ cleos push action scholder how '["name"]' -p bob@customp2
 
@@ -363,6 +390,7 @@ executed transaction: 43b6ad4ce7a52d7281ccd2800caa02d5278ee714de36fefe9624bff621
 #      scholder <= scholder::how               {"user":"name"}
 >> how are you name
 ```
+{% endcode %}
 
 customp2 권한은 how 를 호출 할 수 있지만 what 과 why 는 호출할 수 없음을 확인하였습니다.
 
@@ -372,12 +400,14 @@ customp2 권한은 how 를 호출 할 수 있지만 what 과 why 는 호출할 �
 
 `cleos set action permission` 명령을 사용하여 how 액션과 customp2 권한의 연결을 끊겠습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ cleos set action permission bob scholder how NULL -p bob@active
 
 executed transaction: 50fe754760a1b8bd0e56f57570290a3f5daa509c090deb54c81a721ee7048201  120 bytes  242 us
 #         eosio <= eosio::unlinkauth            {"account":"bob","code":"scholder","type":"how"}
 ```
+{% endcode %}
 
 ### 테스트
 
@@ -393,6 +423,7 @@ executed transaction: 50fe754760a1b8bd0e56f57570290a3f5daa509c090deb54c81a721ee7
 
 bob@active 로 how 를 호출해 봅니다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ cleos push action scholder how '["name"]' -p bob@active
 
@@ -400,9 +431,11 @@ executed transaction: 43b6ad4ce7a52d7281ccd2800caa02d5278ee714de36fefe9624bff621
 #      scholder <= scholder::how               {"user":"name"}
 >> how are you name
 ```
+{% endcode %}
 
 bob@customp2 로 how 를 호출해 봅니다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ cleos push action scholder how '["name"]' -p bob@customp2
 
@@ -411,17 +444,20 @@ Please remove the unnecessary authority from your action!
 Error Details:
 action declares irrelevant authority '{"actor":"bob","permission":"customp2"}'; minimum authority is {"actor":"bob","permission":"active"}
 ```
+{% endcode %}
 
 ### 사용자 지정 권한 삭제
 
 `cleos set account permission` 명령을 사용하여 모든 액션과의 연결이 끊긴 customp2 권한을 삭제할 수 있습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ cleos set account permission bob customp2 NULL active -p bob@active
 
 executed transaction: 3f3e58707e5548ec34f5655327b1110c18d455c9ee0a6cffc102d7bc4e0a6cdb  112 bytes  472 us
 #         eosio <= eosio::deleteauth            {"account":"bob","permission":"customp2"}
 ```
+{% endcode %}
 
 이제 계정을 확인해 보겠습니다
 

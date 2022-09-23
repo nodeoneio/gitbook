@@ -167,21 +167,25 @@ cleos set contract hello . -p hello@active
 
 다음과 같이 bob 계정과 권한으로 `cleos push action` 명령을 사용합니다.
 
+{% code overflow="wrap" %}
 ```shell
 $ cleos push action hello hi '["bob"]' -p bob@active
 executed transaction: 4c10c1426c16b1656e802f3302677594731b380b18a44851d38e8b5275072857  244 bytes  1000 cycles
 #    hello.code <= hello.code::hi               {"user":"bob"}
 >> Hello World, bob
 ```
+{% endcode %}
 
 아무 사용자나 `hello` 컨트랙트의 `hi` 액션을 호출할 수 있습니다. 다른 계정을 한번 사용해 보겠습니다.
 
+{% code overflow="wrap" %}
 ```shell
 $ cleos push action hello hi '["alice"]' -p alice@active
 executed transaction: 28d92256c8ffd8b0255be324e4596b7c745f50f85722d0c4400471bc184b9a16  244 bytes  1000 cycles
 #    hello.code <= hello.code::hi               {"user":"alice"}
 >> Hello World, alice
 ```
+{% endcode %}
 
 위에서 만든 Hello World 스마트 컨트랙트는 매우 간단한 것이며 `hi` 액션을 아무나 호출할 수 있습니다. 실제 사용하는 스마트 컨트랙트는 보안이 중요하기 때문에 인증을 위한 코드를 더 추가해 보겠습니다.&#x20;
 
@@ -224,6 +228,7 @@ cleos push action hello hi '["bob"]' -p alice@active
 
 `require_auth` 는 트랜잭션을 중단시키고 다음과 같이 에러 메시지를 출력 할 것입니다.
 
+{% code overflow="wrap" %}
 ```
 error 2022-09-14T17:03:24.566 cleos     main.cpp:575                  print_result         ] soft_except->to_detail_string(): 3090004 missing_auth_exception: Missing required authority
 missing authority of bob
@@ -233,6 +238,7 @@ pending console output:
     {"console":""}
     nodeos  apply_context.cpp:123 exec_one
 ```
+{% endcode %}
 
 이제 이 컨트랙트는 `name` 파라미터와 트랜잭션에 서명한 계정이 동일한 계정인지 확인할 수 있게 되었습니다.
 
@@ -244,10 +250,12 @@ cleos push action hello hi '["alice"]' -p alice@active
 
 실행 결과는 다음과 같습니다.
 
+{% code overflow="wrap" %}
 ```
 235bd766c2097f4a698cfb948eb2e709532df8d18458b92c9c6aae74ed8e4518  244 bytes  1000 cycles
 #    hello <= hello::hi               {"user":"alice"}
 >> Hello World, alice
 ```
+{% endcode %}
 
 액션을 호출하는 계정과 액션이 `name` 으로 넘겨받은 계정이 같은 인증 계정인지 확인된 후에 액션이 성공적으로 실행되는 것을 볼 수 있습니다.

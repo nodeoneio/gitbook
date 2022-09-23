@@ -34,6 +34,7 @@ touch addressbook.cpp
 
 `addressbook.cpp` 파일에 `addressbook` 클래스를 작성합니다.
 
+{% code overflow="wrap" %}
 ```cpp
 #include <eosio/eosio.hpp>
 
@@ -46,6 +47,7 @@ class [[eosio::contract("addressbook")]] addressbook : public eosio::contract {
 
 };
 ```
+{% endcode %}
 
 ## 단계4: 데이터 구조 작성
 
@@ -199,15 +201,18 @@ void upsert(name user, std::string first_name, std::string last_name, std::strin
 
 scope 는 다중 인덱스 테이블 내에서 테이블을 논리적으로 분리하는 데 사용합니다. (테이블 상에서 토큰 소유자의 범위를 제한하는 `eosio.token` 컨트랙트 `multi-index` 참조). scope 는 원래 각각의 하위 테이블에서 병렬 계산을 수행하기 위해 테이블의 상태를 분리하려는 의도로 만든 것이었습니다. 그러나 현재 블록체인 간 통신이 테이블 병렬화보다 우선시 되고 있기 때문에 scope 는 `eosio.token` 의 경우처럼 테이블을 논리적으로 분리하는 데만 사용되고 있습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 void upsert(name user, std::string first_name, std::string last_name, std::string street, std::string city, std::string state) {
   require_auth( user );
   address_index addresses(get_self(), get_first_receiver().value);
 }
 ```
+{% endcode %}
 
 다음으로 반복자(iterator)를 가져옵니다. 이 반복자는 나중에 다시 사용할 것이기 때문에 변수에 저장합니다.
 
+{% code overflow="wrap" %}
 ```cpp
 void upsert(name user, std::string first_name, std::string last_name, std::string street, std::string city, std::string state) {
   require_auth( user );
@@ -215,11 +220,13 @@ void upsert(name user, std::string first_name, std::string last_name, std::strin
   auto iterator = addresses.find(user.value);
 }
 ```
+{% endcode %}
 
 이제 실행 권한이 설정되고 테이블이 인스턴스화 되었습니다. 이제 테이블을 만들거나 수정하는 코드를 작성하겠습니다.
 
 먼저 테이블의 `find` 메소드에 특정 사용자를 매개 변수로 넘겨, 테이블에 해당 사용자가 이미 있는지 여부를 확인합니다. `find` 메서드는 반복자를 반환합니다. 반환자는 `end()` 메소드의 반환값("null" 값과 일치합니다)와 비교하여 사용자의 유무를 확인할 수 있습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 void upsert(name user, std::string first_name, std::string last_name, std::string street, std::string city, std::string state) {
   require_auth( user );
@@ -234,11 +241,13 @@ void upsert(name user, std::string first_name, std::string last_name, std::strin
   }
 }
 ```
+{% endcode %}
 
 `multi_index` 의 메소드 `emplace` 를 사용하여 테이블에 레코드를 만듭니다. 이 메소드는 이 레코드 데이터가 차지하는 스토리지 사용량을 지불할 "payer" 계정과 콜백 함수 두 개의 인자를 받습니다.
 
 `emplace` 메서드에 전달할 콜백 함수는 참조자(reference)를 만들기 위하여 람다 함수를 사용해야 합니다. 아래 코드에서 upsert 메소드에 인자로 전달된 값을 행의 값으로 할당하고 있습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 void upsert(name user, std::string first_name, std::string last_name, std::string street, std::string city, std::string state) {
   require_auth( user );
@@ -260,6 +269,7 @@ void upsert(name user, std::string first_name, std::string last_name, std::strin
   }
 }
 ```
+{% endcode %}
 
 다음으로 `multi_index` 의 `modify` 메소드를 사용하여 upsert 에 수정/업데이트 기능을 추가하겠습니다. 다음과 같은 인자가 필요합니다.
 
@@ -267,6 +277,7 @@ void upsert(name user, std::string first_name, std::string last_name, std::strin
 * 이 데이터의 저장 비용을 지불하게 될 결제자 "payer". 이 코드에서는 사용자 자신이 된다.
 * 실제로 행을 수정하는 콜백 함수.
 
+{% code overflow="wrap" %}
 ```cpp
 void upsert(name user, std::string first_name, std::string last_name, std::string street, std::string city, std::string state) {
   require_auth( user );
@@ -295,6 +306,7 @@ void upsert(name user, std::string first_name, std::string last_name, std::strin
   }
 }
 ```
+{% endcode %}
 
 이제 `addressbook` 컨트랙트는, 어떤 레코드가 아직 존재하지 않는다면 테이블에 추가하고, 해당 레코드가 이미 있는 경우에는 데이터를 수정하는 액션을 가지게 되었습니다.
 
@@ -385,6 +397,7 @@ struct [[eosio::table]] person {
 
 아래가 `addressbook` 컨트랙트의 최종 코드입니다.
 
+{% code overflow="wrap" %}
 ```cpp
 #include <eosio/eosio.hpp>
 
@@ -448,6 +461,7 @@ private:
   using address_index = eosio::multi_index<"people"_n, person>;
 };
 ```
+{% endcode %}
 
 ## 단계 10:(선택사항) 리카르디안 컨트랙트(Ricardian Contract) 준비
 
@@ -466,6 +480,7 @@ touch addressbook.contract.md
 
 리카르디안 컨트랙트의 정의를 이 파일에 작성합니다.
 
+{% code overflow="wrap" %}
 ```cpp
 <h1 class="contract">upsert</h1>
 ---
@@ -481,6 +496,7 @@ title: Erase
 summary: This action will remove an entry from the address book if an entry in the multi index table exists with the specified name.
 icon:
 ```
+{% endcode %}
 
 ## 단계11:(선택사항) 리카르디안 구절(Ricardian clause) 준비
 
@@ -492,6 +508,7 @@ touch addressbook.clauses.md
 
 다음의 리카르디안 구절 정의를 위 파일에 붙여넣습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 <h1 class="clause">Data Storage</h1>
 ---
@@ -528,6 +545,7 @@ title: Data Future
 summary: The smart contract promises to only use the data in accordance of the terms defined in the Ricardian Contract, now and at all future dates.
 icon:
 ```
+{% endcode %}
 
 ## 단계 12: 계약 컴파일
 
@@ -539,6 +557,7 @@ cdt-cpp addressbook.cpp -o addressbook.wasm
 
 리카르디안 컨트랙트와 구절을 만들었다면, 그 내용이 `.abi` 파일에 표시될 것입니다. 위에서 작성한 예제 `addressbook.cpp` 파일의 내용과 그에 해당하는 리카르디안 컨트랙트와 구절을 적용한 ABI 파일은 다음과 같습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 {
     "____comment": "This file was generated with eosio-abigen. DO NOT EDIT ",
@@ -662,17 +681,21 @@ cdt-cpp addressbook.cpp -o addressbook.wasm
     "variants": []
 }
 ```
+{% endcode %}
 
 ## 단계 13: 컨트랙트 배포
 
 다음 명령어를 실행하여 컨트랙트 배포에 필요한 계정을 하나 만듭니다.
 
+{% code overflow="wrap" %}
 ```cpp
 cleos create account eosio addressbook EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV -p eosio@active
 ```
+{% endcode %}
 
 이제 `addressbook` 컨트랙트를 온체인으로 배포합니다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ cleos set contract addressbook CONTRACTS_DIR/addressbook -p addressbook@active
 
@@ -681,26 +704,32 @@ $ cleos set contract addressbook CONTRACTS_DIR/addressbook -p addressbook@active
 #         eosio <= eosio::setabi                {"account":"addressbook","abi":"0e656f73696f3a3a6162692f312e30010c6163636f756e745f6e616d65046e616d65...
 warning: transaction executed locally, but may not be confirmed by the network yet    ]
 ```
+{% endcode %}
 
 ## 단계 14: 컨트랙트 테스트
 
 테이블에 행을 추가해 봅시다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ cleos push action addressbook upsert '["alice", "alice", "liddell", "123 drink me way", "wonderland", "amsterdam"]' -p alice@active
 
 executed transaction: 003f787824c7823b2cc8210f34daed592c2cfa66cbbfd4b904308b0dfeb0c811  152 bytes  692 us
 #   addressbook <= addressbook::upsert          {"user":"alice","first_name":"alice","last_name":"liddell","street":"123 drink me way","city":"wonde...
 ```
+{% endcode %}
 
 계정 alice 는 다른 계정 이름을 가지고 레코드를 추가 할 수 없을 것입니다. 다음과 같이 확인해 봅시다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ cleos push action addressbook upsert '["bob", "bob", "is a loser", "doesnt exist", "somewhere", "someplace"]' -p alice@active
 ```
+{% endcode %}
 
 예상대로 `require_auth()` 때문에 alice 는 다른 사용자 이름으로 레코드를 추가/수정 할 수 없습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 Error 3090004: Missing required authority
 Ensure that you have the related authority inside your transaction!;
@@ -708,9 +737,11 @@ If you are currently using 'cleos push action' command, try to add the relevant 
 Error Details:
 missing authority of bob
 ```
+{% endcode %}
 
 alice 의 레코드를 조회해 봅시다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ cleos get table addressbook addressbook people --lower alice --limit 1
 
@@ -728,9 +759,11 @@ $ cleos get table addressbook addressbook people --lower alice --limit 1
   "next_key": ""
 }
 ```
+{% endcode %}
 
 alice 가 레코드를 삭제할 수 있는지 확인해 봅시다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ cleos push action addressbook erase '["alice"]' -p alice@active
 
@@ -738,6 +771,7 @@ executed transaction: 0a690e21f259bb4e37242cdb57d768a49a95e39a83749a02bced652ac4
 #   addressbook <= addressbook::erase           {"user":"alice"}
 warning: transaction executed locally, but may not be confirmed by the network yet    ]
 ```
+{% endcode %}
 
 레코드가 삭제되었는지 확인해 봅니다.
 

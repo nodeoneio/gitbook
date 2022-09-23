@@ -68,10 +68,12 @@ Without password imported keys will not be retrievable.
 
 키를 디폴트 지갑으로 가져오려면 다음과 같이 `cleos wallet import` 명령을 실행하고 `private key:` 프롬프트에서 개인키를 붙여넣으면 됩니다.
 
+{% code overflow="wrap" %}
 ```
 $ cleos wallet import
 private key: imported private key for: EOS6Pxs3oiKT7y6eP58qr6KzYSPA5hbe7XtDciNNFM8qrVwPWBszW
 ```
+{% endcode %}
 
 {% hint style="info" %}
 지갑은 15분동안 사용하지 않으면 잠금 상태가 됩니다. 만약 지갑의 잠금 해제 시간을 늘리고 싶다면 keosd 의 환경 설정 파일(디폴트로 `~/eosio-wallet/config.ini`) 에서 `unlock-timeout` 값(초 단위)을 원하는 만큼 늘려주면 됩니다.&#x20;
@@ -177,9 +179,11 @@ plugin = eosio::producer_api_plugin
 
 그리고 `chain-state-db-size-mb` 에 로컬 머신의 메모리 용량을 입력합니다. 메모리는 다음과 같이 계산할 수 있습니다,
 
+{% code overflow="wrap" %}
 ```
 awk '/MemTotal/ {printf( "%.2f\n", $2 / 1024 )}' /proc/meminfo |  awk '{print int($0)}'
 ```
+{% endcode %}
 
 로컬 테스트넷이라면 16GB(16384) 이하로도 충분합니다. 다만 입력할 메모리 용량이 전체 물리 메모리양을 넘어가지 않도록 합니다.&#x20;
 
@@ -202,6 +206,7 @@ awk '/MemTotal/ {printf( "%.2f\n", $2 / 1024 )}' /proc/meminfo |  awk '{print in
 
 * **start.sh**
 
+{% code overflow="wrap" %}
 ```
 #!/bin/bash
 
@@ -230,6 +235,7 @@ done
 
 $NODEOSBINDIR/nodeos $GENESIS $SNAPSHOT --data-dir $DATADIR --config-dir $DATADIR 2>> $DATADIR/stderr.txt &  echo $! > $DATADIR/nodeos.pid
 ```
+{% endcode %}
 
 * **stop.sh**
 
@@ -368,15 +374,19 @@ Public key: EOS84BLRbGbFahNJEpnnJHYCoW9QPbQEk2iHsHGGS6qcVUq9HhutG
 
 다음과 같이 입력하여 이 키를 디폴트 지갑에 넣습니다.
 
+{% code overflow="wrap" %}
 ```
 cleos wallet import --private-key 5KAVVPzPZnbAx8dHz6UWVPFDVFtU1P5ncUzwHGQFuTxnEbdHJL4
 ```
+{% endcode %}
 
 디폴트 지갑에 키가 성공적으로 들어가면 해당 키의 공개키가 콘솔상에 표시 됩니다.
 
+{% code overflow="wrap" %}
 ```
 private key: imported private key for: EOS84BLRbGbFahNJEpnnJHYCoW9QPbQEk2iHsHGGS6qcVUq9HhutG
 ```
+{% endcode %}
 
 다른 키를 사용하려면 다음 명령어를 명령줄에 입력하여 키를 생성합니다.
 
@@ -388,6 +398,7 @@ cleos create key --to-console
 
 이 스크립트에서는 모든 eosio.\* 계정이 모두 같은 키를 사용하도록 할 것이지만 원한다면 다른 키를 만들어 사용해도 됩니다.
 
+{% code overflow="wrap" %}
 ```
 cleos create account eosio eosio.bpay EOS84BLRbGbFahNJEpnnJHYCoW9QPbQEk2iHsHGGS6qcVUq9HhutG
 cleos create account eosio eosio.msig EOS84BLRbGbFahNJEpnnJHYCoW9QPbQEk2iHsHGGS6qcVUq9HhutG
@@ -400,6 +411,7 @@ cleos create account eosio eosio.token EOS84BLRbGbFahNJEpnnJHYCoW9QPbQEk2iHsHGGS
 cleos create account eosio eosio.vpay EOS84BLRbGbFahNJEpnnJHYCoW9QPbQEk2iHsHGGS6qcVUq9HhutG
 cleos create account eosio eosio.rex EOS84BLRbGbFahNJEpnnJHYCoW9QPbQEk2iHsHGGS6qcVUq9HhutG
 ```
+{% endcode %}
 
 ### 시스템 컨트랙트 빌드 및 배포하기
 
@@ -415,6 +427,7 @@ sudo apt install build-essential cmake
 
 `eosio.contracts` 저장소를 클론하고 저장소에 포함된 빌드 스크립트로 소스를 빌드합니다.&#x20;
 
+{% code overflow="wrap" %}
 ```
 cd /home/nodeos/genesis
 git clone https://github.com/eosnetworkfoundation/eos-system-contracts.git
@@ -422,6 +435,7 @@ cd ./eos-system-contracts
 ./build.sh # 빌드 중 eosio.cdt 설치 디렉토리를 입력해야 할 수도 있는데, /usr/opt/cdt/<version> 아래에 설치되어 있다.
 cd ./build/contracts/
 ```
+{% endcode %}
 
 `build.sh` 파일로 빌드하는 도중 경고를 볼 수 있는데, 이는 리카르디안 컨트랙트가 없다는 경고로, 무시해도 문제 없습니다.
 
@@ -431,11 +445,13 @@ EOSIO v1.8 및 이후 버전에서 도입된 모든 프로토콜 기능을 사�
 
 `PREACTIVATE_FEATURE` 을 활성화 하려면 다음 명령을 입력합니다.
 
+{% code overflow="wrap" %}
 ```
 curl --request POST \\
     --url <http://127.0.0.1:8888/v1/producer/schedule_protocol_feature_activations> \\
     -d '{"protocol_features_to_activate": ["0ec7e080177b2c02b278d5088611686b49d739925a92d9bfcacd7fc6b74053bd"]}'
 ```
+{% endcode %}
 
 #### eosio.boot 컨트랙트 설정
 
@@ -445,6 +461,7 @@ curl --request POST \\
 
 이제 `eosio.boot` 컨트랙트를 설치하면 Antelope 기반 블록체인에서 권장되는 일련의 프로토콜 기능을 사용할 수 있게 됩니다.
 
+{% code overflow="wrap" %}
 ```
 //cleos set contract eosio.boot <eosio.boot.wasm 파일 경로>
 cd /home/nodeos/genesis/eos-system-contracts/build/contracts/eosio.boot
@@ -457,6 +474,7 @@ executed transaction: 2150ed87e4564cd3fe98ccdea841dc9ff67351f9315b6384084e8572a3
 #         eosio <= eosio::setcode               {"account":"eosio","vmtype":0,"vmversion":0,"code":"0061736d0100000001be023060027f7e0060067f7e7e7f7f...
 #         eosio <= eosio::setabi                {"account":"eosio","abi":{"types":[],"structs":[{"name":"buyrambytes","base":"","fields":[{"name":"p...
 ```
+{% endcode %}
 
 #### 다른 프로토콜 기능 활성화하기
 
@@ -464,12 +482,15 @@ executed transaction: 2150ed87e4564cd3fe98ccdea841dc9ff67351f9315b6384084e8572a3
 
 어떤 프로토콜 기능을 사용하려면 `activate` 액션에 원하는 프로토콜 기능의 해시 다이제스트를 전달하여 활성화 시킵니다. Antelope 블록체인의 프로토콜 기능 다이제스트는 다음 명령으로 확인할 수 있습니다.
 
+{% code overflow="wrap" %}
 ```
 curl -X POST http://127.0.0.1:8888/v1/producer/get_supported_protocol_features | jq .
 ```
+{% endcode %}
 
 아래 예제는 Leap 3.1.0 에서 사용 가능한 프로토콜 기능을 활성화시키는 명령입니다. 무엇을 사용할 것인가는 어디까지나 선택사항이며 이러한 프로토콜 기능 없이도 블록체인을 사용할 수는 있지만, 가능하면 Antelope 기반 블록체인에서는 전부 활성화하여 사용하는 것이 좋습니다.
 
+{% code overflow="wrap" %}
 ```
 # ONLY_LINK_TO_EXISTING_PERMISSION
 cleos push action eosio activate '["1a99a59d87e06e09ec5b028a9cbb7749b4a5ad8819004365d02dc4379a8b7241"]' -p eosio
@@ -525,6 +546,7 @@ cleos push action eosio activate '["6bcb40a24e49c26d0a60513b6aeb8551d264e4717f30
 # GET_BLOCK_NUM
 cleos push action eosio activate '["35c2186cc36f7bb4aeaf4487b36e57039ccf45a9136aa856a5d569ecca55ef2b"]' -p eosio
 ```
+{% endcode %}
 
 만약 현재 활성화된 프로토콜 기능 목록을 확인하고 싶다면 다음과 같이 입력합니다.
 
@@ -536,6 +558,7 @@ curl http://127.0.0.1:8888/v1/chain/get_activated_protocol_features | jq .
 
 이제 `eosio.token` 컨트랙트를 배포합니다. 이 컨트랙트는 토큰을 발행하거나 정보를 얻거나 이체할 수 있도록 합니다. `eosio.token` 을 배포하려면 다음과 같이 합니다.
 
+{% code overflow="wrap" %}
 ```
 //cleos set contract eosio.token <eosio.token.wasm 파일 경로>
 cd /home/nodeos/genesis/eos-system-contracts/build/contracts/eosio.token
@@ -548,18 +571,22 @@ executed transaction: 17fa4e06ed0b2f52cadae2cd61dee8fb3d89d3e46d5b133333816a04d2
 #         eosio <= eosio::setcode               {"account":"eosio.token","vmtype":0,"vmversion":0,"code":"0061736d01000000017f1560037f7e7f0060057f7e...
 #         eosio <= eosio::setabi                {"account":"eosio.token","abi":{"types":[],"structs":[{"name":"transfer","base":"","fields":[{"name"...
 ```
+{% endcode %}
 
 #### eosio.msig 컨트랙트 배포
 
 `eosio.msig` 는 퍼미션 레벨과 다중서명(multisig) 프로세스를 사용할 수 있게 하고 또한 이들을 쉽게 정의하고 관리 할 수 있게 합니다. leap 3.1 에서 이 기능을 사용하려면 먼저 `CRYPTO_PRIMITIVE` 프로토콜 기능을 활성화해야 합니다.
 
+{% code overflow="wrap" %}
 ```
 # CRYPTO_PRIMITIVES
 cleos push action eosio activate '["6bcb40a24e49c26d0a60513b6aeb8551d264e4717f306b81a37a5afb3b47cedc"]' -p eosio
 ```
+{% endcode %}
 
 이제 다음과 같이 `eosio.msig` 컨트랙트를 배포합니다.
 
+{% code overflow="wrap" %}
 ```
 //cleos set contract eosio.msig <eosio.msig.wasm 파일 경로>
 cd /home/nodeos/genesis/eos-system-contracts/build/contracts/eosio.msig
@@ -572,6 +599,7 @@ executed transaction: 007507ad01de884377009d7dcf409bc41634e38da2feb6a117ceced855
 #         eosio <= eosio::setcode               {"account":"eosio.msig","vmtype":0,"vmversion":0,"code":"0061736d010000000198011760017f0060047f7e7e7...
 #         eosio <= eosio::setabi                {"account":"eosio.msig","abi":{"types":[{"new_type_name":"account_name","type":"name"}],"structs":[{...
 ```
+{% endcode %}
 
 #### SYS 화폐를 만들고 할당
 
@@ -579,21 +607,25 @@ executed transaction: 007507ad01de884377009d7dcf409bc41634e38da2feb6a117ceced855
 
 첫 단계로 `eosio.token` 계정을 사용하여 인증하게 되는 `eosio.token` 컨트랙트의 `create` 액션을 사용하여 100억개의 SYS 토큰을 생성합니다. 이는 토큰의 최대 공급량을 설정하는 것으로 실제로 토큰을 발행하지는 않습니다. 발행되지 않은 토큰은 일종의 적립금인 상태라고 생각하면 됩니다.
 
+{% code overflow="wrap" %}
 ```
 cleos push action eosio.token create '[ "eosio", "10000000000.0000 SYS" ]' -p eosio.token@active
 
 executed transaction: 0440461e0d8816b4a8fd9d47c1a6a53536d3c7af54abf53eace884f008429697  120 bytes  326 us
 #   eosio.token <= eosio.token::create          {"issuer":"eosio","maximum_supply":"10000000000.0000 SYS"}
 ```
+{% endcode %}
 
 두 번째로, `eosio.token` 컨트랙트의 `issue` 액션을 사용하여 10억 개의 SYS 토큰을 적립된 상태로부터 발행하도록 합니다. 발행한 순간부터 토큰들은 `eosio` 계정에 귀속됩니다. `eosio` 계정이 아직 발행되지 않은, 적립된 토큰을 가지고 있기 때문에 액션을 수행하려면 이 계정으로 인증해야 합니다.
 
+{% code overflow="wrap" %}
 ```
 cleos push action eosio.token issue '[ "eosio", "1000000000.0000 SYS", "memo" ]' -p eosio@active
 
 executed transaction: a53961a566c1faa95531efb422cd952611b17d728edac833c9a55582425f98ed  128 bytes  432 us
 #   eosio.token <= eosio.token::issue           {"to":"eosio","quantity":"1000000000.0000 SYS","memo":"memo"}
 ```
+{% endcode %}
 
 {% hint style="info" %}
 경제적 관점에서 보면, 토큰을 발행함 으로서 유동성을 공급하면, 즉 토큰을 적립금에서 유통되는 상태로 이동시키면, 그로 인해 인플레이션이 발생하게 됩니다. 토큰 발행은 인플레이션을 발생시키는 하나의 방법입니다.
@@ -674,6 +706,7 @@ cleos push action eosio init '["0", "4,SYS"]' -p eosio@active
 이 단원에서는 새로운 계정 생성 시 아래의 키 쌍을 사용할 것입니다. 실제 프로덕션 환경에서 사용해서는 안 되며 별도의 계정 키 값과 토큰을 만들어 사용해야 합니다.
 {% endhint %}
 
+{% code overflow="wrap" %}
 ```
 Private key: 5K7EYY3j1YY14TSFVfqgtbWbrw3FA8BUUnSyFGgwHi8Uy61wU1o
 Public key: EOS8mUftJXepGzdQ2TaCduNuSPAfXJHf22uex4u41ab1EVv9EAhWt
@@ -681,9 +714,11 @@ Public key: EOS8mUftJXepGzdQ2TaCduNuSPAfXJHf22uex4u41ab1EVv9EAhWt
 cleos wallet import --private-key 5K7EYY3j1YY14TSFVfqgtbWbrw3FA8BUUnSyFGgwHi8Uy61wU1o
 imported private key for: EOS8mUftJXepGzdQ2TaCduNuSPAfXJHf22uex4u41ab1EVv9EAhWt
 ```
+{% endcode %}
 
 새로운 계정 `bp.account.1` 을 다음과 같이 만듭니다.
 
+{% code overflow="wrap" %}
 ```
 cleos system newaccount eosio --transfer bp.account.1 EOS8mUftJXepGzdQ2TaCduNuSPAfXJHf22uex4u41ab1EVv9EAhWt --stake-net "100000000.0000 SYS" --stake-cpu "100000000.0000 SYS" --buy-ram-kbytes 8192
 
@@ -692,17 +727,20 @@ executed transaction: 07ec321e34d09e9becfdc3a15f4eacade2bfe14c56056040f609b1c5ed
 #         eosio <= eosio::buyrambytes           {"payer":"eosio","receiver":"bp.account.1","bytes":8388608}
 #         eosio <= eosio::delegatebw            {"from":"eosio","receiver":"bp.account.1","stake_net_quantity":"100000000.0000 SYS","stake_cpu_quant...
 ```
+{% endcode %}
 
 ### 새로운 계정을 BP 로 등록하기
 
 새로운 계정을 BP로 등록하려면 다음과 같이 합니다.
 
+{% code overflow="wrap" %}
 ```
 cleos system regproducer bp.account.1 EOS8mUftJXepGzdQ2TaCduNuSPAfXJHf22uex4u41ab1EVv9EAhWt https://www.nodeone.io 401
 
 executed transaction: 43bebaf6a4302b08d639c1413faef7d30de130dac857d2f91e28c0b9153364cd  160 bytes  625 us
 #         eosio <= eosio::regproducer           {"producer":"bp.account.1","producer_key":"EOS8mUftJXepGzdQ2TaCduNuSPAfXJHf22uex4u41ab1EVv9EAhWt","u...
 ```
+{% endcode %}
 
 위 명령은 계정을 BP 후보로 만듭니다. 하지만 투표를 받아 선출되지 않는 이상 아직 블록을 생성하지는 않습니다.
 
@@ -710,12 +748,14 @@ executed transaction: 43bebaf6a4302b08d639c1413faef7d30de130dac857d2f91e28c0b915
 
 다음 명령으로 BP 목록을 볼 수 있습니다. 현 시점에서는 BP로 등록된 계정만이 나타날 것입니다.
 
+{% code overflow="wrap" %}
 ```
 cleos system listproducers
 
 Producer      Producer key                                           Url                                                         Scaled votes
 accountnum11  EOS8mUftJXepGzdQ2TaCduNuSPAfXJHf22uex4u41ab1EVv9EAhWt  <https://accountnum11.com/EOS8mUftJXepGzdQ2TaCduNuSPAfXJHf22> 0.0000
 ```
+{% endcode %}
 
 ### 추가 BP 설정 및 시작
 
@@ -771,11 +811,13 @@ touch /home/nodeos/bp.account.1/stderr.txt
 
 **config.ini**
 
+{% code overflow="wrap" %}
 ```
 p2p-peer-address = 10.117.126.249:9876
 signature-provider=EOS8mUftJXepGzdQ2TaCduNuSPAfXJHf22uex4u41ab1EVv9EAhWt=KEY:5K7EYY3j1YY14TSFVfqgtbWbrw3FA8BUUnSyFGgwHi8Uy61wU1o
 producer-name = bp.account.1
 ```
+{% endcode %}
 
 #### 두 번째 BP 노드 시작하기
 
@@ -842,13 +884,16 @@ BP 가 선출되고 최소한 15% 의 토큰이 투표를 위해 스테이킹 �
 
 `eosio.*` 계정을 파기하려면 `eosio.*` 의 키 세트를을 null 로 설정하면 됩니다. 다음 명령을 사용하여 `eosio.*` 계정의 `owner` 키와 `active` 키를 삭제합니다.
 
+{% code overflow="wrap" %}
 ```
 cleos push action eosio updateauth '{"account": "eosio", "permission": "owner", "parent": "", "auth": {"threshold": 1, "keys": [], "waits": [], "accounts": [{"weight": 1, "permission": {"actor": "eosio.prods", "permission": "active"}}]}}' -p eosio@owner
 cleos push action eosio updateauth '{"account": "eosio", "permission": "active", "parent": "owner", "auth": {"threshold": 1, "keys": [], "waits": [], "accounts": [{"weight": 1, "permission": {"actor": "eosio.prods", "permission": "active"}}]}}' -p eosio@active
 ```
+{% endcode %}
 
 필요시 위에서 만든 시스템 계정들 역시 다음 명령을 사용하여 파기할 수 있습니다.
 
+{% code overflow="wrap" %}
 ```
 cleos push action eosio updateauth '{"account": "eosio.bpay", "permission": "owner", "parent": "", "auth": {"threshold": 1, "keys": [], "waits": [], "accounts": [{"weight": 1, "permission": {"actor": "eosio", "permission": "active"}}]}}' -p eosio.bpay@owner
 cleos push action eosio updateauth '{"account": "eosio.bpay", "permission": "active", "parent": "owner", "auth": {"threshold": 1, "keys": [], "waits": [], "accounts": [{"weight": 1, "permission": {"actor": "eosio", "permission": "active"}}]}}' -p eosio.bpay@active
@@ -877,6 +922,7 @@ cleos push action eosio updateauth '{"account": "eosio.token", "permission": "ac
 cleos push action eosio updateauth '{"account": "eosio.vpay", "permission": "owner", "parent": "", "auth": {"threshold": 1, "keys": [], "waits": [], "accounts": [{"weight": 1, "permission": {"actor": "eosio", "permission": "active"}}]}}' -p eosio.vpay@owner
 cleos push action eosio updateauth '{"account": "eosio.vpay", "permission": "active", "parent": "owner", "auth": {"threshold": 1, "keys": [], "waits": [], "accounts": [{"weight": 1, "permission": {"actor": "eosio", "permission": "active"}}]}}' -p eosio.vpay@active
 ```
+{% endcode %}
 
 ## 모니터링하고 테스트하기
 

@@ -19,6 +19,7 @@ touch abcounter.cpp
 
 편집기로 `abcounter.cpp` 파일을 열고 다음 코드를 붙여넣습니다. 이 컨트랙트는 지금까지 다루었던 내용을 기반으로 매우 기본적인 내용으로 구성되어 있습니다. 몇 가지 예외가 있기는 하지만, 그 내용에 대해서는 아래에 자세히 설명할 것입니다.
 
+{% code overflow="wrap" %}
 ```cpp
 #include <eosio/eosio.hpp>
 
@@ -66,6 +67,7 @@ class [[eosio::contract("abcounter")]] abcounter : public eosio::contract {
     using count_index = eosio::multi_index<"counts"_n, counter>;
 };
 ```
+{% endcode %}
 
 위 코드에서 처음 등장한 개념은, 아래와 코드와 같이 `require_auth()` 를 사용하여 특정 계정만이 이 컨트랙트의 어떤 액션 호출할 수 있도록 명시한다는 것입니다.
 
@@ -86,9 +88,11 @@ using count_action = action_wrapper<"count"_n, &abcounter::count>;
 
 터미널을 열고 아래 명령을 실행하여 `abcounter` 사용자를 만듭니다.
 
+{% code overflow="wrap" %}
 ```cpp
 cleos create account eosio abcounter EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
 ```
+{% endcode %}
 
 ## 단계3: 컴파일 및 배포
 
@@ -146,6 +150,7 @@ increment_counter(user, "erase");
 
 이제 `addressbook.cpp` 전체 코드는 다음과 같을 것입니다.
 
+{% code overflow="wrap" %}
 ```cpp
 #include <eosio/eosio.hpp>
 #include "abcounter.cpp"
@@ -246,6 +251,7 @@ private:
   > address_index;
 };
 ```
+{% endcode %}
 
 ## 단계5: addressbook 컨트랙트 재 컴파일 및 재배포
 
@@ -267,6 +273,7 @@ cleos set contract addressbook CONTRACTS_DIR/addressbook
 
 이제 `abcounter` 가 배포되었고 `addressbook` 도 다시 배포 되었으니 테스트를 해 보겠습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ cleos push action addressbook upsert '["alice", "alice", "liddell", 19, "123 drink me way", "wonderland", "amsterdam"]' -p alice@active
 
@@ -276,6 +283,7 @@ executed transaction: cc46f20da7fc431124e418ecff90aa882d9ca017a703da78477b381a02
 #         alice <= addressbook::notify          {"user":"alice","msg":"alice successfully modified record in addressbook"}
 #     abcounter <= abcounter::count             {"user":"alice","type":"modify"}
 ```
+{% endcode %}
 
 출력된 로그에서 `counter` 알림이 성공적으로 나타난 것을 확인할 수 있습니다. 이제 테이블을 확인해보겠습니다.
 
@@ -295,6 +303,7 @@ $ cleos get table abcounter abcounter counts --lower alice --limit 1
 
 각각의 액션을 테스트하고 `counter` 도 체크합니다. 이미 alice 의 레코드가 있으므로 upsert 로 수정하겠습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ cleos push action addressbook upsert '["alice", "alice", "liddell", 21,"1 there we go", "wonderland", "amsterdam"]' -p alice@active
 
@@ -306,9 +315,11 @@ executed transaction: c819ffeade670e3b44a40f09cf4462384d6359b5e44dd211f4367ac6d3
 #     abcounter <= abcounter::count             {"user":"alice","type":"emplace"}
 warning: transaction executed locally, but may not be confirmed by the network yet    ]
 ```
+{% endcode %}
 
 alice 의 레코드는 다음과 같이 삭제할 수 있습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ cleos push action addressbook erase '["alice"]' -p alice@active
 
@@ -322,9 +333,11 @@ executed transaction: aa82577cb1efecf7f2871eac062913218385f6ab2597eaf31a4c0d25ef
 warning: transaction executed locally, but may not be confirmed by the network yet    ]
 Toaster:addressbook sandwich$
 ```
+{% endcode %}
 
 이제 `abcounter` 컨트랙트를 직접 호출하여 데이터를 조작 할 수 있는지 테스트 해 보겠습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 cleos push action abcounter count '["alice", "erase"]' -p alice@active
 
@@ -335,6 +348,7 @@ Error Details:
 missing authority of addressbook
 pending console output:
 ```
+{% endcode %}
 
 권한 때문에 오류가 발생함을 확인할 수 있습니다. `abcounter` 내의 테이블을 다음과 같이 확인해 보겠습니다.
 
@@ -359,6 +373,7 @@ $ cleos get table abcounter abcounter counts --lower alice
 
 아래에서 수정할 내용은 변경 모드를 기반으로 하여 사용자 영수증을 보내줄 것입니다. 만약 수정 중에 변경 사항이 없다면 영수증은 이 상황을 반영할 것입니다.
 
+{% code overflow="wrap" %}
 ```cpp
 #include <eosio/eosio.hpp>
 #include "abcounter.cpp"
@@ -491,3 +506,4 @@ private:
   typedef eosio::multi_index<"people"_n, person, indexed_by<"byage"_n, const_mem_fun<person, uint64_t, &person::get_secondary_1>>> address_index;
 };
 ```
+{% endcode %}

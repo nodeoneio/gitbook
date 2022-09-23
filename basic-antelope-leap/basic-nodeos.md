@@ -21,6 +21,7 @@ Antelope 노드의 핵심 데몬(daemon)인 `nodeos` 는 CLI(명령줄 인터페
 
 `nodeos --help` 를 입력하면 도움말이 출력되는데, 출력된 내용의 하단에서 다음과 같이 `nodeos` 전용 옵션들을 확인 할 수 있습니다.
 
+{% code overflow="wrap" %}
 ```
 $ nodeos --help
 ...
@@ -40,6 +41,7 @@ Application Command Line Options:
   -c [ --config ] arg (=config.ini)     config-dir에 저장된 설정 파일 이름을 지정합니다.
   -l [ --logconf ] arg (=logging.json)  라이브러리 사용자를 위한 로깅 구성 파일/경로를 지정합니다. 
 ```
+{% endcode %}
 
 ## nodeos 플러그인 전용 옵션
 
@@ -55,6 +57,7 @@ Application Command Line Options:
 
 `nodeos --help` 실행하면 아래 예시와 같이 `Command Line Options for...` 라는 섹션에서 이러한 명령줄 전용 옵션들을 찾아볼 수 있습니다.
 
+{% code overflow="wrap" %}
 ```
 $ nodeos --help
 ....
@@ -63,6 +66,7 @@ Command Line Options for eosio::chain_plugin:
   --genesis-timestamp arg               제네시스 상태 파일의 초기 타임스탬프를 덮어씌움.
 ...
 ```
+{% endcode %}
 
 ## **config.ini 설정 파일 위치**
 
@@ -76,6 +80,7 @@ Command Line Options for eosio::chain_plugin:
 
 다음은 로컬 환경에서 단독으로 실행되는 블록 생산자(BP)의 노드를 시작하는 명령입니다. 명령줄에서 실행합니다.&#x20;
 
+{% code overflow="wrap" %}
 ```bash
 $ nodeos \
 -e -p eosio \
@@ -94,6 +99,7 @@ $ nodeos \
 --verbose-http-errors \
 >> nodeos.log 2>&1 &
 ```
+{% endcode %}
 
 위 예제에서 `nodeos` 명령과 함께 사용된 옵션은 다음과 같습니다.
 
@@ -121,6 +127,7 @@ $ nodeos \
 
 `cleos get info` 명령을 실행하면 다음과 같이 명령을 실행한 순간의 로컬 노드 정보가 콘솔에 출력됩니다. 이 정보로 노드의 상태가 정상인지 확인할 수 있습니다.
 
+{% code overflow="wrap" %}
 ```
 $ cleos get info
 {
@@ -146,11 +153,13 @@ $ cleos get info
   "last_irreversible_block_time": "2022-08-22T14:22:40.000"
 }
 ```
+{% endcode %}
 
 ### 출력되는 로그 확인
 
 위 명령에서 `nodeos` 가 출력하는 `stdout`, `stderr` 로그를 `nodeos.log` 에 기록하도록 하였습니다. 다음 명령으로 노드가 출력하는 로그를 실시간으로 확인할 수 있습니다.
 
+{% code overflow="wrap" %}
 ```
 $ tail -f nodeos.log
 ...
@@ -162,6 +171,7 @@ info  2022-08-22T14:34:20.401 nodeos    producer_plugin.cpp:2434      produce_bl
 info  2022-08-22T14:34:21.906 nodeos    producer_plugin.cpp:2434      produce_block        ] Produced block ndj573hyd7oedjdj... #12 @ 2022-08-22T14:34:21.000 signed by eosio [trxs: 0, lib: 11, confirmed: 0]
 ...
 ```
+{% endcode %}
 
 정상적으로 `nodeos` 가 동작 중이라면 위와 같이 로그에서 블록이 생성되고 있는 과정을 확인할 수 있습니다.
 
@@ -173,6 +183,7 @@ info  2022-08-22T14:34:21.906 nodeos    producer_plugin.cpp:2434      produce_bl
 
 다음은 `nodeos` 데몬을 제거하는 예제입니다.
 
+{% code overflow="wrap" %}
 ```
 $ ps
 ...
@@ -180,6 +191,7 @@ $ ps
 ...
 $ kill 500
 ```
+{% endcode %}
 
 만약 `kill -SIGKILL <PID>` 명령으로 데몬을 강제 종료하면 블록체인 상태 데이터베이스가 망가져, 블록체인 데이터를 지우고 다시 처음부터 시작하거나 리플레이를 해야 합니다. 따라서 블록체인을 나중에 다시 계속 이어서 사용하려면 강제 종료는 사용하지 않는 것이 좋습니다.&#x20;
 

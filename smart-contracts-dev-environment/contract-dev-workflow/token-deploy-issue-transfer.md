@@ -14,10 +14,12 @@ cd CONTRACTS_DIR
 
 github 저장소에서 최신 `eosio.contracts` 소스를 다운로드 받고 압축을 풉니다.
 
+{% code overflow="wrap" %}
 ```jsx
 wget https://github.com/eosnetworkfoundation/eos-system-contracts/archive/refs/tags/v3.1.0.tar.gz
 tar -zxvf v3.1.0.tar.gz
 ```
+{% endcode %}
 
 이 파일은 여러가지 스마트 컨트랙트 소스를 포함하고 있는데, 그 중 `eosio.token` 컨트랙트가 이 단원에서 다룰 내용입니다.&#x20;
 
@@ -38,9 +40,11 @@ Private: 5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3
 
 다음과 같이 `eosio.token` 계정을 만듭니다.
 
+{% code overflow="wrap" %}
 ```jsx
 cleos create account eosio eosio.token EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
 ```
+{% endcode %}
 
 ### 단계3: 스마트 컨트랙트 컴파일
 
@@ -56,6 +60,7 @@ cdt-cpp -I include -o eosio.token.wasm src/eosio.token.cpp --abigen
 
 이제 배포할 준비가 되었습니다. 다음 명령으로 토큰 컨트랙트를 배포합니다.
 
+{% code overflow="wrap" %}
 ```jsx
 $ cleos set contract eosio.token . --abi eosio.token.abi -p eosio.token@active
 
@@ -66,6 +71,7 @@ executed transaction: a68299112725b9f2233d56e58b5392f3b37d2a4564bdf99172152c21c7
 #         eosio <= eosio::setabi                {"account":"eosio.token","abi":"0e656f73696f3a3a6162692f312e310008076163636f756e7400010762616c616e63...
 warning: transaction executed locally, but may not be confirmed by the network yet         ]
 ```
+{% endcode %}
 
 ### 단계5: 토큰 만들기
 
@@ -77,14 +83,17 @@ warning: transaction executed locally, but may not be confirmed by the network y
 
 아래는 토큰을 만드는 액션을 호출하는 명령의 예제 입니다.
 
+{% code overflow="wrap" %}
 ```jsx
 cleos push action eosio.token create '[ "alice", "1000000000.0000 SYS"]' -p eosio.token@active
 ```
+{% endcode %}
 
 위 명령으로 최대 공급량이 `100000000.0000` 이고 소수점 4자리의 정밀도를 가지는 새 토큰 "SYS"를 만들었습니다. 그리고 alice 도 발행인으로 지정했습니다. 또한 스마트 컨트랙트가 이 토큰을 만들기 위해 `eosio.token` 의 권한을 필요로 하기 때문에 `-p eosio.token@active` 옵션으로 권한을 지정하였습니다.
 
 액션 호출시에 다음과 같이 각 인수에 명확한 이름을 지정하는 형식으로 사용 할 수도 있습니다.
 
+{% code overflow="wrap" %}
 ```jsx
 cleos push action eosio.token create '{"issuer":"alice", "maximum_supply":"1000000000.0000 SYS"}' -p eosio.token@active
 
@@ -92,11 +101,13 @@ executed transaction: 10cfe1f7e522ed743dec39d83285963333f19d15c5d7f0c120b7db6526
 #   eosio.token <= eosio.token::create          {"issuer":"alice","maximum_supply":"1000000000.0000 SYS"}
 warning: transaction executed locally, but may not be confirmed by the network yet         ]
 ```
+{% endcode %}
 
 ### 단계6: 토큰 발행
 
 이제 발행자(issuer)인 alice 는 새 토큰을 발행할 수 있게 되었습니다. 앞서 설명하였듯이 토큰 발행은 발행자만이 할 수있습니다. 따라서 토큰을 발행하는 액션인 `issue` 액션을 호출할 때 반드시 `-p alice@active` 권한을 같이 넘겨야 합니다.
 
+{% code overflow="wrap" %}
 ```jsx
 $ cleos push action eosio.token issue '[ "alice", "100.0000 SYS", "memo" ]' -p alice@active
 
@@ -104,12 +115,15 @@ executed transaction: d1466bb28eb63a9328d92ddddc660461a16c405dffc500ce4a75a10aa1
 #   eosio.token <= eosio.token::issue           {"to":"alice","quantity":"100.0000 SYS","memo":"memo"}
 warning: transaction executed locally, but may not be confirmed by the network yet         ]
 ```
+{% endcode %}
 
 트랜잭션을 검사하려면 "브로드캐스트 안 함" 및 "트랜잭션을 json으로 반환"을 나타내는 -d 와 -j 옵션을 사용하면 됩니다. 이 옵션은 개발 중에 사용하면 유용합니다.
 
+{% code overflow="wrap" %}
 ```jsx
 cleos push action eosio.token issue '["alice", "100.0000 SYS", "memo"]' -p alice@active -d -j
 ```
+{% endcode %}
 
 토큰이 제대로 발행 되었는지 alice 의 잔고를 확인해 보겠습니다.
 
@@ -122,6 +136,7 @@ $ cleos get currency balance eosio.token alice SYS
 
 이제 alice 가 토큰을 발행했으니 다른 계정인 bob 으로 토큰을 전송해 보겠습니다.
 
+{% code overflow="wrap" %}
 ```jsx
 $ cleos push action eosio.token transfer '[ "alice", "bob", "25.0000 SYS", "m" ]' -p alice@active
 
@@ -131,6 +146,7 @@ executed transaction: 800835f28659d405748f4ac0ec9e327335eae579a0d8e8ef6330e78c9e
 #           bob <= eosio.token::transfer        {"from":"alice","to":"bob","quantity":"25.0000 SYS","memo":"m"}
 warning: transaction executed locally, but may not be confirmed by the network yet         ]
 ```
+{% endcode %}
 
 이번에는 3개의 `transfer`액션이 출력된 것을 볼 수 있습니다. 액션의 실행 결과로 표시되는 내용은 호출된 액션의 핸들러 들과, 액션이 호출된 순서, 그리고 액션이 출력한 내용입니다.
 

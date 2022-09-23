@@ -19,6 +19,7 @@ cleos get account <계정 이름>
 
 다음 예제는 시스템 계정인 `eosio` 의 정보를 얻어오는 명령과 그 결과입니다.
 
+{% code overflow="wrap" %}
 ```
 cleos get account eosio
 
@@ -40,6 +41,7 @@ cpu bandwidth:
      available:          unlimited
      limit:              unlimited
 ```
+{% endcode %}
 
 {% hint style="info" %}
 블록체인 네트워크에 어떤 시스템 컨트랙트가 배포되어 있는가에 따라 표시되는 내용이 달라질 수 있습니다.

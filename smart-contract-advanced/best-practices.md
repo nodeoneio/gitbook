@@ -230,15 +230,18 @@ c++ \[\[eosio::table("\<valid action name>")]]
 
 ### \[\[eosio::contract("ANY\_NAME\_YOU\_LIKE")]]
 
+{% code overflow="wrap" %}
 ```cpp
 class [[eosio::contract("ANY_NAME_YOU_LIKE")]] test_contract : public eosio::contract {
 };
 ```
+{% endcode %}
 
 위의 코드는 속성을 지정하여 이 클래스가 Antelope 스마트 컨트랙트 라는 것을 나타내고 있으며, 이를 통해 컨트랙트의 네임스페이스를 사용할 수 있습니다. 예를 들어 `eosio::token` 이라는 헤더를 포함할 수 있고 `eosio::token` 의 액션과 테이블이 ABI 나 만들어진 디스패처에 표시되지 않습니다.
 
 ### \[\[eosio::on\_notify("VALID\_EOSIO\_ACCOUNT\_NAME::VALID\_EOSIO\_ACTION\_NAME")]]
 
+{% code overflow="wrap" %}
 ```cpp
 [[eosio::on_notify("eosio.token::transfer")]]
 void on_token_transfer(name from, name to, assert quantity, std::string memo) {
@@ -249,6 +252,7 @@ void on_token_transfer(name from, name to, assert quantity, std::string memo) {
 void on_any_transfer(name from, name to, assert quantity, std::string memo) {
    // 임의의 계약의 어떠한 계정에서 해당 컨트랙트가 배포된 계정으로 전송(transfer) 하는 액션 상에서 해야하는 일을 기술한다.
 ```
+{% endcode %}
 
 ### \[\[eosio::wasm\_entry]]
 
@@ -359,6 +363,7 @@ Print C++ API 는 다음과 같은 내용을 지원합니다.
 
 #### debug.hpp
 
+{% code overflow="wrap" %}
 ```cpp
 namespace debug {
     struct foo {
@@ -371,6 +376,7 @@ namespace debug {
     };
 }
 ```
+{% endcode %}
 
 #### debug.cpp
 
@@ -423,11 +429,13 @@ extern "C" {
 
 이 컨트랙트를 배포하고 액션을 push 해 보겠습니다. debug 계정은 이미 만들어져 있으며 키도 지갑에 있다고 가정하겠습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 $ cdt-cpp -abigen debug.cpp -o debug.wasm
 $ cleos set contract debug CONTRACT_DIR/debug -p youraccount@active
 $ cleos push action debug foo '{"from":"inita", "to":"initb", "amount":10}' --scope debug
 ```
+{% endcode %}
 
 로컬 `nodeos` 노드 로그를 보면 위의 메시지가 전송된 다음에 아래 내용이 표시되는 것을 볼 수 있습니다.
 

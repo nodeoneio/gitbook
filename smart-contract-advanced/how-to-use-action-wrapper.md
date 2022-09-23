@@ -52,11 +52,13 @@ class [[eosio::contract]] multi_index_example : public contract {
 
 * 액션 래퍼 `mod_action` 을 인스턴스화 합니다. 첫 번째 매개변수로서 액션을 전달하는 컨트랙트를 지정합니다. 여기서 이 컨트랙트는 `multiindexex` 계정으로 배포된다고 가정합니다. 그리고 구조체는 두 개의 매개변수로 정의되는데, 첫 번째는 get\_self() 을 호출하여 얻을 수 있는 자신의 계정이고, 두 번째는 active 권한입니다. 이 두개의 매개변수는 필요에 따라 변경할 수 있습니다.
 
+{% code overflow="wrap" %}
 ```cpp
 #include <multi_index_example.hpp>
 
 +multi_index_example::mod_action mod_action("multiindexex"_n, {get_self(), "active"_n});
 ```
+{% endcode %}
 
 * 액션 래퍼를 사용하여 액션을 전달 \
   액션 래퍼의 send 메소드를 호출하고 mod 액션의 매개변수를 인자로 전달합니다.

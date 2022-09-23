@@ -80,6 +80,7 @@ dune latest dacb47a5a67b 5 seconds ago 3.73GB
 
 예를 들어 `cleos get info` 명령을 수행하려면 다음과 같이 입력합니다.
 
+{% code overflow="wrap" %}
 ```
 $ dune -- cleos get info
 {
@@ -92,6 +93,7 @@ $ dune -- cleos get info
 “head_block_time”: “2022–07–14T16:55:59.500”,
 ...
 ```
+{% endcode %}
 
 컨테이너가 아직 생성되지 않은 경우 D.U.N.E 으로 아무 명령이나 실행하면 자동으로 생성됩니다. D.U.N.E 이 정상적으로 동작하는 상황이라면 `start-container` 명령을 꼭 실행할 필요는 없습니다.
 
@@ -140,6 +142,7 @@ $ dune --set-active <node_name>
 
 이제 시작한 노드의 정보를 확인해 보겠습니다. 아래 명령은 `cleos get info` 명령과 같은 결과를 출력합니다.
 
+{% code overflow="wrap" %}
 ```
 $ dune --monitor
 {
@@ -151,6 +154,7 @@ $ dune --monitor
  “head_block_id”: “00001cc5a12fbbe0f8d3bb1a8613fca2c183ecee4addd14fe05eec2227758f89”,
  ...
 ```
+{% endcode %}
 
 동작중인 노드를 중지하려면 다음과 같이 입력합니다.
 
