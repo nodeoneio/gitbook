@@ -4,22 +4,22 @@
 
 ### 개요
 
-EOSIO 버전 2.1을 사용하면 모든 액션에서 반환값을 받을 수 있습니다. 이 기능을 사용하여 보다 쉽게 스마트 컨트랙트를 구현하고 디버깅 할 수 있으며 스마트 컨트랙트와 클라이언트 사이에서 메시지를 주고받을 수 있습니다. 이제부터 스마트 컨트랙트 클라이언트는 액션으로부터 반환된 값을 사용할 수 있기 때문에, 클라이언트 측에서 문자열을 파싱하거나 스마트 컨트랙트 구현시 Print 문을 사용할 필요가 없습니다.
+Antelope 을 사용하면 모든 액션에서 반환값을 받을 수 있습니다. 이 기능을 사용하여 보다 쉽게 스마트 컨트랙트를 구현하고 디버깅 할 수 있으며 스마트 컨트랙트와 클라이언트 프로그램 사이에서 메시지를 주고받을 수 있습니다. 스마트 컨트랙트 클라이언트는 액션으로부터 반환된 값을 사용할 수 있기 때문에, 클라이언트 측에서 문자열을 파싱하거나 스마트 컨트랙트 구현시 값을 확인하기 위해 `Print` 문을 사용할 필요가 없습니다.
 
 ### 개념
 
-스마트 컨트랙트 내에서 액션을 작성할 때 return 문을 사용하여 어떤 값이든 액션을 호출한 쪽으로 반환 할 수 있습니다. 반환되는 값은 C++ 원시 타입, C++ 표준 라이브러리 타입 또는 사용자 정의 타입일 수 있습니다. EOSIO 프레임워크는 반환된 값을 직렬화하여 클라이언트로 다시 보내는 데 필요한 작업을 수행합니다. 클라이언트 측에서는 수신된 값을 역직렬화하여, 여타 함수의 반환 값을 사용하는것과 동일한 방법으로 사용할 수 있습니다.
+스마트 컨트랙트 내에서 액션을 작성할 때 `return` 문을 사용하여 어떤 값이든 액션을 호출한 쪽으로 반환 할 수 있습니다. 반환되는 값은 C++ 원시 타입, C++ 표준 라이브러리 타입 또는 사용자 정의 타입일 수 있습니다. Antelope 프레임워크는 반환된 값을 직렬화하여 클라이언트로 다시 보내는 데 필요한 작업을 수행합니다. 클라이언트 측에서는 수신된 값을 역직렬화하여, 여타 함수의 반환 값을 사용하는것과 동일한 방법으로 사용할 수 있습니다.
 
 ### 상세
 
 액션에서 값을 반환할때 중요한 내용이 아래에 자세히 나타나 있습니다.
 
-* 위에서 언급한 바와 같이 EOSIO 프레임워크는 반환된 값을 클라이언트에게 전달하기 위해 모든 heavy lifting 을 수행한다. EOSIO 프레임워크는 set\_action\_return\_value 라는 새로운 내장함수를 정의하고 사용합니다. EOSIO 반환값 기능에 대한 자세한 내용은 [EOSIO 설명서 및 구현](https://github.com/EOSIO/eosio.cdt/blob/develop/libraries/native/intrinsics.cpp#L295)을 참조합니다.
+* 위에서 언급한 바와 같이 Antelope 프레임워크는 반환된 값을 클라이언트에게 전달하기 위해 모든 heavy lifting 을 수행합니다. Antelope 프레임워크는 set\_action\_return\_value 라는 새로운 내장함수를 정의하고 사용합니다. Antelope 반환값 기능에 대한 자세한 내용은 [Antelope CDT native 코드](https://github.com/AntelopeIO/cdt/blob/main/libraries/native/intrinsics.cpp)를 참조합니다.
 * RAM 또는 NET가 아닌, 컨트랙트에 대한 CPU 타임 및 메모리 제한(wasm의 최대 크기)이 반환되는 값의 최대값을 정의합니다.
 * 액션 영수증에는 직렬화된 반환 값의 해시가 포함되어 있습니다.
 * 액션 추적에는 직렬화된 반환 값이 포함됩니다.
 * 추적 로그가 활성화된 경우 상태 기록 추적 로그에는 직렬화된 반환 값도 저장됩니다.
-* trace api 플러그인이 활성화된 경우 trace api trace 로그에 직렬화된 반환 값이 저장됩니된다.
+* trace api 플러그인이 활성화된 경우 trace api trace 로그에 직렬화된 반환 값이 저장됩니다.
 * 반환된 값은 액션 추적에서 사용할 수 있습니다. 송신자가 다른 액션인 경우 액션 추적을 송신자의 액션 code 에서 사용할 수 없습니다. 따라서 인라인 액션에서 반환된 값을 인라인 액션을 보낸 액션에서 읽을 수 없습니다.
 * 또한 인라인 액션은 동기적으로 실행되지 않고 나중에 실행됩니다. 송신자는 인라인 액션을 전송하는 시점에 반환 값을 받을 수 없습니다.
 
@@ -27,28 +27,28 @@ EOSIO 버전 2.1을 사용하면 모든 액션에서 반환값을 받을 수 있
 
 값을 반환하는 스마트 컨트랙트 액션 예제는 다음 리소스를 참조합니다.
 
-* Hello 스마트 컨트랙트 예제, 액션 hello::checkwithrv 을 참조.\
-  [https://github.com/EOSIO/eosio.cdt/blob/develop/examples/hello/src/hello.cpp#L14](https://github.com/EOSIO/eosio.cdt/blob/develop/examples/hello/src/hello.cpp#L14)
-* 액션으로부터 값을 반환하는 방법.\
-  [https://developers.eos.io/manuals/eosio.cdt/latest/how-to-guides/how-to-return-values-from-actions](https://developers.eos.io/manuals/eosio.cdt/latest/how-to-guides/how-to-return-values-from-actions)
+* Hello 스마트 컨트랙트 예제, 액션 `hello::checkwithrv` 을 참조.\
+  [https://github.com/AntelopeIO/cdt/blob/main/examples/hello/src/hello.cpp](https://github.com/AntelopeIO/cdt/blob/main/examples/hello/src/hello.cpp)
+* [액션으로부터 값을 반환하는 방법](how-to-return-from-action.md).\
+
 
 ## eosio::binary\_extension 타입
 
-eosio:binary\_extension 타입이 뭔지, 무엇을 하는지, 왜 특정한 상황에서 컨트랙트 업데이트를 위해 필요한지를 설명합니다.
+`eosio:binary_extension` 타입이 뭔지, 무엇을 하는지, 왜 특정한 상황에서 컨트랙트 업데이트를 위해 필요한지를 설명합니다.
 
-eosio.cdt 저장소에서 eosio::binary\_extension 을 구현한 파일인eosio.cdt/libraries/eosio/core/eosio/binary\_extension.hpp 을 찾을 수 있습니다.
+cdt 저장소에서 `eosio::binary_extension` 을 구현한 파일인 [binary\_extension.hpp](https://github.com/AntelopeIO/cdt/blob/main/libraries/eosiolib/core/eosio/binary\_extension.hpp) 을 찾을 수 있습니다.
 
-이 타입을 사용할 때 가장 주목해야 할 점은, 현재의 eosio::multi\_index 타입 (즉, 테이블)에서 사용되고 있는 스마트 컨트랙트 데이터 구조에 새 필드를 추가하거나 액션 선언에 새 매개 변수를 추가할 때 입니다.
+이 타입을 사용할 때 가장 주목해야 할 점은, 현재의 `eosio::multi_index` 타입 (즉, 테이블)에서 사용되고 있는 스마트 컨트랙트 데이터 구조에 새 필드를 추가하거나 액션 선언에 새 매개 변수를 추가할 때 입니다.
 
-새로운 필드를 eosio::binary\_extension 으로 감싸면 나중에 사용할 수 있도록 컨트랙트가 역방향으로 호환될 수 있습니다. 이 새 필드/매개변수는 **반드시** 데이터 구조에(이는 eosio::multi\_index의 내부에 구현된 내용이 boost::multi\_index 타입에 의존하기 때문입니다) 또는 액션 선언에 있는 매개 변수 목록 끝에 추가해야 합니다.
+새로운 필드를 `eosio::binary_extension` 으로 감싸면 나중에 사용할 수 있도록 컨트랙트가 역방향으로 호환될 수 있습니다. 이 새 필드/매개변수는 **반드시** 데이터 구조에(이는 `eosio::multi_index`의 내부에 구현된 내용이 `boost::multi_index` 타입에 의존하기 때문입니다) 또는 액션 선언에 있는 매개 변수 목록 끝에 추가해야 합니다.
 
-eosio::binary\_extension 에서 새 필드를 래핑하지 않으면 eosio::multi\_index 테이블이 이전 기준점으로 읽히지 않도록 다시 포맷되거나 액션의 경우 함수를 호출할 수 없게 됩니다.
+`eosio::binary_extension` 에서 새 필드를 래핑하지 않으면 `eosio::multi_index` 테이블이 이전 기준점으로 읽히지 않도록 다시 포맷되거나 액션의 경우 함수를 호출할 수 없게 됩니다.
 
-그럼 예제를 통하여 eosio::binary\_extension 타입이 작동하는 방식을 알아보겠습니다.
+그럼 예제를 보면서 `eosio::binary_extension` 타입이 작동하는 방식을 알아보겠습니다.
 
 아래의 스마트 컨트랙트와 그에, 연결된 ABI 를 보겠습니다.
 
-이 컨트랙트는 eosio::binary\_extension 를 설명하는 좋은 예제일 뿐 아니라, eosio 프로토콜 상의 스마트 컨트랙트 개발의 템플릿으로서 사용할 수도 있습니다.
+이 컨트랙트는 `eosio::binary_extension` 를 설명하는 좋은 예제일 뿐 아니라, Antelope 프로토콜 상의 스마트 컨트랙트 개발의 템플릿으로서 사용할 수도 있습니다.
 
 #### binary\_extension\_contract.hpp
 
@@ -436,7 +436,7 @@ executed transaction: e9b77d3cfba322a7a3a93970c0c883cb8b67e2072a26d714d46eef9d79
 warning: transaction executed locally, but may not be confirmed by the network yet
 ```
 
-이제 테이블에 새로운 필드를 더하고 액션에 새로운 매개변수를 더하여 스마트 컨트랙트를 업그레이드 해 보겠습니다. 이 때 eosio::binary\_extension 로 새로운 필드와 매개변수를 래핑하지는 않을 것인데, 그러면 무슨 일이 일어나나 확인해 볼 것입니다.
+이제 테이블에 새로운 필드를 더하고 액션에 새로운 매개변수를 더하여 스마트 컨트랙트를 업그레이드 해 보겠습니다. 이 때 `eosio::binary_extension` 로 새로운 필드와 매개변수를 래핑하지는 않을 것인데, 그러면 무슨 일이 일어나나 확인해 볼 것입니다.
 
 #### binary\_extension\_contract.hpp
 
@@ -554,7 +554,7 @@ Missing field 'secondary_key' in input object while processing struct 'regpkey'
 
 마찬가지로 업그레이드 된 액션으로도 원래 방식대로는 테이블에 쓸 수 없습니다.
 
-이제 eosio::binary\_extension 타입으로 새로운 필드와 매개변수를 래핑 해보겠습니다.
+이제 `eosio::binary_extension` 타입으로 새로운 필드와 매개변수를 래핑 해보겠습니다.
 
 #### binary\_extension\_contract.hpp
 
@@ -644,7 +644,7 @@ struct [[eosio::table]] structure {
 }
 ```
 
-이번엔 타입 뒤에 "$" 가 붙어 있는 것을 볼 수 있습니다. 이것이 eosio::binary\_extension 타입 필드라는 것을 나타내는 것입니이다.
+이번엔 타입 뒤에 "$" 가 붙어 있는 것을 볼 수 있습니다. 이것이 `eosio::binary_extension` 타입 필드라는 것을 나타내는 것입니다.
 
 ```cpp
 {
@@ -697,17 +697,17 @@ warning: transaction executed locally, but may not be confirmed by the network y
 
 잘 실행됩니다. 이제 이 스마트 컨트랙트는 나중에 테이블/액션을 사용할 때를 위한 역방향(backward) 호환성을 가지게 되었습니다.
 
-스마트 컨트랙트를 업그레이드 할 때 다음 규칙을 기억합시다. eosio:multi\_index 를 사용하여 새로운 필드를 구조체에 추가할 때는, 새 필드를 구조체의 가장 마지막에 추가해야 하는할 것과 eosio::binary\_extension 타입을 사용하여 래핑해야 한다는 것을 유의해야 합니다.
+스마트 컨트랙트를 업그레이드 할 때 다음 규칙을 기억합시다. `eosio:multi_index` 를 사용하여 새로운 필드를 구조체에 추가할 때는, 새 필드를 구조체의 가장 마지막에 추가해야 하는 것과 `eosio::binary_extension` 타입을 사용하여 래핑해야 한다는 것을 유의해야 합니다.
 
 ## 네이티브 테스터와 컴파일
 
-v1.5.0 이후로 네이티브 컴파일을 실행할 수 있으며, 이를 위하여 네이티브 테스팅 및 네이티브 "스크래치 패드(Scratch Pad)" 컴파일을 지원하는 새로운 라이브러리 세트가 준비되어 있습니다. 이제 eosio-cc, cdt-cpp 및 eosio-ld는 더 편하고 빠른 개발을 위한 네이티브 유닛 테스트와 "스마트 컨트랙트" 구축을 기본적으로 지원합니다.(현재 eosio 내장함수(intrinsics) 의 기본 구현은 사용할 수 없는 상태이며 사용자가 정의할 수 있는 상태임을 참고).(note the default implementations of eosio intrinsics are currently asserts that state they are unavailable, these are user definable.)
+v1.5.0 이후로 네이티브 컴파일을 실행할 수 있으며, 이를 위하여 네이티브 테스팅 및 네이티브 "스크래치 패드(Scratch Pad)" 컴파일을 지원하는 새로운 라이브러리 세트가 준비되어 있습니다. 이제 cdt-cc, cdt-cpp 및 cdt-ld는 더 편하고 빠른 개발을 위한 네이티브 유닛 테스트와 "스마트 컨트랙트" 구축을 기본적으로 지원합니다.(현재 Leap 내장함수(intrinsics) 의 기본 구현은 사용할 수 없는 상태이며 사용자가 정의할 수 있는 상태임을 참고).
 
 ## 시작
 
 일단 스마트 컨트랙트를 작성하고면 테스트 소스도 작성합니다.
 
-hello.hpp
+`hello.hpp`
 
 ```cpp
 #include <eosio/eosio.hpp>
@@ -725,7 +725,7 @@ class [[eosio::contract]] hello : public eosio::contract {
 };
 ```
 
-그리고 hello\_test.cpp 테스트 코드를 작성합니다.
+그리고 `hello_test.cpp` 테스트 코드를 작성합니다.
 
 ```cpp
 #include <eosio/eosio.hpp>
@@ -792,7 +792,7 @@ int main(int argc, char** argv) {
 }
 ```
 
-eosio 에 정의된 모든 내장함수(prints, require\_auth 등) 들은 `intrinsics::set_intrinsics<intrinsics::the_intrinsic_name>()` 함수로 재정의 할 수 있습니다. 이러한 함수들은 람다 함수를 가지는데 이 람다 함수들은 인수와 리턴 타입이 재정의하고자 하는 내장 함수와 일치해야 합니다. 이러한 특성덕분에 컨트랙트 작성자는 작성중인 유닛 테스트를 유연하게 수정하여 원하는대로 작동하게 할 수 있습니다.
+eosio 에 정의된 모든 내장함수(`prints`, `require_auth` 등) 들은 `intrinsics::set_intrinsics<intrinsics::the_intrinsic_name>()` 함수로 재정의 할 수 있습니다. 이러한 함수들은 람다 함수를 가지는데 이 람다 함수들은 인수와 리턴 타입이 재정의하고자 하는 내장 함수와 일치해야 합니다. 이러한 특성덕분에 컨트랙트 작성자는 작성중인 유닛 테스트를 유연하게 수정하여 원하는대로 작동하게 할 수 있습니다.
 
 다른 함수인 `intrinsics::get_intrinsics<intrinsics::the_intrinsic_name>()` 은 현재 내장함수의 행동을 정의하는 함수 개체를 반환합니다. 이 패턴은 mock 함수에 사용될 수 있으며 스마트 컨트랙트를 쉽게 테스트 할 수 있게 합니다. 다음 링크에서 더 많은 정보를 확인할 수 있습니다.
 
@@ -833,7 +833,7 @@ eosio 에 정의된 모든 내장함수(prints, require\_auth 등) 들은 `intri
 ## 자원 지불자(Resource Payer)
 
 {% hint style="warning" %}
-Resource Payer 는 EOSIO 2.2의 기능이므로 만델에서 적용되는지 여부를 보고 번역한다.
+Resource Payer 는 EOSIO 2.2의 기능이므로 Antelope 에서 적용되는지 여부를 보고 번역 예정.
 
 [https://developers.eos.io/manuals/eosio.cdt/latest/features/resource\_payer](https://developers.eos.io/manuals/eosio.cdt/latest/features/resource\_payer)
 {% endhint %}
