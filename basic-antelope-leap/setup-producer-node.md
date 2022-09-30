@@ -22,12 +22,14 @@ BP 노드를 시작하려면 **System Contract 가 네트워크에 로드**되�
 
 `config.ini` 의 `producer-name` 에 계정 이름을 설정합니다.
 
+{% code overflow="wrap" %}
 ```
 #config.ini:
 
 # ID of producer controlled by this node (e.g. inita; may specify multiple times) (eosio::producer_plugin)
 producer-name = <youraccount>
 ```
+{% endcode %}
 
 ### BP의 signature-provider 정보를 설정
 
@@ -41,6 +43,7 @@ BP 등록용의 공개 키/개인 키 정보를 설정합니다. `cleos create k
 
 #### **KEY 를 사용하는 경우**
 
+{% code overflow="wrap" %}
 ```
 # config.ini:
 
@@ -49,9 +52,11 @@ signature-provider = PUBLIC_SIGNING_KEY=KEY:PRIVATE_SIGNING_KEY
 //Example
 //signature-provider = EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV=KEY:5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3
 ```
+{% endcode %}
 
 #### **KEOSD 를 사용하는 경우**
 
+{% code overflow="wrap" %}
 ```
 # config.ini:
 
@@ -60,6 +65,7 @@ signature-provider = KEOSD:<data>
 //Example
 //EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV=KEOSD:https://127.0.0.1:88888
 ```
+{% endcode %}
 
 ### peer 목록을 입력
 
@@ -105,9 +111,11 @@ cleos system regproducer [OPTIONS] account producer_key [url] [location]
 
 이제 명령을 실행합니다. 다음은 블록 생성자 계정 등록의 예시 입니다.
 
+{% code overflow="wrap" %}
 ```bash
 $ cleos system regproducer leapblockprd EOS84BLRbGbFahNJEpnnJHYCoW9QPbQEk2iHsHGGS6qcVUq9HhutG https://www.mywebsite.io 410
 ```
+{% endcode %}
 
 ### 등록된 BP 확인
 
@@ -125,6 +133,8 @@ leapblockprd  EOS84BLRbGbFahNJEpnnJHYCoW9QPbQEk2iHsHGGS6qcVUq9HhutG             
 
 만약 nodeos 의 stdout 로그를 콘솔에 출력하거나 파일에 기록하고 있다면, 등록한 BP가 투표를 받고 활성 스케줄에 포함되어 블록을 생성할 차례가 되었을 때 다음 예시와 같은 로그가 출력되는 것을 확인할 수 있습니다.
 
+{% code overflow="wrap" %}
 ```
 info  2022-08-22T14:34:18.906 nodeos    producer_plugin.cpp:2434      produce_block        ] Produced block 76c79aac6ddd6f3b... #3 @ 2022-08-22T14:34:19.000 signed by leapblockprd [trxs: 0, lib: 2, confirmed: 0]
 ```
+{% endcode %}
