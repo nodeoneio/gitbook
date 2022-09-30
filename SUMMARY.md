@@ -82,6 +82,10 @@
 
 ## Advanced Smart Contract Tutorial
 
-* [Reference](advanced-smart-contract-tutorial/reference.md)
-* [License](advanced-smart-contract-tutorial/license.md)
-* [Change Log](advanced-smart-contract-tutorial/change-log.md)
+* [Under Construction](advanced-smart-contract-tutorial/under-construction.md)
+
+## Appendix
+
+* [Reference](appendix/reference.md)
+* [License](appendix/license.md)
+* [Change Log](appendix/change-log.md)
