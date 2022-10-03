@@ -4,7 +4,7 @@
 
 Antelope Leap(이하 Leap) 은 EOS, Telos, WAX 와 같은 블록체인 네트워크를 구축할 수 있는 오픈소스 소프트웨어 입니다.
 
-서두에서 이야기 한 바와 같이 원래 이 소프트웨어는 EOSIO 라는 이름으로 블록체인 기업인 블록원(Block.one) 에서 개발하고 관리 하였습니다. 그러나 2021년 중반, 블록원이 개발을 중단한 이후 EOS 재단인 ENF(EOS Network Foundation) 가 EOSIO 를 포킹(Forking)하여 Antelope 이라는 이름으로 변경하고 개발 및 유지보수를 하였습니다. 그리고 이 소프트웨어를 EOS 네트워크에 적용하기 전, Leap 이라는 이름으로 다시 한 번 리브랜딩 하였습니다.
+서두에서 이야기 한 바와 같이 원래 이 소프트웨어는 EOSIO 라는 이름으로 블록체인 기업인 블록원(Block.one) 에서 개발하고 관리 하였습니다. 그러나 2021년 중반, 블록원이 개발을 중단한 이후 EOS 재단인 ENF(EOS Network Foundation) 가 EOSIO 를 포킹(Forking)하여 Mandel 이라는 이름으로 변경하고 개발 및 유지보수를 하였습니다. 그리고 이 소프트웨어를 EOS 네트워크에 적용하기 전, Leap 이라는 이름으로 다시 한 번 리브랜딩 하였습니다.
 
 ENF 는 공식적으로 다음과 같이 Antelope 와 Leap 의 관계를 설명하고 있습니다.
 
@@ -34,7 +34,7 @@ Leap 소프트웨어는 블록체인 네트워크를 운영하고 스마트 컨�
 
 ### nodeos (node + eos)
 
-nodeos 는 Leap 코어 데몬이며 각종 설정을 플러그인 방식으로 구성하여 원하는 목적에 맞는 블록체인 노드를 구성하고 운영할 수 있습니다. nodeos 데몬이 정상적으로 동작하고 있다면, 설정된 내용에 따라 블록을 생성하거나, 트랜잭션을 처리하거나, API 엔드포인트를 제공하거나, 다른 노드와 블록을 동기화 하는 등의 작업을 수행합니다.
+nodeos 는 Leap 코어 데몬이며 각종 설정을 플러그인 방식으로 구성하여, 원하는 목적에 맞는 블록체인 노드를 만들고 운영할 수 있습니다. nodeos 데몬이 정상적으로 동작하고 있다면, 설정된 내용에 따라 블록을 생성하거나, 트랜잭션을 처리하거나, API 엔드포인트를 제공하거나, 다른 노드와 블록을 동기화 하는 등의 작업을 수행합니다.
 
 ### cleos (cli + eos)
 
@@ -50,13 +50,13 @@ cleos 는 nodeos 가 제공하는 REST API 와 통신하기 위한 커맨드라�
 
 ### CDT
 
-CDT는 WASM(Web Assembly)용 개발 툴킷이자, Antelope 체인 상에서 동작하는 스마트 컨트랙트를 쉽게 작성할 수 있도록 도와주는 도구들을 모은 것입니다. CDT 는 범용 Web Assembly 개발 도구이기도 하지만, Antelope 스마트 컨트랙트를 개발 할 때 Antelope 에 최적화 된 기능도 사용할 수 있습니다. CDT 는 Clang9 을 기반으로 만들어졌으며, 다수의 LLVM 최적화 도구 및 분석 도구를 포함하고 있습니다.
+CDT는 WASM(Web Assembly)용 개발 툴킷이자, Antelope 체인 상에서 동작하는 스마트 컨트랙트를 쉽게 작성할 수 있도록 도와주는 도구들을 모은 것입니다. CDT 는 범용 Web Assembly 개발 도구이기도 하지만, Antelope 스마트 컨트랙트를 개발 할 때 Antelope 에 최적화 된 기능도 사용할 수 있습니다. CDT 는 Clang9 을 기반으로 만들어졌으며, LLVM 최적화 도구 및 분석 도구를 다수 포함하고 있습니다.
 
 {% embed url="https://github.com/AntelopeIO/cdt" %}
 
 ### EOSJS
 
-Leap 에서 제공하는 RPC API를 사용하여 블록체인 네트워크와 통신할 수 있는 프론트엔드 Javascript API SDK입니다.
+Leap 에서 제공하는 RPC API를 사용하여 블록체인 네트워크와 통신할 수 있는 프론트엔드 Javascript API SDK 입니다.
 
 {% embed url="https://github.com/eosnetworkfoundation/mandel-eosjs" %}
 
