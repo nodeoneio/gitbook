@@ -2,11 +2,11 @@
 
 ## 개요
 
-Leap  소프트웨어를 설치하였습니다. 본격적으로 뭔가 시작해보기 전에 Leap 의 핵심 컴포넌트들에 대한 기초적인 내용을 먼저 짚어보겠습니다.
+[이전 단원](install-leap-software.md)에서 Leap  소프트웨어를 설치하였습니다. 본격적으로 뭔가 시작해보기 전에 Leap 의 핵심 컴포넌트들에 대한 기초적인 내용을 먼저 짚어보겠습니다.
 
-Antelope 노드의 핵심 데몬(daemon)인 `nodeos` 는 CLI(명령줄 인터페이스) 환경에서 실행하는 응용 프로그램입니다. `nodeos` 는 명령줄에서 직접 실행하거나 별도로 자동화된 스크립트를 만들어 실행 할 수 있습니다.&#x20;
+Antelope 노드의 핵심 데몬(daemon)인 `nodeos` 는 CLI(명령줄 인터페이스) 환경에서 실행하는 응용 프로그램입니다. `nodeos` 는 명령줄에서 직접 실행해도 되지만 보통 노드 운영 환경에서는 `nodeos` 실행에 필요한 조건과 옵션들을 bash 나 Python 등의 스크립트로 만들어 실행합니다.
 
-`nodeos` 는 일반적으로 여러가지 옵션과 함께 실행합니다. 옵션은 명령줄에 직접 입력하거나 환경설정 파일에 미리 구성해 놓을 수 있습니다. `nodeos` 프로그램에서 사용 가능한 옵션은 다음과 같이 두 가지 종류로 나눌 수 있습니다.&#x20;
+`nodeos` 을 실행할 때 일반적으로 여러가지 옵션이 필요합니다. 옵션은 명령줄에 직접 입력하거나 환경설정 파일에 미리 구성해 놓을 수 있습니다. `nodeos` 프로그램에서 사용 가능한 옵션은 다음과 같이 두 가지 종류로 나눌 수 있습니다.&#x20;
 
 * [nodeos 전용 옵션](basic-nodeos.md#nodeos)\
   `nodoes` 프로그램 데몬 자체의 동작을 제어하는 옵션이며 명령줄에서만 입력할 수 있습니다.
@@ -72,7 +72,7 @@ Command Line Options for eosio::chain_plugin:
 
 `config.ini` 는 노드의 동작과 역할을 제어하는 환경 설정 파일입니다. 디폴트로 `config.ini` 는  `~/.local/share/eosio/nodeos/config` 디렉토리에 위치합니다.
 
-직접 작성한 `config.ini` 파일을 사용하려면, `nodeos` 실행 시 명령줄에서 `-config <path>/config.ini` 옵션을 설정하면 됩니다. 환경 설정 파일은 `nodeos` 데이터 디렉토리와 같이등 쉽게 접근할 수 있는 곳에 저장하는 것이 사용하기 편리합니다.
+직접 작성한 `config.ini` 파일을 사용하려면, `nodeos` 실행 시 명령줄에서 `-config <path>/config.ini` 옵션을 설정하면 됩니다. 환경 설정 파일은 `nodeos` 데이터 디렉토리와 같이 쉽게 접근할 수 있는 곳에 저장하는 것이 사용하기 편리합니다.
 
 ## nodeos 실행 <a href="#nodeos_run_example" id="nodeos_run_example"></a>
 
