@@ -6,11 +6,11 @@ description: Docker Utilities for Node Execution
 
 ## 개요
 
-ENF 에서 관리하는 블록체인 네트워크 기반 소프트웨어인 Antelope Leap 는 현재 Ubuntu Linux 버전 18.04 부터 22.04 까지만을 네이티브 환경으로 지원하고 있으며, 당분간 지원하는 플랫폼을 추가하지는 않을 예정이라 하였습니다.
+ENF 에서 관리하는 블록체인 네트워크 기반 소프트웨어인 Antelope Leap 는 3.2 버전까지는 Ubuntu Linux 버전 18.04 부터 22.04 까지만을 네이티브 환경으로 지원하고 있으며, Leap 4.0 부터는 Ubuntu 18.04 는 지원하지 않습니다. 그 외 당분간은 지원하는 플랫폼을 추가하지는 않을 예정이라 하였습니다.&#x20;
 
 따라서 Windows 나 Mac OS 와 같은 이종 OS , 또는 RHEL 과 같은 지원 대상 외 리눅스 배포판에서 Antelope 기반 블록체인 환경을 구성하려면 VM 이나 컨테이너 환경을 이용해야 합니다.
 
-일일히 노드를 설정하는 작업은 번거롭기 때문에 ENF 는 Docker 컨테이너 환경에서 개발자들이 쉽게 Antelope 로컬 노드를 구성하고 스마트 컨트랙트를 테스트 할 수 있도록 D.U.N.E(Docker Utilities for Node Execution) 이라는 도구를 만들고 공개했습니다.
+노드를 하나하나 설정하는 작업은 번거롭기 때문에 ENF 는 Docker 컨테이너 환경에서 개발자들이 쉽게 Antelope 로컬 노드를 구성하고 스마트 컨트랙트를 테스트 할 수 있도록 D.U.N.E(Docker Utilities for Node Execution) 이라는 도구를 만들고 공개했습니다.
 
 이 단원에서 D.U.N.E 를 사용하여 스마트 컨트랙트 개발 환경을 만들고 간단히 테스트 해 보겠습니다.
 
@@ -48,7 +48,7 @@ $ echo "PATH=<LocationOfDUNE>:$PATH" >> ~/.bashrc
 $ source ~/.bashrc
 ```
 
-윈도우의 경우 다음 웹사이트를 참조하여 PATH 환경 변수에 D.U.N.E 의 소스 코드 경로를 추가합니다.&#x20;
+윈도우의 경우 다음 웹사이트를 참조하여 PATH 환경 변수에 D.U.N.E 의 소스 코드 경로를 추가합니다.
 
 {% embed url="https://rootblog.tistory.com/206" %}
 
@@ -134,7 +134,7 @@ test_node | Y | Y | 127.0.0.1:8888 | 0.0.0.0:9876 | 127.0.0.1:8080
 
 D.U.N.E 은 상태 기반으로 동작합니다. 따라서 원하는 노드를 active 노드로 설정하고 명령을 실행하면 그 명령은 active 노드에서 바로 실행됩니다.
 
-새 노드 생성하고 그시 노드가 성공적으로 시작되면 해당 노드는 active 노드로 자동으로 전환 됩니다. 만약 특정 노드를 active 노드로 전환하고 싶다면 다음과 같이 입력합니다.&#x20;
+새 노드 생성하고 그시 노드가 성공적으로 시작되면 해당 노드는 active 노드로 자동으로 전환 됩니다. 만약 특정 노드를 active 노드로 전환하고 싶다면 다음과 같이 입력합니다.
 
 ```
 $ dune --set-active <node_name>

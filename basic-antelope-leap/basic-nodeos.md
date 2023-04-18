@@ -2,18 +2,18 @@
 
 ## 개요
 
-[이전 단원](install-leap-software.md)에서 Leap  소프트웨어를 설치하였습니다. 본격적으로 뭔가 시작해보기 전에 Leap 의 핵심 컴포넌트들에 대한 기초적인 내용을 먼저 짚어보겠습니다.
+[이전 단원](install-leap-software.md)에서 Leap 소프트웨어를 설치하는 방법을 알아보았습니다. 본격적으로 뭔가 시작해보기 전에 Leap 의 핵심 컴포넌트들에 대한 기초적인 내용을 먼저 짚어보겠습니다.
 
-Antelope 노드의 핵심 데몬(daemon)인 `nodeos` 는 CLI(명령줄 인터페이스) 환경에서 실행하는 응용 프로그램입니다. `nodeos` 는 명령줄에서 직접 실행해도 되지만 보통 노드 운영 환경에서는 `nodeos` 실행에 필요한 조건과 옵션들을 bash 나 Python 등의 스크립트로 만들어 실행합니다.
+Antelope 네트워크 노드의 핵심 데몬(daemon)인 `nodeos` 는 CLI(명령줄 인터페이스) 환경에서 실행하는 응용 프로그램입니다. `nodeos` 를 명령줄에서 직접 실행해도 되지만, 일반적으로 노드 운영 환경은 설정해야 하는 내용이 많기 때문에 `nodeos` 실행에 필요한 조건과 옵션들을 `bash` 나 `Python` 등의 스크립트로 만들어 실행합니다.
 
-`nodeos` 을 실행할 때 일반적으로 여러가지 옵션이 필요합니다. 옵션은 명령줄에 직접 입력하거나 환경설정 파일에 미리 구성해 놓을 수 있습니다. `nodeos` 프로그램에서 사용 가능한 옵션은 다음과 같이 두 가지 종류로 나눌 수 있습니다.&#x20;
+`nodeos` 을 실행할 때 일반적으로 여러가지 옵션이 필요합니다. 이러한 옵션은 `nodeos` 을 실행할 때 명령줄에 직접 입력하거나 환경설정 파일에 미리 구성해 놓을 수 있습니다. `nodeos` 프로그램에서 사용 가능한 옵션은 다음과 같이 두 가지 종류로 나눌 수 있습니다.
 
 * [nodeos 전용 옵션](basic-nodeos.md#nodeos)\
   `nodoes` 프로그램 데몬 자체의 동작을 제어하는 옵션이며 명령줄에서만 입력할 수 있습니다.
 * [nodeos 플러그인 전용 옵션](basic-nodeos.md#nodeos-1)\
-  `nodeos` 플러그인 전용 옵션은 `nodeos` 플러그인의 동작을 제어하며, `nodeos` 실행 시 명령줄 옵션으로 입력하거나 `config.ini` 파일 안에 설정할 수 있습니다. 어떤 옵션들을 설정하는가에 따라 Antelope 노드의 기능이 달라집니다.
+  `nodeos` 플러그인 전용 옵션은 `nodeos` 플러그인의 동작을 제어하며, 명령줄에서 `nodeos` 를 실행 할 때 옵션으로서 같이 입력하거나, 설정 파일인 `config.ini` 파일 안에 작성 할 수 있습니다. 어떤 옵션들을 설정하는가에 따라 Antelope 노드의 기능이 달라집니다.
 
-`nodeos` 옵션에 대한 자세한 정보는 `nodeos --help` 를 실행하면 확인할 수 있습니다.
+`nodeos` 옵션에 대한 자세한 정보는 명령줄에서 `nodeos --help` 를 실행하면 확인할 수 있습니다.
 
 ## nodeos 전용 옵션
 
@@ -45,17 +45,26 @@ Application Command Line Options:
 
 ## nodeos 플러그인 전용 옵션
 
-`nodeos` 플러그인 전용 옵션은 `nodeos` 플러그인의 동작을 제어합니다. 플러그인 전용 옵션마다 이름이 다르기 때문에 순서에 상관없이 명령줄이나 `config.ini` 파일 안에 원하는 방식대로 기입할 수 있습니다. 일반적으로 어떤 플러그인과 그 플러그인의 옵션들을 한 데 묶어 기입하는 것이 관리하기 편리합니다.&#x20;
+`nodeos` 플러그인 전용 옵션은 `nodeos` 플러그인의 동작을 제어합니다. 플러그인 전용 옵션마다 이름이 다르기 때문에 순서에 상관없이 명령줄이나 `config.ini` 파일 안에 원하는 방식대로 기입할 수 있습니다. 일반적으로 어떤 플러그인과 그 플러그인의 옵션들을 한 데 묶어 기입하는 것이 관리하기 편리합니다.
 
-어떤 플러그인 전용 옵션을 설정할 때는 반드시 `--plugin` 옵션으로 이 옵션이 적용될 플러그인도 함께 사용하도록 설정되어 있는지 확인해야 합니다. 그렇지 않으면 플러그인 전용 옵션은 무시됩니다.
+어떤 플러그인 전용 옵션을 설정할 때는, 반드시 `--plugin` 옵션으로 이 옵션이 적용될 플러그인도 함께 사용하도록 설정되어 있는지 확인해야 합니다. 그렇지 않으면 플러그인 전용 옵션은 무시됩니다.
+
+예를 들어 `nodoes` 의 http 서버 주소를 지정하는 `http-server-address` 옵션의 경우 `eosio::http_plugin` 가 설정되어 있어야 합니다. 따라서 다음과 같이 설정합니다.
+
+```
+...
+plugin = eosio::http_plugin
+http-server-address = 0.0.0.0:8888
+...
+```
 
 각 플러그인별 전용 옵션에 대한 자세한 내용은 [Nodeos Plugin 상세](install-leap-software/nodeos-plugin-details/) 단원에서 찾아볼 수 있습니다.
 
-대부분의 `config.ini` 옵션에는 그에 대응하는 CLI 옵션이 존재합니다. 예를 들어 CLI 옵션 `--plugin eosio::chain_api_plugin` 은 `config.ini` 의 `plugin = eosio::chain_api_plugin` 에 대응됩니다.
+`config.ini` 에 설정할 수 있는 대부분의 옵션은 그에 대응하는 CLI 옵션이 존재합니다. 예를 들어 CLI 옵션 `--plugin eosio::chain_api_plugin` 은 `config.ini` 의 `plugin = eosio::chain_api_plugin` 에 대응됩니다.
 
-몇몇 CLI 옵션은 `config.ini` 에서 사용할 수 없습니다. 예를 들어 `state_history_plugin` 의 `--delete-state-history` 옵션이나 `chain_plugin` 의 `--genesis-json` 과 같은 플러그인 전용 옵션은 `config.ini`에서 사용할 수 없습니다.&#x20;
+몇몇 CLI 옵션은 `config.ini` 에서 사용할 수 없습니다. 예를 들어 `state_history_plugin` 의 `--delete-state-history` 옵션이나 `chain_plugin` 의 `--genesis-json` 과 같은 플러그인 전용 옵션은 `config.ini`에서 사용할 수 없습니다.
 
-`nodeos --help` 실행하면 아래 예시와 같이 `Command Line Options for...` 라는 섹션에서 이러한 명령줄 전용 옵션들을 찾아볼 수 있습니다.
+`nodeos --help` 실행하면 아래 예시와 같이 `Command Line Options for...` 라는 섹션에서 이러한 명령줄 전용 옵션들을 확인할 수 있습니다.
 
 {% code overflow="wrap" %}
 ```
@@ -70,15 +79,15 @@ Command Line Options for eosio::chain_plugin:
 
 ## **config.ini 설정 파일 위치**
 
-`config.ini` 는 노드의 동작과 역할을 제어하는 환경 설정 파일입니다. 디폴트로 `config.ini` 는  `~/.local/share/eosio/nodeos/config` 디렉토리에 위치합니다.
+`config.ini` 는 노드의 동작과 역할을 제어하는 환경 설정 파일입니다. 디폴트로 `config.ini` 는 `~/.local/share/eosio/nodeos/config` 디렉토리에 위치합니다.
 
-직접 작성한 `config.ini` 파일을 사용하려면, `nodeos` 실행 시 명령줄에서 `-config <path>/config.ini` 옵션을 설정하면 됩니다. 환경 설정 파일은 `nodeos` 데이터 디렉토리와 같이 쉽게 접근할 수 있는 곳에 저장하는 것이 사용하기 편리합니다.
+직접 작성한 `config.ini` 파일을 사용하려면, `nodeos` 실행 시 명령줄에서 `-config <path>/config.ini` 옵션을 설정하면 됩니다. 환경 설정 파일은 data 디렉토리(`blocks` 와 `state` 디렉토리가 있는 `nodeos` 루트 디렉토리)와 같이 쉽게 접근할 수 있는 곳에 저장하는 것이 사용하기 편리합니다.
 
 ## nodeos 실행 <a href="#nodeos_run_example" id="nodeos_run_example"></a>
 
-이제 `nodeos` 를 실행해 볼 수 있습니다.아직 Leap 를 설치하지 않았다면 [Leap 소프트웨어 설치 단원](install-leap-software.md) 참조하여 Leap 를 설치합니다.&#x20;
+이제 `nodeos` 를 실행해 볼 수 있습니다. 아직 Leap 소프트웨어를 설치하지 않았다면 [Leap 소프트웨어 설치 단원](install-leap-software.md) 참조하여 Leap 를 설치합니다.
 
-다음은 로컬 환경에서 단독으로 실행되는 블록 생산자(BP)의 노드를 시작하는 명령입니다. 명령줄에서 실행합니다.&#x20;
+다음은 로컬 환경에서 단독으로 실행되는 블록 생산자(BP)의 노드를 시작하는 명령입니다. 아래 내용을 명령줄에서 실행합니다.
 
 {% code overflow="wrap" %}
 ```bash
@@ -90,31 +99,31 @@ $ nodeos \
 --plugin eosio::chain_plugin \
 --plugin eosio::http_plugin \
 --plugin eosio::chain_api_plugin \
---http-server-address 0.0.0.0:8888 \
 --p2p-listen-endpoint 0.0.0.0:9876 \
 --contracts-console \
 --disable-replay-opts \
 --access-control-allow-origin='*' \
 --http-validate-host=false \
 --verbose-http-errors \
+--http-server-address 0.0.0.0:8888 \
 >> nodeos.log 2>&1 &
 ```
 {% endcode %}
 
 위 예제에서 `nodeos` 명령과 함께 사용된 옵션은 다음과 같습니다.
 
-* 블록 생성자로 지정하여 블록을 생성하도록 합니다. (`e`)
-* 블록 생성자 이름을 "eosio"  로 지정합니다. (`p`)
-* data 디렉토리를 지정합니다. (`-data-dir`) data 디렉토리는 블록체인의 블록 데이터를 저장할 루트 디렉토리입니다.
-* `config.ini` 가 위치한 디렉토리를 지정합니다. (`-config-dir`)
-* `-plugin` 으로 다음 플러그인들을 로딩합니다. \
+* `-e` : 블록 생성자로 지정하여 블록을 생성하도록 합니다.
+* `-p` : 블록 생성자 이름을 "eosio" 로 지정합니다.
+* `--data-dir`: data 디렉토리를 지정합니다. data 디렉토리는 블록체인의 블록 로그 및 상태 데이터를 저장할 루트 디렉토리 입니다.
+* `--config-dir`: `config.ini` 파일이 위치한 디렉토리를 지정합니다.&#x20;
+* `--plugin` 으로 다음 플러그인들을 로딩합니다.\
   `producer_plugin`, `chain_plugin`, `http_plugin`, `chain_api_plugin`
 * 다음과 같은 `chain_plugin` 의 전용 옵션들을 설정합니다.\
-  `-contracts-console`, `-disable-replay-opts`
+  `--p2p-listen-endpoint`, `--contracts-console`, `--disable-replay-opts`
 * 다음과 같은 `http-plugin`의 전용 옵션들을 설정합니다.\
-  `-access-control-allow-origin`, `-http-validate-host`, `-verbose-http-errors`
-* `stdout` 와 `stderr` 로 출력되는 로그를 `nodeos.log` 파일로 전달합니다. (`nodeos.log 2>&1`)
-* 프로세스를 백그라운드로 돌리고 쉘 프롬프트로 돌아옵니다. (`&`)
+  `--access-control-allow-origin`, `--http-validate-host`, `--verbose-http-errors`,`--http-server-address`
+* `nodeos.log 2>&1`: `stdout` 와 `stderr` 로 출력되는 로그를 `nodeos.log` 파일에 기록합니다.&#x20;
+* `&`: 프로세스를 백그라운드로 실행하고 쉘 프롬프트로 돌아옵니다.&#x20;
 
 ## nodeos 동작 확인
 
@@ -125,7 +134,7 @@ $ nodeos \
 
 ### cleos 명령 실행
 
-`cleos get info` 명령을 실행하면 다음과 같이 명령을 실행한 순간의 로컬 노드 정보가 콘솔에 출력됩니다. 이 정보로 노드의 상태가 정상인지 확인할 수 있습니다.
+`cleos get info` 명령을 실행하면, 다음과 같이 명령을 실행한 순간의 로컬 노드 정보가 콘솔에 출력됩니다. 이 정보로 노드의 상태가 정상인지 확인할 수 있습니다.
 
 {% code overflow="wrap" %}
 ```
@@ -179,7 +188,7 @@ info  2022-08-22T14:34:21.906 nodeos    producer_plugin.cpp:2434      produce_bl
 
 ## nodeos 중지하기
 
-`nodeos` 를 중지하려면 먼저 nodeos 의 PID 를 찾은 다음, 인터럽트 시그널인 `SIGINT` 를 전달하면 됩니다. `SIGINT` 는 디폴트 시그널이기 때문에 단순히 `kill <PID>`  명령으로 데몬을 제거할 수 있습니다.
+`nodeos` 를 중지하려면 먼저 nodeos 의 PID 를 찾은 다음, 인터럽트 시그널인 `SIGINT` 를 전달하면 됩니다. `SIGINT` 는 디폴트 시그널이기 때문에 단순히 `kill <PID>` 명령으로 데몬을 제거할 수 있습니다.
 
 다음은 `nodeos` 데몬을 제거하는 예제입니다.
 
@@ -193,7 +202,7 @@ $ kill 500
 ```
 {% endcode %}
 
-만약 `kill -SIGKILL <PID>` 명령으로 데몬을 강제 종료하면 블록체인 상태 데이터베이스가 망가져, 블록체인 데이터를 지우고 다시 처음부터 시작하거나 리플레이를 해야 합니다. 따라서 블록체인을 나중에 다시 계속 이어서 사용하려면 강제 종료는 사용하지 않는 것이 좋습니다.&#x20;
+만약 `kill -SIGKILL <PID>` 명령으로 데몬을 강제 종료하면 블록체인 상태 데이터베이스가 망가져, 블록체인 데이터를 지우고 다시 처음부터 시작하거나 리플레이를 해야 합니다. 따라서 블록체인을 나중에 다시 계속 이어서 사용하려면 강제 종료는 사용하지 않는 것이 좋습니다.
 
 중지했던 노드를 다시 시작하려면 앞서 입력했던 `nodeos` 실행 명령을 다시 실행하면 됩니다.
 
