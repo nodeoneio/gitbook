@@ -6,7 +6,7 @@
 
 ## 사용법
 
-다음과 같이 `config.ini`  또는 명령줄에서 사용할 수 있습니다.&#x20;
+다음과 같이 `config.ini` 또는 명령줄에서 사용할 수 있습니다.
 
 ```
 # config.ini
@@ -31,14 +31,6 @@ eosio::http_plugin 설정 옵션
     사용하지 않으려면 공백으로 설정한다.
   --http-server-address arg (=127.0.0.1:8888) 
     HTTP 커넥션을 수신하기 위한 로컬 IP와 포트. 사용하지 않으려면 공백으로 설정한다.
-  --https-server-address arg
-    HTTPS 커넥션을 수신하기 위한 로컬 IP와 포트. 사용하지 않으려면 공백으로 설정한다.
-  --https-certificate-chain-file arg
-    HTTPS 커넥션을 위한 인증서 체인이 있는 파일 이름. PEM 포맷이며 https 설정에 필요.
-  --https-private-key-file arg
-    PEM 포맷의 HTTPS 개인 키가 있는 파일 이름. https 설정에 필요.
-  --https-ecdh-curve arg (=secp384r1)
-    https ECDH curve 를 사용하기 위한 설정: secp384r1 or prime256v1
   --access-control-allow-origin arg
     요청마다 반환되는 Access-Control-Allow-Origin 을 지정.
   --access-control-allow-headers arg
@@ -51,7 +43,10 @@ eosio::http_plugin 설정 옵션
     수신되는 RPC요청에 대하여 허용되는 최대 body 크기(Bytes 단위)
   --http-max-bytes-in-flight-mb arg (=500)
     http_plugin 이 http 요청을 처리하는데 사용해야 하는 최대 크기(megabytes).
-    초과하면 503 error 응답.
+    초과하면 429 error 응답. -1 을 설정하면 무제한.
+  --http-max-in-flight-requests arg (=-1)
+    http_plugin 이 http 요청을 처리하는데 사용해야 하는 최대 요청 수.
+    초과하면 429 error 응답.
   --http-max-response-time-ms arg (=30)
     HTTP 요청 처리에 허용되는 최대 시간.
   --verbose-http-errors
@@ -63,6 +58,8 @@ eosio::http_plugin 설정 옵션
     디폴트로 http/https_server_address 포함.
   --http-threads arg (=2)
     https 스레드 풀에서 동작하는 worker 스레드의 수.
+  --http-keep-alive arg (=1)
+    false 로 지정하면 클라이언트의 요청이 있다고 해도 HTTP connection alive 를 유지하지 않는다.
 ```
 
 ## 의존성

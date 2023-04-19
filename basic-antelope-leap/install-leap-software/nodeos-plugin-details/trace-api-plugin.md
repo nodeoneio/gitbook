@@ -16,7 +16,7 @@
 
 ## 사용법
 
-다음과 같이 `config.ini`  또는 명령줄에서 사용할 수 있습니다.&#x20;
+다음과 같이 `config.ini` 또는 명령줄에서 사용할 수 있습니다.
 
 ```
 # config.ini
@@ -29,33 +29,34 @@ nodeos ... --plugin eosio::trace_api_plugin [options]
 
 ## Trace API Plugin 설정 옵션
 
-다음은 nodeos 명령줄 또는 `config.ini` 파일에 설정할 수 있는 옵션들 입니다.
+다음은 `nodeos` 명령줄 또는 `config.ini` 파일에 설정할 수 있는 옵션들 입니다.
 
+{% code overflow="wrap" %}
 ```
 eosio::trace_api_plugin 설정 옵션
 
-  --trace-dir arg (="traces")
-    trace 디렉토리의 위치. (절대경로 또는 data 디렉토리의 상대경로)
-  --trace-slice-stride arg (=10000)
-    trace 데이터의 각 "slice"가 파일 시스템에 포함할 블록의 개수.
-  --trace-minimum-irreversible-history-blocks arg (=-1) 
-    "slice" 파일을 자동으로 제거하기 전에 검색을 위해 LIB 가 지나도 보관하는 블록 개수.
-    (-1 = "slice" 파일의 자동 제거가 해제됨)
-  --trace-minimum-uncompressed-irreversible-history-blocks arg (=-1)
-    LIB 이전까지 압축되지 않은 블록 개수. 압축된 "slice" 파일에 계속 액세스할 수 있지만 검색 시 
-    성능이 저하될 수 있다. (-1 값은 "slice" 파일의 자동 압축이 해제됨을 나타냄.)
-  --trace-rpc-abi arg
-    trace RPC 응답을 디코딩할 때 사용되는 ABI.
-    하나 이상의 ABI가 지정되어 있거나 또는 trace-no-abis 플래그를 사용해야 한다.
-    ABI는 <account-name>=<abi-def> 형식의 "Key=Value" 쌍으로 지정된다.
+--trace-dir arg (="traces")
+trace 디렉토리의 위치. (절대경로 또는 data 디렉토리의 상대경로)
+
+--trace-slice-stride arg (=10000)
+trace 데이터의 각 "slice"가 파일 시스템에 포함할 블록의 개수.
+
+--trace-minimum-irreversible-history-blocks arg (=-1) 
+"slice" 파일을 자동으로 제거하기 전에 검색을 위해 LIB 가 지나도 보관하는 블록 개수.(-1 = "slice" 파일의 자동 제거가 해제됨)
+
+--trace-minimum-uncompressed-irreversible-history-blocks arg (=-1)
+LIB 이전까지 압축되지 않은 블록 개수. 압축된 "slice" 파일에 계속 액세스할 수 있지만 검색 시 성능이 저하될 수 있다. (-1 값은 "slice" 파일의 자동 압축이 해제됨을 나타냄.)
+
+--trace-rpc-abi arg
+trace RPC 응답을 디코딩할 때 사용되는 ABI.하나 이상의 ABI가 지정되어 있거나 또는 trace-no-abis 플래그를 사용해야 한다. ABI는 <account-name>=<abi-def> 형식의 "Key=Value" 쌍으로 지정된다.
     <abi-def>는 다음과 같다.
       유효한 JSON으로 인코딩 된 ABI를 포함하는 파일의 절대 경로.
       유효한 JSON으로 인코딩 된 ABI를 포함하는 파일의 "data-dir"으로부터의 상대 경로.
-  --trace-no-abis
-    RPC 응답이 ABI를 사용하지 않을 때 사용.
-    trace-rpc-abi 설정이 없을 때 이 옵션을 지정할 경우 실패할 수 있다.
-    이 옵션은 trace-rpc-api 와 상호 배타적이다.
+
+--trace-no-abis
+RPC 응답이 ABI를 사용하지 않을 때 사용.trace-rpc-abi 설정이 없을 때 이 옵션을 지정할 경우 실패할 수 있다.이 옵션은 trace-rpc-api 와 상호 배타적이다.
 ```
+{% endcode %}
 
 ## 의존성
 
@@ -124,7 +125,7 @@ trace 데이터 로그는 실제 이진 직렬화된 블록 데이터를 저장�
 * block\_entry\_v0
 * lib\_entry\_v0
 
-인덱스 로그는 로그에 저장된 데이터에 대한 버전 정보를 포함하는 기본 헤더부터 시작합니다.&#x20;
+인덱스 로그는 로그에 저장된 데이터에 대한 버전 정보를 포함하는 기본 헤더부터 시작합니다.
 
 `block_entry_v0` 에는 데이터 로그 내에서 해당 블록 위치에 대한 오프셋이 있는 블록 ID와 블록 번호가 포함됩니다. 이 항목은 `block_trace_v0` 및 `block_trace_v1` 블록의 오프셋을 모두 찾는 데 사용됩니다.
 
@@ -139,7 +140,7 @@ trace 데이터 로그는 실제 이진 직렬화된 블록 데이터를 저장�
 데이터는 raw zlib 형식으로 압축되며, 일정한 간격으로 full-flush 탐색 지점을 배치합니다. 압축 해제기는 이전 데이터를 읽지 않고도 이러한 탐색 지점부터 시작할 수 있으며 데이터 내에 표시되는 탐색 지점을 문제 없이 통과할 수도 있습니다.
 
 {% hint style="info" %}
-**추적 로그 크기 줄이기** \
+**추적 로그 크기 줄이기**\
 데이터 압축을 통하여 추적 로그의 증가하는 공간을 20배 가량 줄일 수 있습니다. 예를 들어, EOS 공용 네트워크에서 512개의 검색 지점을 사용하고 테스트 데이터셋을 사용하면 데이터 압축은 전체 데이터에 대해 추적 디렉토리의 증가량을 일일 최대 50GiB 에서 최대 2.5GiB 로 줄일 수 있습니다. 추적 로그 내용의 중복성이 높기 때문에 압축률은 gzip -9 와 비슷합니다. 압축 해제된 데이터도 서비스 저하 없이 [Trace RPC API](https://developers.eos.io/manuals/eos/latest/nodeos/plugins/trace\_api\_plugin/api-reference/index)를 통해 즉시 사용할 수 있습니다.
 {% endhint %}
 

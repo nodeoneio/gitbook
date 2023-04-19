@@ -9,7 +9,7 @@
 {% endhint %}
 
 {% hint style="info" %}
-본 문서는 Leap 3.1.0 버전을 기준으로 작성되었습니다. 빠르게 발전하는 Leap 소프트웨어의 특성상 수시로 변경이 있을 수 있으니, 본 문서에서 아직 다루지 않은 내용은 Antelope 공식 깃허브나`help` 명령어로  확인하여 주시기 바랍니다.
+본 문서는 Leap 4.0 버전을 기준으로 작성되었습니다. 빠르게 발전하는 Leap 소프트웨어의 특성상 수시로 변경이 있을 수 있으니, 본 문서에서 아직 다루지 않은 내용은 Antelope 공식 깃허브나`help` 명령어로 확인하여 주시기 바랍니다.
 {% endhint %}
 
 Leap 는 다음과 같은 플러그인을 제공하고 있으며 상세한 내용은 각각의 단원에서 알아보겠습니다.
@@ -23,4 +23,3 @@ Leap 는 다음과 같은 플러그인을 제공하고 있으며 상세한 내�
 * Resource Monitor Plugin
 * Trace API Plugin
 * Txn Test Gen Plugin
-* Login Plugin
