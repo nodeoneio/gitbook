@@ -48,8 +48,7 @@ ENF 에서도 자체적으로 [개발자 가이드 문서](http://docs.eosnetwor
 * Smart Contract Advanced\
   인라인 액션, 인덱스(Primary/Secondary), ABI, 리카르디안 컨트랙트, 액션 래퍼, 반환값 처리 개요를 다룹니다.
 * Antelope Leap Advanced\
-  Antelope 에 대하여 보다 심화된 내용을 다룹니다.\
-  Antelope 프로토콜 상세, Nodeos 구성 파일 옵션 상세, 체인베이스 DB 상세, 트랜잭션 생애주기, 계정과 권한, CFD 바이오스 부트 시퀀스 등
+  Antelope 프로토콜 상세, nodeos 구성 파일 옵션 상세, 체인베이스 DB 상세, 트랜잭션 생애주기, 계정과 권한, CFD, 바이오스 부트 시퀀스 등 Antelope leap 에 대하여 보다 심화된 내용을 다룹니다.
 * (TBD) Advanced Tutorial\
   Hello World 보다 조금 더 많은 기능을 가진 컨트랙트를 작성해 보겠습니다.
 * References
