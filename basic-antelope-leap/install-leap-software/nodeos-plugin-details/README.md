@@ -15,11 +15,14 @@
 Leap 는 다음과 같은 플러그인을 제공하고 있으며 상세한 내용은 각각의 단원에서 알아보겠습니다.
 
 * Chain Plugin
+* HTTP Plugin
 * Net Plugin
 * Producer Plugin
-* HTTP Plugin
-* HTTP Client Plugin
-* State History Plugin
+* Prometheus Plugin
 * Resource Monitor Plugin
-* Trace API Plugin
-* Txn Test Gen Plugin
+* Signature Provider Plugin
+* State History Plugin
+* Trace API Plugin&#x20;
+* \[Deprecated] HTTP Client Plugin&#x20;
+* \[Deprecated] Txn Test Gen Plugin
+* \[Deprecated] Login Plugin
