@@ -74,7 +74,7 @@ snapshot:    스냅샷 유틸리티
     └ --db-size UINT [65536]:    체인 상태 데이터베이스(Chain State Database)의 최대 크기(MiB) 
 
 chain-state:    체인 유틸리티
-└  build-info:    빌드 환경 정보를 JSON 형태로 추출
+└ build-info:    빌드 환경 정보를 JSON 형태로 추출
     └ -o, --output-file TEXT:   결과물을 출력할 파일 이름과 경로(상대경로 또는 절대경로).
     └ -p, –print:    콘솔에 출력.
 ```

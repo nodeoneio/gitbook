@@ -3,7 +3,7 @@
 ## 개요
 
 {% hint style="warning" %}
-Txn Test Gen Plugin 은 Leap 4.0 부터 제거되었습니다.&#x20;
+Txn Test Gen Plugin 은 Leap 4.0 에서 제거되었습니다.&#x20;
 {% endhint %}
 
 이 플러그인은 트랜잭션 테스트용으로 사용합니다. 자세한 내용은 [링크](https://github.com/EOSIO/eos/blob/develop/plugins/txn\_test\_gen\_plugin/README.md)를 참조합니다.
