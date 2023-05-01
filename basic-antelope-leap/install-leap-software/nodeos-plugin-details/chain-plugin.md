@@ -129,10 +129,10 @@ Action 블랙리스트에 추가된 Action(code::action 의 형태) (여러 번 
 --sender-bypass-whiteblacklist arg
 이 목록에 있는 계정에서 보낸 지연된 트랜잭션에는 주관적인 화이트리스트/블랙리스트 검사가 적용되지 않는다.(여러 번 지정할 수 있다.)
 
---read-mode arg (=speculative)
+--read-mode arg (=head)
 데이터베이스의 읽기 모드 ("speculative", "head", "irreversible").
   - "speculative" 모드 - 데이터베이스에는 헤드 블록까지의 변경사항과 아직 블록체인에 포함되지 않은 
-    트랜잭션의 변경사항이 포함되어 있다.
+    트랜잭션의 변경사항이 포함되어 있다. Leap 4.0에서 Deprecated 되었기 때문에 head 모드를 사용하는 것을 권장한다.
   - "head" 모드 - 데이터베이스에는 헤드 블록까지의 변경사항이 포함되어 있다.
   - "irreversible" 모드 - 데이터베이스에는 마지막 비가역성 블록까지만 블록체인 트랜잭션에 의해 
     수행된 변경사항이 포함되어 있다. P2P 네트워크에서 받은 트랜잭션은 릴레이되지 않으며 트랜잭션을 
