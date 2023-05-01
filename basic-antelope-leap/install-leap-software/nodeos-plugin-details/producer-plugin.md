@@ -2,7 +2,7 @@
 
 ## 개요
 
-`producer_plugin` 을 설정하면 nodeos 가 블록 생산자(Block Producer, BP)로서 블록을 생성하는데 필요한 기능을 사용할 수 있습니다.
+`producer_plugin` 을 설정하면 `nodeos` 가 블록 생산자(Block Producer, BP)로서 블록을 생성하는데 필요한 기능을 사용할 수 있습니다.
 
 {% hint style="info" %}
 블록 생성을 하려면 플러그인 설정 외에도 추가 설정이 더 필요합니다. 상세한 내용은 [블록 생산자(BP) 노드 설정](../../setup-producer-node.md) 단원을 참조합니다.
@@ -10,7 +10,7 @@
 
 ## 사용법
 
-다음과 같이 `config.ini`  또는 명령줄에서 사용할 수 있습니다.&#x20;
+다음과 같이 `config.ini` 또는 명령줄에서 사용할 수 있습니다.
 
 ```
 # config.ini
@@ -22,7 +22,7 @@ nodeos ... -- plugin eosio::producer_plugin [options]
 
 ## Producer Plugin 설정 옵션
 
-다음은 nodeos 명령줄 또는 `config.ini` 파일에 설정할 수 있는 옵션들 입니다.
+다음은 `nodeos` 명령줄 또는 `config.ini` 파일에 설정할 수 있는 옵션들 입니다.
 
 ```
 eosio::producer_plugin 설정 옵션
@@ -48,8 +48,6 @@ eosio::producer_plugin 설정 옵션
     <provider-type> "KEY" 또는 "KEOSD"
     KEY:<data>      제공된 public key에 매핑되는, 문자열 형태의 유효한 Antelope private key.
     KEOSD:<data>    사용할 수 있는 KEOSD 가 있는 URL. 지갑은 unlocked 되어 있어야 한다.
-  --keosd-provider-timeout arg (=5)
-    서명하기 위해 keosd 공급자에게 블록을 보내는 데 허용되는 최대 시간(ms).
   --greylist-account arg
     확장된 CPU/NET 가상 리소스에 액세스할 수 없는 계정.
   --greylist-limit arg (=1000)
@@ -73,8 +71,12 @@ eosio::producer_plugin 설정 옵션
   --max-scheduled-transaction-time-per-block-ms arg (=100)
     정상적인 트랜잭션 프로세싱으로 돌아가기 전에 모든 블록에서 예약된 트랜잭션을 폐기하는 데 소요되는 
     최대 wall-clock time(ms).
+  --subjective-cpu-leeway-us arg (=31000)
+    CPU 할당량이 부족한 채로 시작된 트랜잭션이 CPU 사용량을 완료하고 처리하는 데 허용되는 시간.
   --subjective-account-max-failures arg (=3)
     블록당 주어진 계정에서 허용된 실패의 최대치를 설정.
+  --subjective-account-max-failures-window-size arg (=1)
+    subjective-account-max-failures 를 위한 블록 수 범위(window) 크기.
   --subjective-account-decay-time-minutes arg (=1440)
     계정에 full subjective cpu 를 반환하는데 걸리는 시간을 설정.
   --incoming-defer-ratio arg (=1)
@@ -82,8 +84,6 @@ eosio::producer_plugin 설정 옵션
   --incoming-transaction-queue-size-mb arg (=1024)
     수신되는 트랜잭션 큐(Queue) 의 최대 크기(MiB). 이 크기를 넘어가면 리소스가 고갈되어 임의로 
     트랜잭션을 drop 시킨다.
-  --disable-api-persisted-trx
-    API 트랜잭션 재적용(re-apply)을 사용하지 않음.
   --disable-subjective-billing arg (=1)
     API/P2P 트랜잭션의 주관적 CPU 청구를 사용하지 않음.
   --disable-subjective-account-billing arg
@@ -96,6 +96,12 @@ eosio::producer_plugin 설정 옵션
     BP 스레드풀에서 동작하는 worker 스레드의 수.
   --snapshots-dir arg (="snapshots")
     스냅샷 디렉토리 위치. (절대경로 또는 data 디렉토리의 상대경로)
+  --read-only-threads arg
+    읽기 전용 실행 스레드 풀의 작업 스레드 수(최대 8)
+  --read-only-write-window-time-us arg (=200000)
+    쓰기 windows 가 지속되는 시간(us 단위)
+  --read-only-read-window-time-us arg (=60000)
+    읽기 windows 가 지속되는 시간(us 단위)
 ```
 
 ## 의존성
@@ -124,7 +130,7 @@ nodeos ... --plugin eosio::chain_plugin [operations] [options]`
 
 예를 들면 다음과 같습니다.
 
-* 기본값인 '1'로 설정하면 `producer_plugin` 은 하나의 지연된 트랜잭션 당 수신된 트랜잭션 하나를 처리합니다.&#x20;
+* 기본값인 '1'로 설정하면 `producer_plugin` 은 하나의 지연된 트랜잭션 당 수신된 트랜잭션 하나를 처리합니다.
 * arg 을 10으로 설정하면`producer_plugin` 은 하나의 지연된 트랜잭션 당 10개의 수신된 트랜잭션을 처리합니다.
 
 'arg' 가 적당히 큰 숫자로 설정된 경우 플러그인은 트랜잭션의 대기열이 빌 때까지 항상 수신되는 트랜잭션을 먼저 처리합니다. 'arg'가 0 이면 `producer_plugin` 은 대기열에 있는의 지연된 트랜잭션을 먼저 처리합니다.

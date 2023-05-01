@@ -6,7 +6,7 @@
 
 ## 사용법
 
-다음과 같이 `config.ini`  또는 명령줄에서 사용할 수 있습니다.&#x20;
+다음과 같이 `config.ini` 또는 명령줄에서 사용할 수 있습니다.
 
 ```
 # config.ini
@@ -19,7 +19,7 @@ nodeos ... --plugin eosio::net_plugin [options]
 
 ## Net Plugin 설정 옵션
 
-다음은 nodeos 명령줄 또는 `config.ini` 파일에 설정할 수 있는 옵션들 입니다.
+다음은 `nodeos` 명령줄 또는 `config.ini` 파일에 설정할 수 있는 옵션들 입니다.
 
 ```
 eosio::net_plugin 설정 옵션
@@ -40,11 +40,18 @@ eosio::net_plugin 설정 옵션
   --p2p-max-nodes-per-host arg (=1)
     단일 IP 주소를 사용하여 접속하는 클라이언트 노드의 최대 숫자.
   --p2p-accept-transactions arg (=1)
-    p2p 네트워크레서 수신한 트랜잭션이 유효하다면 처리하고 릴레이 한다.
+    p2p 네트워크에서 수신한 트랜잭션이 유효하다면 처리하고 릴레이 한다.
+  --p2p-auto-bp-peer arg
+    BP 생산 일정에 들어있을 때 자동으로 연결할 BP의 계정과 퍼블릭 p2p 엔드포인트
+    형식: account,host:port
+    예시: 
+    eosproducer1,p2p.eos.io:9876
+    eosproducer2,p2p.eos.io:9876:trx
+    eosproducer2,p2p.eos.io:9876:blk
   --agent-name arg (="EOS Test Agent")
     다른 peer 에서 이 노드를 식별하기 위하여 설정하는 이름.
   --allowed-connection arg (=any)
-    'any' or 'producers' or 'specified' or 'none'. 
+    'any' 또는 'producers' 또는 'specified' 또는 'none'. 
     'specified' 의 경우, peer-key 가 최소한 1번은 지정되어야 한다.
     'producers'만 지정된 경우, peer-key 는 필요 없다. 
     'producers' 와 'specified' 는 같이 사용될 수 있다.
