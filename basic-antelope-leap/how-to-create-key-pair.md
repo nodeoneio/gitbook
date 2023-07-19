@@ -1,3 +1,7 @@
+---
+description: Generate Key pair
+---
+
 # 키 쌍 만들기
 
 ## 개요
@@ -35,5 +39,4 @@ saving keys to keypair.txt
 cat pw.txt
 Private key: 5K7************************************************
 Public key: EOS71k3WdpLDeqeyqVRAAxwpz6TqXwDo9Brik5dQhdvvpeTKdNT59
-
 ```

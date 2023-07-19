@@ -1,3 +1,7 @@
+---
+description: Development Environment Overview
+---
+
 # 개발 환경 개요
 
 Antelope 기반 블록 체인의 로컬 개발 환경이란, Antelope Leap 소프트웨어와 함께 의존성을 가진 소프트웨어들을 설치하여, 시스템 요구 사항을 충족시킨 로컬 시스템을 의미합니다. 그 다음 `nodeos` 를 실행하여 로컬 블록체인 인스턴스를 실행하면 스마트 컨트랙트를 배포할 준비가 된 것입니다.

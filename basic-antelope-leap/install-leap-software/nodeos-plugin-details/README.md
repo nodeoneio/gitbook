@@ -1,3 +1,7 @@
+---
+description: Nodeos Plugin details
+---
+
 # Nodeos Plugin 옵션 상세
 
 ## 개요

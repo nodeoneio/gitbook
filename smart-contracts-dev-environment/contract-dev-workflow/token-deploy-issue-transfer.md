@@ -1,3 +1,7 @@
+---
+description: eosio token deploy issue and transfer
+---
+
 # eosio.token: 토큰 배포, 발행 및 전송
 
 앞서 간단한 Hello World 컨트랙트 코드를 작성하고 컴파일하고 배포하고 실행하여 보았습니다. 이번엔 블록체인에서 토큰을 다루는 시스템 컨트랙트인 `eosio.token` 을 컴파일하고 배포해 보겠습니다. 아울러 토큰의 개념과 `eosio.token` 스마트 컨트랙트, 그리고 `cleos` 를 사용하여 `eosio.token` 의 액션을 호출하는 방법도 알아보겠습니다.
@@ -21,7 +25,7 @@ tar -zxvf v3.1.0.tar.gz
 ```
 {% endcode %}
 
-이 파일은 여러가지 스마트 컨트랙트 소스를 포함하고 있는데, 그 중 `eosio.token` 컨트랙트가 이 단원에서 다룰 내용입니다.&#x20;
+이 파일은 여러가지 스마트 컨트랙트 소스를 포함하고 있는데, 그 중 `eosio.token` 컨트랙트가 이 단원에서 다룰 내용입니다.
 
 이제 `eos-system-contracts-3.1.0/contracts/eosio.token/` 으로 이동합니다.
 
@@ -78,7 +82,7 @@ warning: transaction executed locally, but may not be confirmed by the network y
 배포가 성공했으면 토큰을 만들어 봅시다. `eosio.token` 의 `create` 액션에 몇 가지 정보를 넘겨 호출하면 새로운 토큰을 만들 수 있습니다. 이 액션에는 다음과 같은 내용을 가지는 매개변수 하나가 필요합니다.
 
 * 발행자(issuer) 계정: 여기서 alice 계정을 사용하겠습니다. 발행자는 issue 액션을 호출할 수 있는 권한을 가지며 또한 `closing account` 나 `retiring token` 과 같은 액션을 수행할 수도 있습니다.
-* asset 타입:  이 정보는 두 가지 데이터로 구성됩니다. 첫 번째 인자인 부동소수점 숫자는 토큰의 최대 공급량(maximum supply)이며, 두 번째 인자는 토큰의 심볼을 나타내는 대문자 알파벳(티커)입니다. \
+* asset 타입: 이 정보는 두 가지 데이터로 구성됩니다. 첫 번째 인자인 부동소수점 숫자는 토큰의 최대 공급량(maximum supply)이며, 두 번째 인자는 토큰의 심볼을 나타내는 대문자 알파벳(티커)입니다.\
   예를 들면, "1.0000 SYS" 와 같이 표현할 수 있습니다.
 
 아래는 토큰을 만드는 액션을 호출하는 명령의 예제 입니다.

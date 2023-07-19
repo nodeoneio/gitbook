@@ -1,5 +1,5 @@
 ---
-description: 스마트 컨트랙트를 호출할 때 비용을 지불하는 방법
+description: Payable Action
 ---
 
 # 지불 가능한 액션(Payable Action)

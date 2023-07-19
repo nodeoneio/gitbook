@@ -1,3 +1,7 @@
+---
+description: How to add an inline action
+---
+
 # 인라인 액션을 추가하는 법
 
 ## 개요
@@ -85,7 +89,7 @@ void notify(name user, std::string msg) {}
 
 액션 생성자에 다음과 같은 매개 변수가 필요합니다.
 
-* ``[`permission_level`](https://developers.eos.io/manuals/eosio.cdt/latest/structeosio\_1\_1permission\_\_level) 구조체
+* \`\`[`permission_level`](https://developers.eos.io/manuals/eosio.cdt/latest/structeosio\_1\_1permission\_\_level) 구조체
 * 호출할 컨트랙트 코드 (`eosio::name` 타입을 사용하여 초기화)
 * 액션 (`eosio:name` 타입을 사용하여 초기화됨)
 * 액션에 전달할 데이터, 호출되는 액션과 관련된 위치들의 튜플.

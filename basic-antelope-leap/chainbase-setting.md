@@ -1,4 +1,8 @@
-# 체인베이스 설정
+---
+description: Setup ChainBase Database
+---
+
+# 체인베이스 데이터베이스 설정
 
 ## 체인베이스란?
 

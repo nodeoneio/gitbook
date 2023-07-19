@@ -1,3 +1,7 @@
+---
+description: Generate a wallet
+---
+
 # 지갑 만들기
 
 ## 개요

@@ -1,3 +1,7 @@
+---
+description: Leap-util utility
+---
+
 # Leap-util 유틸리티
 
 ## Leap-util 에 대하여

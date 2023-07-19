@@ -1,3 +1,7 @@
+---
+description: How to return a value from an action
+---
+
 # 액션으로부터 값을 반환하는 방법
 
 ## 개요
@@ -8,7 +12,7 @@
 
 다음과 같이 준비 되었는지 확인합니다.
 
-* Antelope 개발 환경.&#x20;
+* Antelope 개발 환경.
 * 에러 없이 빌드되는 `smrtcontract` 라는 이름의 스마트 컨트랙트.
 * `checkwithrv` 라는 이름의 액션. 이 액션으로부터 `action_response` 라는 사용자 정의 타입을 반환합니다.
 

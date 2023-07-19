@@ -1,3 +1,7 @@
+---
+description: Set up a producer node
+---
+
 # Producer 노드 설정
 
 ## 개요
@@ -16,7 +20,7 @@ BP 노드를 시작하려면 **System Contract 가 네트워크에 로드**되�
 
 ## 단계
 
-먼저 `config.ini` 파일을 열고 BP 등록에 필요한 정보들을 기입합니다.&#x20;
+먼저 `config.ini` 파일을 열고 BP 등록에 필요한 정보들을 기입합니다.
 
 ### BP 이름을 설정
 
@@ -33,7 +37,7 @@ producer-name = <youraccount>
 
 ### BP의 signature-provider 정보를 설정
 
-BP 등록용의 공개 키/개인 키 정보를 설정합니다. `cleos create key` 명령을 사용하여 새로운 BP 등록용 키 쌍을 만들 수 있습니다.  여기서 사용하는 키 쌍은 `owner/active` 키와는 다른 별개의 키 쌍을 만들어 사용하는 것이 보안상 안전합니다.이  이 키 쌍의 공개키는 BP 등록 명령을 실행할 때도 사용할 것입니다.
+BP 등록용의 공개 키/개인 키 정보를 설정합니다. `cleos create key` 명령을 사용하여 새로운 BP 등록용 키 쌍을 만들 수 있습니다. 여기서 사용하는 키 쌍은 `owner/active` 키와는 다른 별개의 키 쌍을 만들어 사용하는 것이 보안상 안전합니다.이 이 키 쌍의 공개키는 BP 등록 명령을 실행할 때도 사용할 것입니다.
 
 `signature-provider` 는 다음과 같이 3개의 필드로 구성됩니다.
 
@@ -102,8 +106,8 @@ cleos system regproducer [OPTIONS] account producer_key [url] [location]
 ```
 
 * account: BP 로 사용할 Antelope 계정 이름을 입력합니다.
-* producer\_key: BP 등록용 키 쌍의 공개키 입니다. 이 키 쌍은 위에서 BP 노드의 설정 파일에 기입하였습니다.&#x20;
-* URL:  BP 의 웹사이트를 기입합니다. 이 웹 사이트에 `bp.json`, `chains.json` 과 같은 파일들이 위치하게 됩니다. 이 URL 은 로컬 네트워크를 구성할 때는 필요 없습니다.
+* producer\_key: BP 등록용 키 쌍의 공개키 입니다. 이 키 쌍은 위에서 BP 노드의 설정 파일에 기입하였습니다.
+* URL: BP 의 웹사이트를 기입합니다. 이 웹 사이트에 `bp.json`, `chains.json` 과 같은 파일들이 위치하게 됩니다. 이 URL 은 로컬 네트워크를 구성할 때는 필요 없습니다.
 * Location: ISO\_3166 코드를 사용합니다. (한국의 경우 410) 마찬가지로 로컬 네트워크를 구성할 때는 필요 없습니다.\
   [https://en.wikipedia.org/wiki/ISO\_3166-1\_numeric#410](https://en.wikipedia.org/wiki/ISO\_3166-1\_numeric#410)
 
@@ -119,7 +123,7 @@ $ cleos system regproducer leapblockprd EOS84BLRbGbFahNJEpnnJHYCoW9QPbQEk2iHsHGG
 
 ### 등록된 BP 확인
 
-명령이 정상적으로 수행되고 계정이 BP 로 등록되었다면 다음과 같이 `cleos system listproducers` 명령으로 확인해 볼 수 있습니다.&#x20;
+명령이 정상적으로 수행되고 계정이 BP 로 등록되었다면 다음과 같이 `cleos system listproducers` 명령으로 확인해 볼 수 있습니다.
 
 ```
 $ cleos system listproducers

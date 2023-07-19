@@ -1,3 +1,7 @@
+---
+description: Basic Nodeos
+---
+
 # Nodeos 기초
 
 ## 개요

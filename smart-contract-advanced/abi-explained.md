@@ -1,3 +1,7 @@
+---
+description: Understanding ABI
+---
+
 # ABI 파일의 이해
 
 ## ABI 란 무엇이며 어떻게 동작하는가.

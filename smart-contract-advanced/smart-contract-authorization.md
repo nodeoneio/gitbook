@@ -1,3 +1,7 @@
+---
+description: How to authenticate a user in a Smart contract
+---
+
 # 스마트 컨트랙트에서 사용자 인증 방법
 
 이 단원에서는 스마트 컨트랙트에서 사용자를 인증하는 방법을 알아보겠습니다.
