@@ -1,3 +1,7 @@
+---
+description: How to use action wrapper
+---
+
 # 액션 래퍼 사용법
 
 ## 액션래퍼 코드 레퍼런스
@@ -60,7 +64,7 @@ class [[eosio::contract]] multi_index_example : public contract {
 ```
 {% endcode %}
 
-* 액션 래퍼를 사용하여 액션을 전달 \
+* 액션 래퍼를 사용하여 액션을 전달\
   액션 래퍼의 send 메소드를 호출하고 mod 액션의 매개변수를 인자로 전달합니다.
 
 ```cpp

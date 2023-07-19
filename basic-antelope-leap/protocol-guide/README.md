@@ -1,6 +1,10 @@
+---
+description: Protocol Guide
+---
+
 # 프로토콜 가이드
 
-Antelope 프로토콜 섹션은 Antelope 플랫폼이 어떻게 동작하고  두 가지 레이어로 나뉠 수 있는지 설명합니다.
+Antelope 프로토콜 섹션은 Antelope 플랫폼이 어떻게 동작하고 두 가지 레이어로 나뉠 수 있는지 설명합니다.
 
 Core 는 오픈 소스이며, C++로 작성되어 있습니다. 그리고 System 은 Core 위에서 실행되는 스마트 컨트랙트로 작성되어 있습니다.
 
@@ -8,11 +12,11 @@ Core 는 오픈 소스이며, C++로 작성되어 있습니다. 그리고 System
 
 Antelope Core 는 System 레이어에 기본 빌딩 블록을 제공하며 스마트 컨트랙트로 작성되어 있지 않습니다. Core 는 오픈소스로 공개되어 있으며, 소스코드를 원하는 비즈니스 요구사항에 맞추어 커스터마이징 하여 사용할 수 있습니다.
 
-Core  프로토콜 구성 요소는 다음과 같습니다.
+Core 프로토콜 구성 요소는 다음과 같습니다.
 
 1. 합의 프로토콜(Consensus Protocol)
 2. 트랜잭션 프로토콜(Transaction Protocol)
-3. 네트워크 또는 p2p  프로토콜(Network or Peer to Peer Protocol)
+3. 네트워크 또는 p2p 프로토콜(Network or Peer to Peer Protocol)
 4. 계정과 권한 (Account and Permissions)
 
 ## System

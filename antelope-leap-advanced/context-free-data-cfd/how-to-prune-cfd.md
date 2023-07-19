@@ -1,3 +1,7 @@
+---
+description: How to tidy up CFD
+---
+
 # CFD 정리하는 방법
 
 ## 개요
@@ -14,7 +18,7 @@
 
 * CFD 를 가지고 있는 완료된(Finalized) 블록에 포함된, 만료된 트랜잭션 ID
 * [CFD](../../basic-antelope-leap/context-free-data-cfd.md) 의 개념을 알고 있어야 합니다.
-* ``[`eosio-blocklog`](https://developers.eos.io/manuals/eos/latest/utilities/eosio-blocklog) 명령줄 도구 사용법을 확인합니다.
+* \`\`[`eosio-blocklog`](https://developers.eos.io/manuals/eos/latest/utilities/eosio-blocklog) 명령줄 도구 사용법을 확인합니다.
 
 ## 순서
 
@@ -22,18 +26,18 @@
 
 1. CFD 를 잘라낼 트랜잭션 ID를 찾습니다(예: `<trx_id>`). 트랜잭션 ID는 트랜잭션의 `id` 필드에서도 찾을 수 있습니다.
 2. 트랜잭션이 포함된 블록 번호(예: `<block_num>`)를 찾습니다. 블록 번호가 트랜잭션의 `block_num` 필드와 일치하는지 확인합니다.
-3. 블록 디렉토리 및 상태 기록 디렉토리(해당하는 경우)를 찾습니다(예: `<blocks_dir>` 및 `<state_hist_dir>`).&#x20;
+3. 블록 디렉토리 및 상태 기록 디렉토리(해당하는 경우)를 찾습니다(예: `<blocks_dir>` 및 `<state_hist_dir>`).
 4. 다음과 같이 `eosio-blocklog` 도구를 실행합니다.\
    `eosio-blocklog [--blocks-dir <blocks_dir>] [--state-history-dir <state_hist_dir>] --prune-transactions --block-num <block_num> --transaction <trx_id> [--transaction <trx_id2> ...]`
 
 다음은 명령이 성공했을 때 적용되는 내용입니다.
 
-* `eosio-blocklog` 유틸리티는 오류 코드 0(오류 없음)로 자동으로 종료됩니다.&#x20;
+* `eosio-blocklog` 유틸리티는 오류 코드 0(오류 없음)로 자동으로 종료됩니다.
 * 블록 로그의 정리된 트랜잭션 내에서 다음 필드가 업데이트됩니다.
-  * 0 이었던 `prunable_data["prunable_data"][0]` 필드가 1로 설정됩니다.&#x20;
-  * `signatures` 필드가 빈 배열로 설정됩니다.&#x20;
-  * `context_free_data` 필드가 빈 배열로 설정됩니다.&#x20;
-  * `packed_context_free_data` 필드가 있다면 제거됩니다.&#x20;
+  * 0 이었던 `prunable_data["prunable_data"][0]` 필드가 1로 설정됩니다.
+  * `signatures` 필드가 빈 배열로 설정됩니다.
+  * `context_free_data` 필드가 빈 배열로 설정됩니다.
+  * `packed_context_free_data` 필드가 있다면 제거됩니다.
 
 다음은 실패했을 때 적용되는 내용입니다.
 
@@ -43,10 +47,10 @@
 
 몇 가지 추가 고려 사항이 있습니다.
 
-* 같은 블록 내의 다수의 트랜잭션을 `eosio-blocklog` 에 전달할 수 있습니다.&#x20;
+* 같은 블록 내의 다수의 트랜잭션을 `eosio-blocklog` 에 전달할 수 있습니다.
 * `eosio-blocklog` 를 사용하여 삭제된 트랜잭션을 가지고 있는는 블록을 표시할 수 있습니다.
 
-## 예제&#x20;
+## 예제
 
 위에서 다루었던 내용을 아래의 예제에서 확인해 보겠습니다.
 
@@ -204,9 +208,9 @@
 
 위의 트랜잭션 예제를 사용하여 순서대로 진행해 보겠습니다.
 
-1. 트랜잭션 ID: `1b9a9c53f9b692d3382bcc19c0c21eb22207e2f51a30fe88dabb45376b6ff23`을 찾습니다.&#x20;
-2. 블록 번호 `119`를 찾습니다.&#x20;
-3. 블록 디렉토리 및 상태 기록 디렉토리(해당하는 경우)를 찾습니다(예: `<blocks_dir>` 및 `<state_hist_dir>`).&#x20;
+1. 트랜잭션 ID: `1b9a9c53f9b692d3382bcc19c0c21eb22207e2f51a30fe88dabb45376b6ff23`을 찾습니다.
+2. 블록 번호 `119`를 찾습니다.
+3. 블록 디렉토리 및 상태 기록 디렉토리(해당하는 경우)를 찾습니다(예: `<blocks_dir>` 및 `<state_hist_dir>`).
 4. 다음과 같이 `eosio-blocklog` 도구를 실행합니다.\
    `eosio-blocklog --blocks-dir <blocks_dir> --state-history-dir <state_hist_dir> --prune-transactions --block-num 119 --transaction 1b9a9c53f9b692d3382bcc19c0c21eb22207e2f51a30fe88dabbb45376b6ff23`
 
@@ -367,5 +371,5 @@
 
 CFD 를 정리한 후에 다음과 같을 작업을 할 수 있습니다.
 
-* 트랜잭션을 정리한 이후 CFD 가 포함되어 있는지 확인합니다.&#x20;
+* 트랜잭션을 정리한 이후 CFD 가 포함되어 있는지 확인합니다.
 * 블록 로그에서 정리된 트랜잭션을 포함하는 블록을 표시합니다.

@@ -1,4 +1,8 @@
-# 테스트넷에 연결된 노드 만들기(작업중)
+---
+description: Connecting a node to a Testnet
+---
+
+# \[TBD]테스트넷에 연결된 노드 만들기
 
 ## 개요
 
@@ -18,23 +22,15 @@ EOS 의 공식 테스트넷은 Jungle Testnet v4(이하 정글넷) 와 Kylin Tes
 
 스냅샷 다운로드
 
-
-
 {% embed url="https://snapshots.eosnation.io/" %}
 
 위 사이트에서 Leap 3.1 버전 전용 스냅샷인 **Jungle 4 Testnet - v6** 의 **latest** 파일을 로컬 노드로 다운로드 합니다. 스냅샷 파일은 zst 형식으로 압축되어 있으므로 unzstd 명령으로 압축을 풀어줘야 합니다.
 
-
-
-
-
 제네시스 파일부터 리플레이 하기
 
+이 노드는 블록을 생성하지도 않고 외부에 API 를
 
-
-이 노드는 블록을 생성하지도 않고 외부에 API 를&#x20;
-
-config.ini 파일 설&#x20;
+config.ini 파일 설
 
 ```
 plugin = eosio::http_plugin
@@ -54,4 +50,3 @@ p2p-peer-address = peer.jungle4.alohaeos.com:9876
 p2p-peer-address = jungle4.eosphere.io:9876
 p2p-peer-address = jungle4.seed.eosnation.io:9876
 ```
-

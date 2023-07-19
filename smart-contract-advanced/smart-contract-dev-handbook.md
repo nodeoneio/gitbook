@@ -1,3 +1,7 @@
+---
+description: Smart Contract Developer Handbook
+---
+
 # 스마트 컨트랙트 개발자 핸드북
 
 ## 개요
@@ -11,4 +15,3 @@
 ## Reference
 
 {% embed url="https://cc32d9.gitbook.io/eosio-smart-contract-developers-handbook/" %}
-

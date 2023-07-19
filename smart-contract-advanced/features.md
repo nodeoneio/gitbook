@@ -1,3 +1,7 @@
+---
+description: Features
+---
+
 # 기능(Features)
 
 ## 액션의 반환값(Action Return Value)
@@ -29,8 +33,7 @@ Antelope 을 사용하면 모든 액션에서 반환값을 받을 수 있습니�
 
 * Hello 스마트 컨트랙트 예제, 액션 `hello::checkwithrv` 을 참조.\
   [https://github.com/AntelopeIO/cdt/blob/main/examples/hello/src/hello.cpp](https://github.com/AntelopeIO/cdt/blob/main/examples/hello/src/hello.cpp)
-* [액션으로부터 값을 반환하는 방법](how-to-return-from-action.md).\
-
+* [액션으로부터 값을 반환하는 방법](how-to-return-from-action.md).\\
 
 ## eosio::binary\_extension 타입
 
@@ -95,114 +98,13 @@ private:
 #### binary\_extension\_contract.app
 
 {% code overflow="wrap" %}
-```cpp
-#include "binary_extension_contract.hpp"
-
-using eosio::name;
-
-[[eosio::action]] void binary_extension_contract::regpkey(name primary_key) {
-   eosio::print_f("`regpkey` executing.\\n");
-   
-   auto index{_table.get_index<"index1"_n>()}; ///< `index` represents `_table` organized by `index1`.
-   auto iter {index.find(primary_key.value) }; ///< Note: the type returned by `index.find` is different than the type returned by `_table.find`.
-   
-   if (iter == _table.get_index<"index1"_n>().end()) {
-      eosio::print_f("`_primary_key`: % not found; registering.\\n", primary_key.to_string());
-      _table.emplace(_self, [&](auto& row) {
-         row._primary_key   = primary_key;
-         row._secondary_key = "nothin"_n;
-      });
-   }
-   else {
-      eosio::print_f("`_primary_key`: % found; not registering.\\n", primary_key.to_string());
-   }
-
-   eosio::print_f("`regpkey` finished executing.\\n");
-}
-
-[[eosio::action]] void binary_extension_contract::printbyp(eosio::name primary_key) {
-   eosio::print_f("`printbyp` executing.\\n");
-   
-   auto index{_table.get_index<"index1"_n>()};
-   auto iter {index.find(primary_key.value) };
-   
-   if (iter != _table.get_index<"index1"_n>().end()) {
-      eosio::print_f("`_primary_key`: % found; printing.\\n", primary_key.to_string());
-      eosio::print_f("
-{% raw %}
-{%, %}
-{% endraw %}
-
-
-\\n", iter->_primary_key, iter->_secondary_key);
-   }
-   else {
-      eosio::print_f("`_primary_key`: % not found; not printing.\\n", primary_key.to_string());
-   }
-
-   eosio::print_f("`printbyp` finished executing.\\n");
-}
-
-[[eosio::action]] void binary_extension_contract::printbys(eosio::name secondary_key) {
-   eosio::print_f("`printbys` executing.\\n");
-   
-   auto index{_table.get_index<"index2"_n>()};
-   auto iter {index.find(secondary_key.value)};
-   
-   if (iter != _table.get_index<"index2"_n>().end()) {
-      eosio::print_f("`_secondary_key`: % found; printing.\\n", secondary_key.to_string());
-      printbyp(iter->_primary_key);
-   }
-   else {
-      eosio::print_f("`_secondary_key`: % not found; not printing.\\n", secondary_key.to_string());
-   }
-
-   eosio::print_f("`printbys` finished executing.\\n");
-}
-
-[[eosio::action]] void binary_extension_contract::modifyp(eosio::name primary_key, name n) {
-   eosio::print_f("`modifyp` executing.\\n");
-   
-   auto index{_table.get_index<"index1"_n>()};
-   auto iter {index.find(primary_key.value)};
-   
-   if (iter != _table.get_index<"index1"_n>().end()) {
-      eosio::print_f("`_primary_key`: % found; modifying `_primary_key`.\\n", primary_key.to_string());
-      index.modify(iter, _self, [&](auto& row) {
-         row._primary_key = n;
-      });
-   }
-   else {
-      eosio::print_f("`_primary_key`: % not found; not modifying `_primary_key`.\\n", primary_key.to_string());
-   }
-
-   eosio::print_f("`modifyp` finished executing.\\n");
-}
-
-[[eosio::action]] void binary_extension_contract::modifys(eosio::name primary_key, name n) {
-   eosio::print_f("`modifys` executing.\\n");
-   
-   auto index{_table.get_index<"index1"_n>()};
-   auto iter {index.find(primary_key.value)};
-   
-   if (iter != _table.get_index<"index1"_n>().end()) {
-      eosio::print_f("`_primary_key`: % found; modifying `_secondary_key`.\\n", primary_key.to_string());
-      index.modify(iter, _self, [&](auto& row) {
-         row._secondary_key = n;
-      });
-   }
-   else {
-      eosio::print_f("`_primary_key`: % not found; not modifying `_secondary_key`.\\n", primary_key.to_string());
-   }
-
-   eosio::print_f("`modifys` finished executing.\\n");
-}
-```
-{% endcode %}
+````
+</div>
 
 #### binary\_extension\_contract.abi
 
-{% code overflow="wrap" %}
+<div data-gb-custom-block data-tag="code" data-overflow='wrap'>
+
 ```cpp
 {
     "____comment": "This file was generated with eosio-abigen. DO NOT EDIT ",
@@ -321,7 +223,7 @@ using eosio::name;
     "ricardian_clauses": [],
     "variants": []
 }
-```
+````
 {% endcode %}
 
 컨트랙트에서 업그레이드 해야 할 부분인 regpkey 액션과 structure 구조체를 아래 hpp 및 cpp 파일에 작성합니다.

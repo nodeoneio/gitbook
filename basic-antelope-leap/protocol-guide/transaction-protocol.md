@@ -1,4 +1,8 @@
-# 트랜잭션 프로토콜(작업중)
+---
+description: Transaction Protocol
+---
+
+# 트랜잭션 프로토콜
 
 ## 개요
 

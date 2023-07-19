@@ -1,5 +1,5 @@
 ---
-description: Accounts and permissions
+description: Basic Accounts and Permissions
 ---
 
 # 계정과 권한 기초
@@ -70,14 +70,14 @@ Antelope 블록체인을 사용하려면 계정(account)이 필요합니다. 계
 
 ## 지갑 만들기
 
-[지갑 만들기 단원](https://app.gitbook.com/s/YZT0OiBQKuAU7OjJoCgQ/\~/changes/9SOrppvOOBlShstEZa2F/basic-antelope-leap/how-to-create-a-wallet)을 참조하여 지갑을 만듭니다.
+[지갑 만들기 단원](http://127.0.0.1:5000/s/YZT0OiBQKuAU7OjJoCgQ/basic-antelope-leap/how-to-create-a-wallet)을 참조하여 지갑을 만듭니다.
 
 ## 계정 만들기
 
 다음 순서를 따라가면 지갑과 계정을 만들 수 있습니다. 로컬 지갑이 열려 있는지를 꼭 확인한 뒤 시작해야 합니다.
 
-1. [키 쌍 만들기](https://app.gitbook.com/s/YZT0OiBQKuAU7OjJoCgQ/\~/changes/9SOrppvOOBlShstEZa2F/basic-antelope-leap/how-to-create-key-pair)
-2. [계정 만들기 ](https://app.gitbook.com/s/YZT0OiBQKuAU7OjJoCgQ/\~/changes/9SOrppvOOBlShstEZa2F/basic-antelope-leap/how-to-create-account)
-3. [계정의 개인 키를 지갑으로 가져오기](https://app.gitbook.com/s/YZT0OiBQKuAU7OjJoCgQ/\~/changes/9SOrppvOOBlShstEZa2F/basic-antelope-leap/how-to-import-a-key-to-a-wallet)
+1. [키 쌍 만들기](http://127.0.0.1:5000/s/YZT0OiBQKuAU7OjJoCgQ/basic-antelope-leap/how-to-create-key-pair)
+2. [계정 만들기](http://127.0.0.1:5000/s/YZT0OiBQKuAU7OjJoCgQ/basic-antelope-leap/how-to-create-account)
+3. [계정의 개인 키를 지갑으로 가져오기](http://127.0.0.1:5000/s/YZT0OiBQKuAU7OjJoCgQ/basic-antelope-leap/how-to-import-a-key-to-a-wallet)
 
-계정을 만들고 나면 [계정의 정보](https://app.gitbook.com/s/YZT0OiBQKuAU7OjJoCgQ/\~/changes/9SOrppvOOBlShstEZa2F/basic-antelope-leap/how-to-get-account-information)를 확인할 수 있습니다.
+계정을 만들고 나면 [계정의 정보](http://127.0.0.1:5000/s/YZT0OiBQKuAU7OjJoCgQ/basic-antelope-leap/how-to-get-account-information)를 확인할 수 있습니다.
