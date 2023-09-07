@@ -72,6 +72,7 @@
   * [계정과 권한](basic-antelope-leap/protocol-guide/account-and-permissions.md)
   * [Network Peer 프로토콜](basic-antelope-leap/protocol-guide/network-peer-protocol.md)
 * [Leap-util 유틸리티](antelope-leap-advanced/leap-util.md)
+* [Antelope 노드 서버 세팅하기](antelope-leap-advanced/setup-antelope-node-server.md)
 * [블록 생성에 대한 상세](basic-antelope-leap/block-producing-explained.md)
 * [Nodeos 의 동작 방식](basic-antelope-leap/nodeos-how-to-work.md)
 * [트랜잭션 생애주기](basic-antelope-leap/transaction-lifecycle.md)
